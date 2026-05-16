@@ -1,0 +1,4 @@
+﻿__pycache__/
+*.pyc
+.agent/skills/ui-ux-pro-max/scripts/__pycache__/
+.claude/settings.local.json

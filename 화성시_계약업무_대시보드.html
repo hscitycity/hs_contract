@@ -1,0 +1,2550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>화성시 계약업무 안내 시스템</title>
+<style>
+/* ── FONTS ── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+
+:root {
+  /* 브랜드 — 화성특례시 공식 컬러 */
+  --primary: #1B4FA8;
+  --primary-mid: #1F5BB8;
+  --secondary: #2563C8;
+  --accent: #F47920;
+  --accent-light: #FEF0E6;
+  --light-blue: #EBF2FF;
+
+  /* 의미색 (기능 유지) */
+  --me-green: #F47920;
+  --me-green-bg: #FEF0E6;
+  --me-green-light: #FFF7F2;
+  --consult-red: #DC2626;
+  --consult-red-bg: #FEE2E2;
+  --consult-red-light: #FEF2F2;
+  --warning: #F47920;
+  --warning-bg: #FEF0E6;
+  --info-blue: #2563EB;
+  --info-bg: #DBEAFE;
+  --audit-purple: #7C3AED;
+  --audit-bg: #EDE9FE;
+
+  /* 레이아웃 */
+  --bg: #F1F5F9;
+  --card: #FFFFFF;
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --text: #0F172A;
+  --text-mute: #475569;
+  --text-light: #64748B;
+
+  /* 간격 */
+  --sp-xs: 4px; --sp-sm: 8px; --sp-md: 16px; --sp-lg: 24px; --sp-xl: 32px;
+
+  /* 그림자 */
+  --shadow-sm: 0 1px 3px rgba(15,23,42,.07), 0 1px 2px rgba(15,23,42,.05);
+  --shadow-md: 0 4px 8px rgba(15,23,42,.08), 0 2px 4px rgba(15,23,42,.05);
+  --shadow-lg: 0 10px 18px rgba(15,23,42,.09), 0 4px 6px rgba(15,23,42,.05);
+  --shadow-xl: 0 20px 30px rgba(15,23,42,.12), 0 8px 12px rgba(15,23,42,.07);
+
+  /* 반경 */
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+
+  /* 전환 */
+  --tr: all .2s ease;
+}
+
+/* ── 스크롤바 ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-light)}
+
+/* ── 포커스 ── */
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:var(--r-sm)}
+
+/* ── 모션 감소 ── */
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.6;min-height:100vh}
+
+/* ── HEADER ── */
+.header{background:#FFFFFF;color:var(--text);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm);border-bottom:3px solid var(--accent)}
+.header-left{display:flex;align-items:center;gap:14px}
+.header-logo{height:44px;flex-shrink:0;display:flex;align-items:center}
+.header-logo img{height:40px;width:auto;display:block}
+.header-title h1{font-size:17px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:7px}
+.header-title .sub{font-size:11px;color:var(--text-mute);margin-top:3px}
+.role-tag{background:var(--light-blue);color:var(--primary);padding:3px 9px;border-radius:10px;font-size:10.5px;font-weight:700;margin-left:8px;border:1px solid var(--border)}
+.btn-hdr{background:var(--primary);color:white;border:none;padding:5px 13px;border-radius:var(--r-sm);cursor:pointer;font-size:11.5px;font-weight:600;transition:var(--tr)}
+.btn-hdr:hover{background:var(--secondary)}
+.hdr-btns{display:flex;gap:5px;align-items:center}
+
+/* ── MAIN LAYOUT ── */
+.main{display:grid;grid-template-columns:320px 1fr;gap:10px;padding:10px;max-width:1700px;margin:0 auto}
+.left-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:13px;height:fit-content;position:sticky;top:10px;max-height:calc(100vh - 20px);overflow-y:auto;box-shadow:var(--shadow-sm);scrollbar-width:thin}
+.right-panel{display:flex;flex-direction:column;gap:9px}
+
+/* ── SECTION TITLE ── */
+.sec{font-size:10.5px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--accent);padding-bottom:5px;margin-bottom:8px;display:flex;align-items:center;gap:5px;justify-content:space-between}
+.sec:not(:first-child){margin-top:13px}
+
+/* ── TYPE BUTTONS ── */
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.type-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:7px 3px;cursor:pointer;font-size:11.5px;text-align:center;font-weight:600;transition:var(--tr)}
+.type-btn:hover{background:var(--accent-light);border-color:var(--accent)}
+.type-btn.active{background:var(--primary);color:white;border-color:var(--primary);box-shadow:var(--shadow-sm)}
+.type-btn.active:hover{background:var(--secondary);border-color:var(--accent)}
+.type-btn .ico{display:block;font-size:18px;margin-bottom:2px}
+
+/* ── OPTIONS ── */
+.opts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}
+.opt{background:white;border:1px solid var(--border-strong);border-radius:var(--r-sm);padding:5px 6px;font-size:10.5px;cursor:pointer;text-align:left;transition:var(--tr);line-height:1.3}
+.opt:hover{background:var(--accent-light);border-color:var(--accent)}
+.opt.active{background:var(--me-green);color:white;border-color:var(--me-green)}
+.opt.consult-s.active{background:var(--consult-red);border-color:var(--consult-red)}
+
+/* ── FORM ── */
+.fr{margin-bottom:7px}
+.fl{display:block;font-size:10.5px;font-weight:600;color:var(--text-mute);margin-bottom:2px}
+.fl.req::after{content:'*';color:var(--consult-red);margin-left:2px}
+.fi{width:100%;padding:6px 8px;border:1px solid var(--border-strong);border-radius:var(--r-sm);font-family:inherit;font-size:12px;background:white;transition:var(--tr)}
+.fi:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(244,121,32,.18)}
+.amt-row{display:flex;gap:4px;align-items:center}
+.amt-pill{background:var(--light-blue);color:var(--primary);padding:6px 8px;border-radius:var(--r-sm);font-weight:700;font-size:11px;white-space:nowrap;min-width:66px;text-align:center}
+.quick-row{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:3px}
+.qb{background:white;border:1px solid var(--border);border-radius:var(--r-sm);padding:3px 2px;font-size:9.5px;cursor:pointer;color:var(--text-mute);line-height:1.2;text-align:center;transition:var(--tr)}
+.qb:hover{background:var(--accent-light);color:var(--accent);border-color:var(--accent)}
+
+/* ── MINI BUTTONS ── */
+.mini-btns{display:flex;gap:3px}
+.mb{border:1px solid var(--border-strong);background:white;padding:3px 8px;border-radius:var(--r-sm);font-size:10px;cursor:pointer;font-weight:600;color:var(--text);transition:var(--tr)}
+.mb.sv{color:var(--me-green);border-color:var(--me-green)}
+.mb.sv:hover{background:var(--me-green);color:white}
+.mb.ld{color:var(--secondary);border-color:var(--secondary)}
+.mb.ld:hover{background:var(--secondary);color:white}
+.mb.cl{color:var(--consult-red);border-color:var(--consult-red)}
+.mb.cl:hover{background:var(--consult-red);color:white}
+.saved-info{font-size:10px;color:var(--text-mute);background:var(--me-green-light);border:1px dashed var(--me-green);border-radius:var(--r-sm);padding:3px 6px;margin-bottom:7px;display:none}
+.saved-info.on{display:block}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;box-shadow:var(--shadow-sm);transition:var(--tr)}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.card-title{font-size:10.5px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--accent);padding-bottom:5px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between}
+.card-title .l{display:flex;align-items:center;gap:5px}
+.badge-type{font-size:9px;background:var(--light-blue);color:var(--primary);padding:2px 9px;border-radius:20px;font-weight:700}
+
+/* ── INFO TABLE ── */
+.info-tbl{width:100%;font-size:11.5px}
+.info-tbl td{padding:3px 0;border-bottom:1px dashed var(--border);vertical-align:top}
+.info-tbl td.lbl{color:var(--text-mute);width:76px;font-size:10.5px}
+.info-tbl td.val{font-weight:600}
+.info-tbl tr:last-child td{border:none}
+
+/* ── STAT GRID ── */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.stat-box{background:var(--bg);border-radius:var(--r-sm);padding:7px 9px;border-left:3px solid var(--accent)}
+.stat-lbl{font-size:9.5px;color:var(--text-mute);margin-bottom:2px}
+.stat-val{font-size:11.5px;font-weight:700}
+.stat-val.ok{color:var(--me-green)}
+.stat-val.warn{color:var(--warning)}
+.stat-val.alert{color:var(--consult-red)}
+.stat-box.ok{border-color:var(--me-green)}
+.stat-box.warn{border-color:var(--warning)}
+.stat-box.alert{border-color:var(--consult-red)}
+
+/* ── ALERTS ── */
+.alerts-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:5px}
+.al{padding:7px 9px;border-radius:var(--r-sm);font-size:11px;display:flex;gap:6px;align-items:flex-start;border-left:3px solid;line-height:1.45;position:relative}
+.al.consult{background:var(--consult-red-bg);border-color:var(--consult-red);color:#7F1D1D}
+.al.warning{background:var(--warning-bg);border-color:var(--warning);color:#92400E}
+.al.info{background:var(--info-bg);border-color:var(--info-blue);color:#1E3A8A}
+.al.success{background:var(--me-green-bg);border-color:var(--me-green);color:#7C2D12}
+.al-ico{flex-shrink:0;font-size:12px}
+.al.custom{padding-right:48px}
+.al-acts{position:absolute;top:4px;right:4px;display:none;gap:2px}
+.al.custom:hover .al-acts{display:flex}
+.al-act{background:rgba(255,255,255,.9);border:1px solid var(--border-strong);border-radius:var(--r-sm);padding:1px 4px;font-size:9.5px;cursor:pointer}
+.al-act.del{color:var(--consult-red);border-color:var(--consult-red)}
+.al-act.del:hover{background:var(--consult-red);color:white}
+.user-bdg{font-size:8px;background:rgba(0,0,0,.08);padding:1px 4px;border-radius:5px;margin-left:3px;font-weight:700;vertical-align:middle}
+
+/* ── FLOW ── */
+.flow-wrap{display:flex;gap:4px;overflow-x:auto;padding:10px 0 4px}
+.flow-step{flex:1;min-width:110px;background:var(--bg);border-radius:var(--r-sm);padding:8px;position:relative;border-top:3px solid var(--secondary);box-shadow:var(--shadow-sm)}
+.flow-step.me{border-top-color:var(--me-green);background:var(--me-green-light)}
+.flow-step.consult{border-top-color:var(--consult-red);background:var(--consult-red-light)}
+.flow-step.audit{border-top-color:var(--audit-purple);background:var(--audit-bg)}
+.flow-num{position:absolute;top:-10px;left:8px;background:var(--secondary);color:white;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.flow-step.me .flow-num{background:var(--me-green)}
+.flow-step.consult .flow-num{background:var(--consult-red)}
+.flow-step.audit .flow-num{background:var(--audit-purple)}
+.flow-name{font-size:11px;font-weight:700;margin:4px 0 2px}
+.flow-desc{font-size:9.5px;color:var(--text-mute);line-height:1.3}
+.flow-actor{display:inline-block;font-size:9px;padding:1px 5px;border-radius:7px;margin-top:3px;font-weight:700}
+.flow-actor.me{background:var(--me-green);color:white}
+.flow-actor.them{background:var(--text-light);color:white}
+.flow-actor.consult{background:var(--consult-red);color:white}
+.flow-actor.audit{background:var(--audit-purple);color:white}
+
+/* ── CHECKLIST ── */
+.check-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:5px;margin-bottom:4px}
+.check-item{display:flex;align-items:flex-start;gap:7px;padding:6px 8px;background:var(--bg);border-radius:var(--r-sm);cursor:pointer;transition:var(--tr);border:1px solid transparent}
+.check-item:hover{border-color:var(--border)}
+.check-item.done{background:var(--me-green-light);border-color:#FED7AA}
+.check-cb{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--border-strong);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px;background:white}
+.check-item.done .check-cb{background:var(--me-green);border-color:var(--me-green);color:white}
+.check-txt{font-size:11px;line-height:1.4}
+.check-txt .ctag{font-size:9px;padding:1px 5px;border-radius:4px;font-weight:700;margin-left:3px}
+.ctag.req{background:var(--consult-red-bg);color:var(--consult-red)}
+.ctag.warn{background:var(--warning-bg);color:var(--warning)}
+.ctag.ok{background:var(--me-green-bg);color:var(--me-green)}
+.ctag.info{background:var(--info-bg);color:var(--info-blue)}
+.check-item.done .check-txt{color:var(--text-mute);text-decoration:line-through}
+
+/* ── DOCS GRID ── */
+.docs-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.doc-stage{background:var(--bg);border-radius:var(--r-sm);padding:7px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm)}
+.doc-stage-hd{font-size:11px;font-weight:700;color:white;background:var(--primary);padding:5px 8px;border-radius:var(--r-sm);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.doc-stage-hd.me{background:var(--me-green)}
+.doc-stage-hd.them{background:var(--text-light)}
+.doc-stage-hd.audit{background:var(--audit-purple)}
+.doc-cnt{background:rgba(255,255,255,.25);padding:1px 6px;border-radius:8px;font-size:9px}
+.doc-list{display:flex;flex-direction:column;gap:4px;flex:1}
+.doc-item{background:white;border-radius:var(--r-sm);padding:5px 7px;border-left:3px solid var(--secondary);font-size:11px;position:relative;transition:var(--tr)}
+.doc-item:hover{box-shadow:var(--shadow-sm)}
+.doc-item.required{border-left-color:var(--me-green)}
+.doc-item.conditional{border-left-color:var(--warning)}
+.doc-item.common{border-left-color:var(--text-light)}
+.doc-item.special{border-left-color:var(--info-blue)}
+.doc-item.consult-i{border-left-color:var(--consult-red)}
+.doc-acts{position:absolute;top:4px;right:5px;display:flex;gap:2px;align-items:center}
+.dl-btn{background:var(--me-green);color:white;border:none;padding:1px 5px;border-radius:var(--r-sm);cursor:pointer;font-size:9.5px;font-weight:700;line-height:1.5;transition:var(--tr)}
+.dl-btn:hover{background:#0D7A31;transform:scale(1.08)}
+.doc-owner{font-size:8px;padding:1px 4px;border-radius:7px;font-weight:700}
+.doc-owner.me{background:var(--me-green);color:white}
+.doc-owner.them{background:var(--text-light);color:white}
+.doc-owner.vendor{background:var(--secondary);color:white}
+.doc-owner.audit{background:var(--audit-purple);color:white}
+.doc-nm{font-weight:700;line-height:1.3;padding-right:48px}
+.doc-nm.wd{padding-right:74px}
+.doc-dc{font-size:9px;color:var(--text-mute);margin-top:1px;line-height:1.3;padding-right:48px}
+.doc-tag{display:inline-block;font-size:8px;padding:1px 4px;border-radius:6px;margin-top:2px;font-weight:700}
+.doc-tag.required{background:var(--me-green-bg);color:var(--me-green)}
+.doc-tag.conditional{background:var(--warning-bg);color:#92400E}
+.doc-tag.common{background:#E2E8F0;color:var(--text-mute)}
+.doc-tag.special{background:var(--info-bg);color:var(--info-blue)}
+.doc-tag.consult-i{background:var(--consult-red-bg);color:var(--consult-red)}
+
+/* ── LEGEND ── */
+.legend{display:flex;gap:6px;font-size:9.5px;color:var(--text-mute);margin-top:7px;flex-wrap:wrap;padding-top:7px;border-top:1px dashed var(--border);align-items:center}
+.leg{display:flex;align-items:center;gap:3px}
+.leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.leg-btn{background:var(--me-green);color:white;padding:1px 4px;border-radius:3px;font-size:8.5px;font-weight:700}
+
+/* ── 절차/서류 범주 필터 ── */
+.leg[data-filter]{cursor:pointer;padding:3px 7px;border-radius:var(--r-sm);transition:var(--tr);user-select:none;border:1px solid transparent}
+.leg[data-filter]:hover{background:var(--bg);color:var(--text);border-color:var(--border)}
+.leg[data-filter].fil-on{background:white;color:var(--text);font-weight:700;border-color:var(--border-strong);box-shadow:var(--shadow-sm)}
+.legend-hint{font-size:9px;color:var(--text-light);margin-left:auto;font-style:italic}
+
+.flow-wrap.fil-active .flow-step{opacity:.15;transform:scale(.97);transition:opacity .2s,transform .2s,box-shadow .2s;filter:grayscale(.4)}
+.flow-wrap.fil-active .flow-step.fil-hi{opacity:1;transform:scale(1.04);box-shadow:var(--shadow-md);filter:none;z-index:2;position:relative}
+
+.docs-grid.fil-active .doc-item{opacity:.1;transition:opacity .2s,box-shadow .2s}
+.docs-grid.fil-active .doc-item.fil-hi{opacity:1;box-shadow:0 0 0 2px var(--accent),var(--shadow-sm)}
+
+/* ── ACTION ROW ── */
+.act-row{display:flex;gap:5px;flex-wrap:wrap}
+.btn-act{background:white;border:1px solid var(--primary);color:var(--primary);padding:6px 11px;border-radius:var(--r-sm);cursor:pointer;font-size:11px;font-weight:600;transition:var(--tr)}
+.btn-act:hover{background:var(--primary);color:white}
+.btn-act.g{border-color:var(--me-green);color:var(--me-green)}
+.btn-act.g:hover{background:var(--me-green);color:white}
+.btn-act.r{border-color:var(--consult-red);color:var(--consult-red)}
+.btn-act.r:hover{background:var(--consult-red);color:white}
+
+/* ── ALERT TYPE TOGGLE ── */
+.al-type-btn{background:white;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:5px 3px;cursor:pointer;font-size:10.5px;font-weight:600;color:var(--text);transition:var(--tr)}
+.al-type-btn:hover{background:var(--bg)}
+.al-type-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal-ov.on{display:flex}
+.modal{background:white;border-radius:var(--r-lg);max-width:860px;width:100%;max-height:92vh;display:flex;flex-direction:column;box-shadow:var(--shadow-xl);border:1px solid rgba(255,255,255,.1)}
+.modal-hdr{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--primary) 0%,var(--secondary) 100%);color:white;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.modal-hdr h3{font-size:14px;font-weight:700}
+.modal-acts{display:flex;gap:5px}
+.modal-body{padding:26px 34px;overflow-y:auto;flex:1}
+.modal-close{background:rgba(255,255,255,.2);border:none;color:white;width:26px;height:26px;border-radius:var(--r-sm);cursor:pointer;font-size:14px;transition:var(--tr)}
+.modal-close:hover{background:rgba(255,255,255,.35)}
+
+/* ── PRINT DOC ── */
+.pdoc{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',serif;color:black;line-height:1.75;font-size:13px}
+.pdoc h1.dtitle{font-size:21px;font-weight:700;text-align:center;margin:0 0 22px;letter-spacing:8px}
+.pdoc .dsub{font-size:10.5px;color:#555;text-align:left;margin-bottom:3px}
+.pdoc table.ftbl{width:100%;border-collapse:collapse;margin:12px 0;border-radius:var(--r-sm)}
+.pdoc table.ftbl td,.pdoc table.ftbl th{border:1px solid black;padding:8px 10px;font-size:12.5px;vertical-align:middle}
+.pdoc table.ftbl th{background:#F3F4F6;font-weight:700;text-align:center}
+.pdoc .sup-tbl{width:200px;margin-left:auto;border-collapse:collapse}
+.pdoc .sup-tbl th,.pdoc .sup-tbl td{border:1px solid black;padding:4px 7px;font-size:11px;text-align:center}
+.pdoc .sup-tbl th{background:#F9FAFB;width:58px}
+.pdoc .dinfo{margin:16px 0;padding-left:3px}
+.pdoc .dinfo p{margin:4px 0;font-size:13px}
+.pdoc .ddate{text-align:center;margin:24px 0 14px;font-size:13px}
+.pdoc .dsign{margin:5px 0;padding-left:48%;font-size:13px}
+.pdoc .dsign p{margin:2px 0}
+.pdoc .drec{border-top:1px solid black;text-align:center;font-weight:700;margin-top:18px;font-size:13.5px;padding-top:10px}
+.pdoc .dfn{font-size:10.5px;color:#555;margin-top:8px;padding-top:5px;border-top:1px dashed #999}
+.pdoc ul.ldisk{margin:5px 0 5px 20px}
+.pdoc ul.ldisk li{margin:2px 0;font-size:12.5px}
+.pdoc .appr{margin:14px 0;padding:0 6px;font-size:13px;line-height:2}
+.pdoc .appr p{margin:2px 0}
+.pdoc .sh{font-weight:700;margin:12px 0 5px;font-size:13px}
+.pdoc .rc{padding-left:12px;line-height:1.9;font-size:12.5px}
+.pdoc .rc p{margin:4px 0}
+.pdoc .fnote{background:#FEF3C7;border-left:3px solid #F59E0B;padding:7px 11px;margin:10px 0;font-size:11px;color:#78350F;border-radius:var(--r-sm)}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{background:var(--bg);border-radius:var(--r-sm);padding:8px 10px;margin-bottom:4px}
+.progress-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.progress-bar{flex:1;height:9px;background:var(--border);border-radius:var(--r-sm);overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--me-green) 0%,#FB923C 100%);border-radius:var(--r-sm);transition:width .4s cubic-bezier(.4,0,.2,1)}
+.progress-lbl{font-size:11px;color:var(--text-mute)}
+.progress-pct{font-size:13px;font-weight:700;color:var(--me-green);min-width:36px;text-align:right}
+.progress-note{font-size:10px;color:var(--text-light)}
+
+/* ── 공사 세부유형 ── */
+#con-type-sec{margin-top:8px}
+.con-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.con-type-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:5px 2px;cursor:pointer;font-size:10px;text-align:center;font-weight:600;transition:var(--tr);line-height:1.3}
+.con-type-btn:hover{background:var(--accent-light);border-color:var(--accent)}
+.con-type-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+.con-type-btn .cico{display:block;font-size:14px;margin-bottom:1px}
+
+/* ── 업체 소재지 / 견적방식 버튼 ── */
+.bid-loc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:4px}
+.bid-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:6px 2px;cursor:pointer;font-size:10px;text-align:center;font-weight:600;transition:var(--tr);line-height:1.3;width:100%}
+.bid-btn:hover{background:var(--accent-light);border-color:var(--accent)}
+.bid-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+.bid-btn .bico{display:block;font-size:14px;margin-bottom:1px}
+.bid-btn small{font-size:8.5px;font-weight:400;opacity:.85}
+.bid-qt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}
+.qt-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:6px 4px;cursor:pointer;font-size:10px;text-align:center;font-weight:600;transition:var(--tr);line-height:1.3;width:100%}
+.qt-btn:hover{background:var(--accent-light);border-color:var(--accent)}
+.qt-btn.active{background:var(--secondary);color:white;border-color:var(--secondary)}
+.qt-btn .bico{display:block;font-size:14px;margin-bottom:1px}
+.qt-btn small{font-size:8.5px;font-weight:400;opacity:.85}
+.bid-sub-lbl{font-size:9.5px;color:var(--text-mute);margin-bottom:3px;display:flex;align-items:center;gap:3px}
+.opt.locked{cursor:not-allowed!important;position:relative;opacity:.9}
+.opt.locked::after{content:'🔒';font-size:8px;position:absolute;top:2px;right:3px;line-height:1}
+
+/* ── 날짜 그룹 ── */
+.date-group{display:flex;align-items:center;gap:3px}
+.date-sep{color:var(--text-mute);font-weight:700;font-size:13px;flex-shrink:0}
+.date-y{width:52px!important;text-align:center;padding:6px 4px!important}
+.date-m,.date-d{width:32px!important;text-align:center;padding:6px 4px!important}
+
+/* ── 담당자 프로필 목록 ── */
+#profile-list-wrap{display:none;margin-bottom:8px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--bg);padding:6px}
+.pfl-hd{font-size:9.5px;color:var(--text-mute);font-weight:700;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.pfl-item{display:flex;align-items:center;gap:5px;padding:5px 7px;background:white;border-radius:var(--r-sm);margin-bottom:3px;border:1px solid var(--border);transition:var(--tr)}
+.pfl-item:hover{border-color:var(--accent);background:var(--light-blue)}
+.pfl-load{flex:1;cursor:pointer;text-align:left;background:none;border:none;padding:0}
+.pfl-name{font-size:11.5px;font-weight:700;color:var(--text);display:block}
+.pfl-date{font-size:9.5px;color:var(--text-mute);display:block}
+.pfl-del{background:none;border:none;color:var(--text-light);cursor:pointer;font-size:13px;padding:2px 5px;border-radius:3px;transition:var(--tr);flex-shrink:0;line-height:1}
+.pfl-del:hover{background:var(--consult-red-bg);color:var(--consult-red)}
+.pfl-empty{font-size:11px;color:var(--text-mute);text-align:center;padding:8px}
+
+/* ── RESPONSIVE ── */
+@media (max-width:1400px){.docs-grid{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:1200px){.docs-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:900px){.main{grid-template-columns:1fr}.left-panel{position:static;max-height:none}.docs-grid{grid-template-columns:repeat(2,1fr)}.stat-grid{grid-template-columns:1fr}}
+@media print{.left-panel,.header,.act-row{display:none}.main{grid-template-columns:1fr}body{background:white}.modal-ov{position:static;background:white;padding:0}.modal{max-width:100%;max-height:none;box-shadow:none}.modal-hdr{display:none}.modal-body{padding:0}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo">
+      <img src="assets/hs_logo.gif" alt="화성특례시" onerror="this.parentElement.style.display='none'">
+    </div>
+    <div class="header-title">
+      <h1>🏛️ 화성시 계약업무 안내 시스템 <span class="role-tag" id="role-tag">공사</span></h1>
+      <div class="sub">계약정보 입력 → 주의사항·절차·서식 자동 안내 · 신규 공무원 가이드 (2026년 기준)</div>
+    </div>
+  </div>
+  <div class="hdr-btns">
+    <button class="btn-hdr" onclick="resetForm()">🔄 초기화</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ════ 좌측 입력 패널 ════ -->
+<div class="left-panel">
+
+  <div class="sec">📋 계약 유형</div>
+  <div class="type-grid" id="type-btns">
+    <button class="type-btn active" data-type="construction"><span class="ico">🏗️</span>공사</button>
+    <button class="type-btn" data-type="service"><span class="ico">📝</span>용역</button>
+    <button class="type-btn" data-type="goods"><span class="ico">📦</span>물품구입</button>
+  </div>
+
+  <!-- 공사 세부 유형 (공사 선택 시만 표시) -->
+  <div id="con-type-sec">
+    <div class="sec" style="margin-top:8px;font-size:9.5px">🏗️ 공사 세부 유형</div>
+    <div class="con-type-grid" id="con-type-btns">
+      <button class="con-type-btn active" data-contype="general"><span class="cico">🏢</span>일반공사<br><span style="font-size:8.5px;font-weight:400;opacity:.8">4억↓ 수의가능</span></button>
+      <button class="con-type-btn" data-contype="specialty"><span class="cico">🔧</span>전문공사<br><span style="font-size:8.5px;font-weight:400;opacity:.8">2억↓ 수의가능</span></button>
+      <button class="con-type-btn" data-contype="electrical"><span class="cico">⚡</span>전기·정보·소방<br><span style="font-size:8.5px;font-weight:400;opacity:.8">1.6억↓ 수의가능</span></button>
+    </div>
+  </div>
+
+  <div class="sec" style="margin-top:11px">⚙️ 추가 조건 (복수 선택 가능)</div>
+  <div class="opts-grid">
+    <button class="opt" data-opt="corp">🏢 법인사업자</button>
+    <button class="opt" data-opt="suuie">📄 수의계약</button>
+    <button class="opt" data-opt="outside">📍 관외업체</button>
+    <button class="opt" data-opt="joint">🤝 공동계약</button>
+    <button class="opt consult-s" data-opt="consult">↔️ 계약부서 협의</button>
+    <button class="opt" data-opt="advance">💰 선금 신청</button>
+  </div>
+
+  <div class="sec" style="margin-top:8px">🌟 특수업체 유형 <span style="font-size:9px;font-weight:400;color:var(--text-mute);text-transform:none;letter-spacing:0">(해당 시 1인 수의 5천만원까지)</span></div>
+  <div class="opts-grid" style="grid-template-columns:repeat(3,1fr)">
+    <button class="opt" data-opt="disability">♿ 장애인기업</button>
+    <button class="opt" data-opt="women">👩‍💼 여성기업</button>
+    <button class="opt" data-opt="social">🌱 사회적기업</button>
+  </div>
+
+  <div class="sec" style="margin-top:8px">🏛️ 입찰방법 확인 <span style="font-size:9px;font-weight:400;color:var(--text-mute);text-transform:none;letter-spacing:0">클릭으로 선택·검증 (재클릭 해제)</span></div>
+  <div class="bid-sub-lbl">📍 업체 소재지 제한</div>
+  <div class="bid-loc-grid">
+    <button class="bid-btn" data-loc="hwaseong"><span class="bico">🏙️</span>화성시 소재<br><small>수의계약</small></button>
+    <button class="bid-btn" data-loc="gyeonggi"><span class="bico">🗺️</span>경기도 소재<br><small>지역제한경쟁</small></button>
+    <button class="bid-btn" data-loc="national"><span class="bico">🌐</span>전 국<br><small>일반경쟁입찰</small></button>
+  </div>
+  <div id="qt-sec" style="display:none;margin-top:5px">
+    <div class="bid-sub-lbl">📋 견적 방식 <span style="font-size:8.5px;color:var(--text-light)">(수의계약 적용)</span></div>
+    <div class="bid-qt-grid">
+      <button class="qt-btn" data-qt="single"><span class="bico">👤</span>1인 견적<br><small id="qt-single-hint">2천만원↓</small></button>
+      <button class="qt-btn" data-qt="multiple"><span class="bico">👥</span>2인 이상 견적<br><small>소액수의 범위</small></button>
+    </div>
+  </div>
+
+  <div class="sec">✏️ 계약 정보</div>
+  <div class="fr">
+    <label class="fl req" id="name-label">공사명</label>
+    <input type="text" class="fi" id="contract-name" placeholder="예: 청사 옥상 방수공사">
+  </div>
+  <div class="fr">
+    <label class="fl">사업 금액 (추정가격 기준, 원)</label>
+    <input type="text" class="fi" id="project-amount" value="20,000,000">
+    <div class="quick-row">
+      <button class="qb" data-amount="5000000">500만</button>
+      <button class="qb" data-amount="10000000">1천만</button>
+      <button class="qb" data-amount="20000000">2천만</button>
+      <button class="qb" data-amount="50000000">5천만</button>
+      <button class="qb" data-amount="100000000">1억</button>
+      <button class="qb" data-amount="300000000">3억</button>
+    </div>
+  </div>
+  <div class="fr">
+    <label class="fl">네고율 (%) <span style="color:var(--consult-red);font-size:9.5px">※ 계약부서 협의</span></label>
+    <div class="amt-row">
+      <input type="number" class="fi" id="nego-rate" value="0" min="0" max="100" step="0.1" style="flex:1">
+      <span class="amt-pill" id="nego-amt" style="background:var(--warning-bg);color:#92400E">감액 0원</span>
+    </div>
+  </div>
+  <div class="fr">
+    <label class="fl req">계약 금액 (원) <span style="font-size:9px;font-weight:400;color:var(--text-mute)">※ 자동산출·서식 반영</span></label>
+    <div class="amt-row">
+      <input type="text" class="fi" id="amount-input" value="20,000,000" readonly style="background:var(--me-green-light);font-weight:700;color:var(--me-green);flex:1">
+      <span class="amt-pill" id="amt-display" style="background:var(--me-green);color:white">2천만원</span>
+    </div>
+  </div>
+  <div class="fr">
+    <label class="fl">계약 일자</label>
+    <input type="hidden" id="start-date">
+    <div class="date-group">
+      <input type="text" class="fi date-y" id="start-y" placeholder="YYYY" maxlength="4" inputmode="numeric">
+      <span class="date-sep">-</span>
+      <input type="text" class="fi date-m" id="start-m" placeholder="MM" maxlength="2" inputmode="numeric">
+      <span class="date-sep">-</span>
+      <input type="text" class="fi date-d" id="start-d" placeholder="DD" maxlength="2" inputmode="numeric">
+    </div>
+  </div>
+  <div class="fr">
+    <label class="fl" id="end-label">준공 기한</label>
+    <input type="hidden" id="end-date">
+    <div class="date-group">
+      <input type="text" class="fi date-y" id="end-y" placeholder="YYYY" maxlength="4" inputmode="numeric">
+      <span class="date-sep">-</span>
+      <input type="text" class="fi date-m" id="end-m" placeholder="MM" maxlength="2" inputmode="numeric">
+      <span class="date-sep">-</span>
+      <input type="text" class="fi date-d" id="end-d" placeholder="DD" maxlength="2" inputmode="numeric">
+    </div>
+  </div>
+
+  <div class="sec">🏢 업체 정보</div>
+  <div class="fr"><label class="fl">업체명 (상호)</label><input type="text" class="fi" id="vendor-name" placeholder="예: (주)화성건설"></div>
+  <div class="fr"><label class="fl">대표자</label><input type="text" class="fi" id="rep" placeholder="예: 홍길동"></div>
+  <div class="fr"><label class="fl">사업자등록번호</label><input type="text" class="fi" id="biz-num" placeholder="예: 123-45-67890"></div>
+  <div class="fr"><label class="fl">사업장 주소</label><input type="text" class="fi" id="address" placeholder="예: 화성시 향남읍 향남로 470"></div>
+  <div class="fr"><label class="fl" id="ind-label">업종 / 면허</label><input type="text" class="fi" id="industry" placeholder="예: 실내건축공사업"></div>
+  <div class="fr"><label class="fl">전화번호</label><input type="text" class="fi" id="phone" placeholder="예: 031-1234-5678"></div>
+
+  <div class="sec">
+    <span>👤 담당자·결재 정보</span>
+    <span class="mini-btns">
+      <button class="mb sv" onclick="saveApprovers()">💾 저장</button>
+      <button class="mb ld" onclick="toggleProfileList()">📂 불러오기</button>
+      <button class="mb cl" onclick="clearAllProfiles()">🗑️</button>
+    </span>
+  </div>
+  <div class="saved-info" id="saved-info"></div>
+  <div id="profile-list-wrap">
+    <div class="pfl-hd">저장된 담당자 프로필</div>
+    <div id="profile-list-inner"></div>
+  </div>
+  <div class="fr"><label class="fl">소속 부서</label><input type="text" class="fi" id="dept" placeholder="예: 총무과 계약팀"></div>
+  <div class="fr"><label class="fl">담당자 직급</label><input type="text" class="fi" id="officer-rank" placeholder="예: 행정8급"></div>
+  <div class="fr"><label class="fl">담당자 성명</label><input type="text" class="fi" id="officer-name" placeholder="예: 김담당"></div>
+  <div class="fr"><label class="fl">팀장 직급</label><input type="text" class="fi" id="leader-rank" placeholder="예: 행정6급"></div>
+  <div class="fr"><label class="fl">팀장 성명</label><input type="text" class="fi" id="leader-name" placeholder="예: 이팀장"></div>
+  <div class="fr"><label class="fl">부서장 직급</label><input type="text" class="fi" id="head-rank" placeholder="예: 행정5급"></div>
+  <div class="fr"><label class="fl">부서장 성명</label><input type="text" class="fi" id="head-name" placeholder="예: 박과장"></div>
+</div>
+
+<!-- ════ 우측 결과 패널 ════ -->
+<div class="right-panel">
+
+  <!-- 진행 진척도 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="l">📊 입력 진척도</span>
+      <span style="font-size:9.5px;color:var(--text-mute);text-transform:none;letter-spacing:0">필수 항목 기준</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-row">
+        <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+        <span class="progress-pct" id="prog-pct">0%</span>
+      </div>
+      <div class="progress-note" id="prog-note">계약명, 금액, 계약일자, 업체명을 입력하세요</div>
+    </div>
+  </div>
+
+  <!-- 정보요약 + 핵심지표 -->
+  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:9px">
+    <div class="card">
+      <div class="card-title">
+        <span class="l">📌 계약 정보 요약</span>
+        <span class="badge-type" id="badge-type">공사</span>
+      </div>
+      <table class="info-tbl" id="info-tbl"></table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="l">🎯 핵심 지표 (자동 산출)</span></div>
+      <div class="stat-grid">
+        <div class="stat-box" id="sb-method"><div class="stat-lbl">계약 방식</div><div class="stat-val" id="sv-method">-</div></div>
+        <div class="stat-box" id="sb-bond"><div class="stat-lbl">계약 보증</div><div class="stat-val" id="sv-bond">-</div></div>
+        <div class="stat-box" id="sb-inspect"><div class="stat-lbl">검사자·입회자</div><div class="stat-val" id="sv-inspect">-</div></div>
+        <div class="stat-box" id="sb-approve"><div class="stat-lbl">결재선</div><div class="stat-val" id="sv-approve">-</div></div>
+        <div class="stat-box" id="sb-심사"><div class="stat-lbl">계약심사 여부</div><div class="stat-val" id="sv-심사">-</div></div>
+        <div class="stat-box" id="sb-발주"><div class="stat-lbl">발주 방식</div><div class="stat-val" id="sv-발주">-</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 주의사항 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="l">⚠️ 사업담당자 주의사항</span>
+      <span style="text-transform:none;letter-spacing:0;display:flex;gap:3px;align-items:center">
+        <span style="font-size:9.5px;color:var(--text-mute);font-weight:400">자동 + 사용자 추가</span>
+        <button class="mb sv" onclick="openAlertEd()" style="font-size:9.5px">➕ 추가</button>
+        <button class="mb cl" onclick="clearCustomAlerts()" style="font-size:9.5px">🗑️ 전체삭제</button>
+      </span>
+    </div>
+    <div class="alerts-wrap" id="alerts-wrap"></div>
+  </div>
+
+  <!-- 사전 체크리스트 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="l">✅ 계약요청 전 체크리스트</span>
+      <span style="text-transform:none;letter-spacing:0;font-size:9.5px;color:var(--text-mute);font-weight:400" id="check-progress">0/0 완료</span>
+    </div>
+    <div class="check-wrap" id="check-wrap"></div>
+    <div style="font-size:10px;color:var(--text-light);margin-top:3px">※ 항목 클릭으로 완료 표시 — 새로고침 시 초기화됩니다</div>
+  </div>
+
+  <!-- 절차 흐름 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="l">🔄 계약 절차 흐름</span>
+      <span style="font-size:9.5px;color:var(--text-mute);text-transform:none;letter-spacing:0">
+        <span style="color:var(--me-green);font-weight:700">● 사업담당자</span> &nbsp;
+        <span style="color:var(--text-light);font-weight:700">● 계약부서</span> &nbsp;
+        <span style="color:var(--consult-red);font-weight:700">● 협의</span> &nbsp;
+        <span style="color:var(--audit-purple);font-weight:700">● 감사관</span>
+      </span>
+    </div>
+    <div class="flow-wrap" id="flow-wrap"></div>
+  </div>
+
+  <!-- 단계별 필요서류 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="l">📂 단계별 필요 서류 <span id="docs-total" style="color:var(--text-mute);font-weight:400;text-transform:none;letter-spacing:0"></span></span>
+      <span style="font-size:9.5px;color:var(--text-mute);text-transform:none;letter-spacing:0;font-weight:400">※ <span class="leg-btn">📥</span> 클릭 → 미리보기 후 원본 PDF 다운로드</span>
+    </div>
+    <div class="docs-grid" id="docs-grid"></div>
+    <div class="legend">
+      <span class="leg" data-filter="me" onclick="filterByActor('me')" title="클릭하면 사업담당자 준비 항목만 부각"><span class="leg-dot" style="background:var(--me-green)"></span>사업담당자 준비</span>
+      <span class="leg" data-filter="them" onclick="filterByActor('them')" title="클릭하면 계약부서 처리 항목만 부각"><span class="leg-dot" style="background:var(--text-light)"></span>계약부서 처리</span>
+      <span class="leg" data-filter="vendor" onclick="filterByActor('vendor')" title="클릭하면 업체 제출 항목만 부각"><span class="leg-dot" style="background:var(--secondary)"></span>업체 제출</span>
+      <span class="leg" data-filter="consult" onclick="filterByActor('consult')" title="클릭하면 협의 필요 항목만 부각"><span class="leg-dot" style="background:var(--consult-red)"></span>협의 필요</span>
+      <span class="leg"><span class="leg-btn">📥</span>서식 다운로드</span>
+      <span class="legend-hint" id="filter-hint"></span>
+    </div>
+  </div>
+
+  <!-- 빠른 작업 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="l">🚀 빠른 작업</span>
+      <span style="font-size:9.5px;color:var(--text-mute);text-transform:none;letter-spacing:0;font-weight:400">※ 원인행위는 <b>차세대지방재정(e-호조)</b>에서 직접 처리</span>
+    </div>
+    <div class="act-row">
+      <button class="btn-act" onclick="copyInfo()">📋 계약정보 복사</button>
+      <button class="btn-act" onclick="copyDocs()">📋 서류목록 복사</button>
+      <button class="btn-act g" onclick="dlAllForms()">📦 전체 서식 일괄 다운로드</button>
+      <button class="btn-act r" onclick="printPage()">🖨️ 인쇄</button>
+    </div>
+  </div>
+
+</div><!-- end right-panel -->
+</div><!-- end main -->
+
+<!-- ════ 서식 모달 ════ -->
+<div class="modal-ov" id="modal-ov">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="modal-title">서식 미리보기</h3>
+      <div class="modal-acts">
+        <button class="btn-hdr" onclick="dlOriginalPDF()" id="btn-dl-pdf">📄 서식 원본 다운로드</button>
+        <button class="btn-hdr" onclick="printForm()">🖨️ 인쇄</button>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ════ 주의사항 편집 모달 ════ -->
+<div class="modal-ov" id="alert-ed-ov">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-hdr">
+      <h3 id="alert-ed-title">📝 주의사항 추가/편집</h3>
+      <button class="modal-close" onclick="closeAlertEd()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:18px 22px">
+      <div class="fr">
+        <label class="fl">유형</label>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+          <button class="al-type-btn" data-type="consult">↔️ 협의</button>
+          <button class="al-type-btn active" data-type="warning">⚠️ 경고</button>
+          <button class="al-type-btn" data-type="info">ℹ️ 정보</button>
+          <button class="al-type-btn" data-type="success">✅ 정상</button>
+        </div>
+      </div>
+      <div class="fr">
+        <label class="fl">아이콘 (이모지)</label>
+        <input type="text" class="fi" id="al-ico-inp" value="📌" maxlength="3">
+      </div>
+      <div class="fr">
+        <label class="fl req">내용</label>
+        <textarea class="fi" id="al-txt-inp" rows="3" placeholder="예: 사업 시작 전 부서장 사전 결재 필수" style="resize:vertical;min-height:55px"></textarea>
+        <div style="font-size:9.5px;color:var(--text-mute);margin-top:2px">💡 강조하려면 &lt;b&gt;텍스트&lt;/b&gt; 사용</div>
+      </div>
+      <div style="display:flex;gap:5px;justify-content:flex-end;margin-top:12px">
+        <button class="btn-act" onclick="closeAlertEd()">취소</button>
+        <button class="btn-act g" onclick="saveAlertItem()" id="al-save-btn">💾 저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// 상태
+// ══════════════════════════════════════════════════════
+var S = { type:'construction', conType:'general', amount:20000000, opts: new Set(), location:null, quoteType:null };
+var currentFormId='';
+var editAlertId=null;
+var selAlertType='warning';
+var checkedItems = new Set();
+var activeFilter = null;
+var APPROVER_KEY='hwaseong_approvers_v2';
+var CUSTOM_ALERT_KEY='hwaseong_custom_alerts_v2';
+
+var TYPE_LBL = { construction:'공사', service:'용역', goods:'물품구입' };
+
+// ══════════════════════════════════════════════════════
+// 유틸
+// ══════════════════════════════════════════════════════
+function fmt(n){ return (n||0).toLocaleString('ko-KR')+'원'; }
+function fmtShort(n){
+  if(!n)return'0원';
+  if(n>=100000000)return(Math.round(n/10000000)/10)+'억원';
+  if(n>=10000000)return(Math.round(n/10000)/1000)+'천만원';
+  if(n>=10000)return Math.round(n/10000)+'만원';
+  return n+'원';
+}
+function fmtHangul(n){
+  if(!n||n===0)return'영원';
+  var d=['','일','이','삼','사','오','육','칠','팔','구'];
+  var u1=['','십','백','천'];
+  var u2=['','만','억','조'];
+  var str='';
+  var num=String(Math.abs(Math.floor(n)));
+  var groups=[];
+  while(num.length>0){groups.unshift(num.slice(-4));num=num.slice(0,-4);}
+  for(var g=0;g<groups.length;g++){
+    var gn=parseInt(groups[g],10);
+    if(gn===0)continue;
+    var gs='';
+    var ds=groups[g].padStart(4,'0').split('');
+    for(var i=0;i<4;i++){var dd=parseInt(ds[i],10);var pos=3-i;if(dd===0)continue;gs+=d[dd]+u1[pos];}
+    str+=gs+u2[groups.length-1-g];
+  }
+  return str+'원';
+}
+function parseAmt(s){ return parseInt(String(s).replace(/[^0-9]/g,''),10)||0; }
+function fmtDateKor(d){
+  if(!d)return'____년 __월 __일';
+  var p=d.split('-');
+  if(p.length!==3)return'____년 __월 __일';
+  return p[0]+'년 '+parseInt(p[1],10)+'월 '+parseInt(p[2],10)+'일';
+}
+function today(){ var t=new Date(); return t.getFullYear()+'년 '+(t.getMonth()+1)+'월 '+t.getDate()+'일'; }
+function todayShort(){ var t=new Date(); return t.getFullYear()+String(t.getMonth()+1).padStart(2,'0')+String(t.getDate()).padStart(2,'0'); }
+function esc(s){ if(s===null||s===undefined)return''; return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function v(val,blank){ return val&&String(val).trim()?esc(val):(blank||'_________________'); }
+function getInfo(){
+  return{
+    type:TYPE_LBL[S.type], typeKey:S.type,
+    name:document.getElementById('contract-name').value||'',
+    amount:S.amount, amountStr:fmt(S.amount), amountHangul:fmtHangul(S.amount),
+    sDate:document.getElementById('start-date').value,
+    eDate:document.getElementById('end-date').value,
+    sDateStr:fmtDateKor(document.getElementById('start-date').value),
+    eDateStr:fmtDateKor(document.getElementById('end-date').value),
+    vendor:document.getElementById('vendor-name').value||'',
+    rep:document.getElementById('rep').value||'',
+    bizNum:document.getElementById('biz-num').value||'',
+    address:document.getElementById('address').value||'',
+    industry:document.getElementById('industry').value||'',
+    phone:document.getElementById('phone').value||'',
+    dept:document.getElementById('dept').value||'',
+    officerRank:document.getElementById('officer-rank').value||'',
+    officerName:document.getElementById('officer-name').value||'',
+    leaderRank:document.getElementById('leader-rank').value||'',
+    leaderName:document.getElementById('leader-name').value||'',
+    headRank:document.getElementById('head-rank').value||'',
+    headName:document.getElementById('head-name').value||''
+  };
+}
+
+// ══════════════════════════════════════════════════════
+// UI 업데이트
+// ══════════════════════════════════════════════════════
+function updateTypeUI(){
+  var t=S.type;
+  var lb={
+    construction:{name:'공사명',end:'준공 기한',ind:'업종 / 면허',namePh:'예: 청사 옥상 방수공사',indPh:'예: 실내건축공사업'},
+    service:{name:'용역명',end:'완료 기한',ind:'업종 (해당없음)',namePh:'예: 2026 행정서비스 개선 용역',indPh:'해당없음'},
+    goods:{name:'물품명',end:'납품 기한',ind:'업종 (해당없음)',namePh:'예: 사무용 노트북 20대',indPh:'해당없음'}
+  };
+  var l=lb[t];
+  document.getElementById('name-label').textContent=l.name;
+  document.getElementById('end-label').textContent=l.end;
+  document.getElementById('ind-label').textContent=l.ind;
+  document.getElementById('contract-name').placeholder=l.namePh;
+  document.getElementById('industry').placeholder=l.indPh;
+  var indEl=document.getElementById('industry');
+  if((t==='service'||t==='goods')&&!indEl.value.trim()) indEl.value='해당없음';
+  else if(t==='construction'&&indEl.value==='해당없음') indEl.value='';
+  document.getElementById('badge-type').textContent=TYPE_LBL[t];
+  document.getElementById('role-tag').textContent=TYPE_LBL[t];
+  // 공사 세부유형 표시/숨김
+  document.getElementById('con-type-sec').style.display=(t==='construction')?'':'none';
+}
+
+function updateProgress(){
+  var fields=['contract-name','project-amount','start-date','vendor-name','rep','officer-name'];
+  var done=0;
+  for(var i=0;i<fields.length;i++){
+    var el=document.getElementById(fields[i]);
+    if(el&&el.value.trim()) done++;
+  }
+  var pct=Math.round(done/fields.length*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  var notes={0:'계약명, 금액, 계약일자, 업체명을 입력하세요',
+    17:'계약 금액이 입력되었습니다',33:'업체 정보를 입력하세요',
+    50:'계약 기간을 입력하세요',67:'담당자 정보를 입력하세요',
+    83:'거의 완료! 담당자 성명을 입력하세요',100:'✅ 필수 정보 입력 완료!'};
+  var noteKey=done*17<=100?done*17:100;
+  if(done===fields.length) noteKey=100;
+  document.getElementById('prog-note').textContent=notes[noteKey]||'입력 진행 중...';
+}
+
+function calculate(){
+  updateProgress();
+  var a=S.amount, t=S.type, o=S.opts;
+  var cName=document.getElementById('contract-name').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var sDate=document.getElementById('start-date').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var eDate=document.getElementById('end-date').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var vendor=document.getElementById('vendor-name').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var rep=document.getElementById('rep').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var bizNum=document.getElementById('biz-num').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var ind=document.getElementById('industry').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var addr=document.getElementById('address').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var phone=document.getElementById('phone').value||'<span style="color:var(--text-light)">(미입력)</span>';
+  var nLabel=t==='construction'?'공사명':t==='service'?'용역명':'물품명';
+  var iLabel=t==='construction'?'업종/면허':'업종';
+  var pAmt=parseAmt(document.getElementById('project-amount').value);
+  var nRate=parseFloat(document.getElementById('nego-rate').value)||0;
+  var negoCut=Math.round(pAmt*(nRate/100));
+  var negoRow=nRate>0?
+    '<tr><td class="lbl">사업금액</td><td class="val" style="color:var(--text-mute)">'+fmt(pAmt)+'</td></tr>'+
+    '<tr><td class="lbl">네고율</td><td class="val" style="color:var(--warning)">'+nRate+'% (-'+fmt(negoCut)+')</td></tr>':'';
+  document.getElementById('info-tbl').innerHTML=
+    '<tr><td class="lbl">'+nLabel+'</td><td class="val">'+cName+'</td></tr>'+negoRow+
+    '<tr><td class="lbl">계약금액</td><td class="val" style="color:var(--primary);font-weight:700">'+fmt(a)+' <span style="color:var(--text-mute);font-weight:400;font-size:10.5px">('+fmtShort(a)+')</span></td></tr>'+
+    '<tr><td class="lbl">계약기간</td><td class="val">'+sDate+' ~ '+eDate+'</td></tr>'+
+    '<tr><td class="lbl">업체명</td><td class="val">'+vendor+'</td></tr>'+
+    '<tr><td class="lbl">대표자</td><td class="val">'+rep+'</td></tr>'+
+    '<tr><td class="lbl">사업자번호</td><td class="val">'+bizNum+'</td></tr>'+
+    '<tr><td class="lbl">'+iLabel+'</td><td class="val">'+ind+'</td></tr>'+
+    '<tr><td class="lbl">주소</td><td class="val">'+addr+'</td></tr>'+
+    '<tr><td class="lbl">연락처</td><td class="val">'+phone+'</td></tr>';
+
+  // 핵심 지표 (추정가격 + 업체 소재지 + 견적방식 → 입찰방법 판정)
+  var lim=getSuuieLimits();
+  var pAmt=parseAmt(document.getElementById('project-amount').value);
+  var loc=S.location, qt=S.quoteType;
+  var meth, mCls;
+  if(!loc){
+    if(pAmt<=lim.limit1){meth='라. 1인 수의계약';mCls='ok';}
+    else if(pAmt<=lim.limit2){meth='다. 화성시 소액수의';mCls='warn';}
+    else if(pAmt<=lim.limitNational){meth='나. 경기도 지역제한';mCls='alert';}
+    else{meth='가. 전국 일반경쟁입찰';mCls='alert';}
+  } else if(loc==='hwaseong'){
+    if(pAmt>lim.limit2){meth='⛔ 수의 불가 ('+fmtShort(lim.limit2)+'↓ 필요)';mCls='alert';}
+    else if(qt==='single'){
+      if(pAmt>lim.limit1){meth='⚠️ 1인 초과 ('+fmtShort(lim.limit1)+'↓ 필요)';mCls='alert';}
+      else{meth='라. 1인 수의계약 ✓';mCls='ok';}
+    } else if(qt==='multiple'){
+      if(pAmt<=lim.limit1){meth='다. 소액수의 (1인도 가능)';mCls='warn';}
+      else{meth='다. 화성시 소액수의 ✓';mCls='ok';}
+    } else {
+      if(pAmt<=lim.limit1){meth='라. 1인 수의계약';mCls='ok';}
+      else{meth='다. 화성시 소액수의';mCls='warn';}
+    }
+  } else if(loc==='gyeonggi'){
+    if(pAmt<=lim.limit2){meth='나. ⚠️ 수의 범위 (화성시 가능)';mCls='warn';}
+    else if(pAmt>lim.limitNational){meth='나. ⛔ 전국입찰 대상';mCls='alert';}
+    else{meth='나. 경기도 지역제한 ✓';mCls='warn';}
+  } else if(loc==='national'){
+    if(pAmt<lim.limitNational){meth='가. ⚠️ 지역제한 가능 범위';mCls='warn';}
+    else{meth='가. 전국 일반경쟁입찰 ✓';mCls='alert';}
+  }
+  setStatBox('method',meth,mCls);
+
+  var rate=t==='construction'?7.5:5;
+  var bondTxt=a>=50000000?'보증증권 ('+rate+'%)':'면제각서 ('+rate+'%)';
+  setStatBox('bond',bondTxt,a>=50000000?'warn':'ok');
+
+  var insp=a<30000000?'담당자 / 팀장':'팀장 + 회계팀장 입회';
+  setStatBox('inspect',insp,a>=30000000?'warn':'ok');
+
+  var appLines=[];
+  if(a<100000000) appLines.push('과장');
+  else if(a<1000000000) appLines.push('국장');
+  else appLines.push('시장·부시장');
+  if(o.has('consult')) appLines.push('계약부서 협의');
+  setStatBox('approve',appLines.join(' · '),o.has('consult')?'alert':'ok');
+
+  var 심사Threshold=t==='construction'?100000000:t==='service'?50000000:20000000;
+  setStatBox('심사',a>=심사Threshold?'대상 (감사관 심사 필요)':'비대상',a>=심사Threshold?'warn':'ok');
+
+  var 발주Lbl, 발주Cls;
+  if(!loc){
+    if(pAmt<=lim.limit1){ 발주Lbl=lim.isSpecial?'라. 1인 수의 (특수 5천만↓)':'라. 1인 수의 (2천만↓)'; 발주Cls='ok'; }
+    else if(pAmt<=lim.limit2){ 발주Lbl='다. 화성시 소액수의'; 발주Cls='warn'; }
+    else if(pAmt<=lim.limitNational){ 발주Lbl='나. 경기도 지역제한'; 발주Cls='alert'; }
+    else{ 발주Lbl='가. 전국 일반경쟁입찰'; 발주Cls='alert'; }
+  } else if(loc==='hwaseong'){
+    if(pAmt>lim.limit2){ 발주Lbl='⛔ 수의불가 — 입찰 전환 필요'; 발주Cls='alert'; }
+    else if(qt==='single'){ 발주Lbl=pAmt>lim.limit1?'라. ⚠️ 1인 한도 초과':'라. 1인 수의계약 ✓'; 발주Cls=pAmt>lim.limit1?'alert':'ok'; }
+    else if(qt==='multiple'){ 발주Lbl=pAmt<=lim.limit1?'다. 소액수의 (1인도 가능)':'다. 화성시 소액수의 ✓'; 발주Cls='warn'; }
+    else{ 발주Lbl=pAmt<=lim.limit1?'라. 1인 수의계약':'다. 화성시 소액수의'; 발주Cls=pAmt<=lim.limit1?'ok':'warn'; }
+  } else if(loc==='gyeonggi'){
+    if(pAmt>lim.limitNational){ 발주Lbl='나. ⛔ 전국입찰 대상'; 발주Cls='alert'; }
+    else if(pAmt<=lim.limit2){ 발주Lbl='나. ⚠️ 수의범위 (화성시 가능)'; 발주Cls='warn'; }
+    else{ 발주Lbl='나. 경기도 지역제한 ✓'; 발주Cls='warn'; }
+  } else {
+    발주Lbl=pAmt<lim.limitNational?'가. ⚠️ 지역제한 가능 범위':'가. 전국 일반경쟁입찰 ✓'; 발주Cls='alert';
+  }
+  setStatBox('발주',발주Lbl,발주Cls);
+
+  renderAlerts();
+  renderChecklist();
+  renderFlow();
+  renderDocs();
+  reapplyFilter();
+}
+
+function setStatBox(id,val,cls){
+  document.getElementById('sv-'+id).textContent=val;
+  document.getElementById('sv-'+id).className='stat-val '+cls;
+  document.getElementById('sb-'+id).className='stat-box '+cls;
+}
+
+// ══════════════════════════════════════════════════════
+// 주의사항
+// ══════════════════════════════════════════════════════
+function renderAlerts(){
+  var a=S.amount, t=S.type, o=S.opts;
+  var pAmt=parseAmt(document.getElementById('project-amount').value);
+  var lim=getSuuieLimits();
+  var als=[];
+  if(o.has('consult')) als.push({type:'consult',ico:'↔️',txt:'<b>계약부서 협의 필요</b> — 가격협상·선금·특수조건 등은 계약팀과 사전 협의'});
+  if(lim.isSpecial) als.push({type:'info',ico:'⭐',txt:'<b>특수기업 우대 적용</b> — 장애인·여성·사회적기업 해당 시 1인 수의계약 한도 <b>5천만원↓</b> (일반 2천만원)'});
+  // 소재지·견적방식 선택 검증 알림
+  var loc=S.location, qt=S.quoteType;
+  if(loc==='hwaseong'){
+    if(pAmt>lim.limit2) als.push({type:'warning',ico:'🚫',txt:'<b>수의계약 불가</b> — 화성시 소재 선택하셨으나 금액('+fmtShort(pAmt)+')이 소액수의 상한('+fmtShort(lim.limit2)+') 초과. 경쟁입찰로 전환 필요'});
+    else if(qt==='single'&&pAmt>lim.limit1) als.push({type:'warning',ico:'⚠️',txt:'<b>1인 견적 한도 초과</b> — 1인 수의계약 상한은 '+fmtShort(lim.limit1)+'원. 2인 이상 견적(소액수의)으로 변경 필요'});
+    else if(qt==='single') als.push({type:'success',ico:'✅',txt:'<b>라. 1인 견적 수의계약 가능</b> — 화성시 소재 업체, '+fmtShort(pAmt)+' ≤ '+fmtShort(lim.limit1)+' 조건 충족'});
+    else if(qt==='multiple') als.push({type:'info',ico:'🏙️',txt:'<b>다. 소액수의 (2인 이상 견적)</b> — 화성시 소재 업체 대상, 견적서 2인분 이상 첨부 필수'});
+    else als.push({type:'info',ico:'🏙️',txt:'<b>화성시 소재 수의계약</b> — 견적방식(1인/2인이상)을 선택하면 상세 검증이 됩니다'});
+  } else if(loc==='gyeonggi'){
+    if(pAmt>lim.limitNational) als.push({type:'warning',ico:'⚠️',txt:'<b>전국입찰 대상 금액</b> — 경기도 지역제한('+fmtShort(lim.limitNational)+' 이하)을 초과. 전국 일반경쟁입찰로 전환 필요'});
+    else if(pAmt<=lim.limit2) als.push({type:'info',ico:'💡',txt:'<b>나. 경기도 지역제한 선택</b> — 이 금액('+fmtShort(pAmt)+')은 화성시 소액수의('+fmtShort(lim.limit2)+' 이하)도 가능. 화성시 소재로 변경 검토'});
+    else als.push({type:'info',ico:'🗺️',txt:'<b>나. 경기도 지역제한 경쟁입찰</b> — 경기도 소재 업체로 제한하여 G2B 전자입찰 진행'});
+  } else if(loc==='national'){
+    if(pAmt<lim.limitNational) als.push({type:'info',ico:'💡',txt:'<b>가. 전국입찰 선택</b> — 이 금액은 경기도 지역제한(나)도 가능. 지역제한 시 지역업체 참여 기회 확대'});
+    else als.push({type:'info',ico:'🌐',txt:'<b>가. 전국 일반경쟁입찰</b> — 나라장터(G2B) 전자입찰, 자격제한 없음'});
+  } else {
+    if(pAmt>lim.limit2) als.push({type:'warning',ico:'⚠️',txt:'<b>경쟁입찰 대상</b> — 소액수의 상한('+fmtShort(lim.limit2)+') 초과, 나라장터(G2B) 전자입찰 필수'});
+    else if(pAmt>lim.limit1) als.push({type:'info',ico:'🏙️',txt:'<b>화성시 소액수의 대상</b> — 화성시 소재 업체로 제한하여 소액견적 수의계약 진행 (지방계약법 시행령 제30조)'});
+  }
+  if(a>=10000000) als.push({type:'warning',ico:'💵',txt:'<b>1천만원 이상</b> — 정부수입인지 납부 필수 (홈택스 납부 후 증빙)'});
+  if(a>=20000000&&t!=='goods') als.push({type:'info',ico:'🪙',txt:'<b>2천만원 이상</b> — 지역개발채권 매입 필수 (공급가액 1.5%, 청구 시마다)'});
+  if(a>=30000000) als.push({type:'consult',ico:'👥',txt:'<b>3천만원 이상 검수</b> — 검사자 <b>팀장</b>, 입회자 <b>회계팀장</b> 必'});
+  if(o.has('outside')) als.push({type:'warning',ico:'📍',txt:'<b>관외업체</b> — 관외업체 선정 사유서 작성 필수 (관내업체 현황 확인 후)'});
+  if(o.has('suuie')||pAmt<=lim.limit2) als.push({type:'info',ico:'📄',txt:'<b>수의계약</b> — 요청사유서 + 체결제한 확인서 + 각서 3종 준비'});
+  if(a>15000000&&t==='construction') als.push({type:'warning',ico:'📜',txt:'<b>공사 1,500만원 이상</b> — 건설업 면허 확인 필수'});
+  if(t==='construction'&&a>=100000000) als.push({type:'info',ico:'🏗️',txt:'<b>1억원 이상 공사</b> — 계약심사(감사관) 필수, 착공 전 기술지도 계약 체결'});
+  if(t==='service'&&a>=50000000) als.push({type:'info',ico:'📋',txt:'<b>용역 5천만원 이상</b> — 계약심사(감사관) 필수'});
+  if(t==='goods'&&a>=20000000) als.push({type:'info',ico:'📦',txt:'<b>물품 2천만원 이상</b> — 계약심사(감사관) 필수, 중소기업 경쟁제품 여부 확인'});
+  if(t==='goods'&&pAmt<=100000000) als.push({type:'info',ico:'🏭',txt:'<b>소기업 경쟁제품 확인</b> — 1억 이하 물품은 소기업자간 경쟁제품 해당 여부 반드시 확인'});
+  if(t==='goods'&&pAmt>100000000&&pAmt<=330000000) als.push({type:'info',ico:'🏭',txt:'<b>중소기업 경쟁제품</b> — 해당 품목은 중소기업자만 입찰 가능, 직접생산증명서 징수'});
+  if(o.has('advance')) als.push({type:'warning',ico:'💰',txt:'<b>선금 신청</b> — 계약금액 30~50%(최대70%) 지급 가능. 보증서 필수, 잔여기간 30일 초과 시 신청'});
+  if(o.has('joint')) als.push({type:'info',ico:'🤝',txt:'<b>공동계약</b> — 공동수급협정서 제출 필수, 구성원별 이행내용에 따라 보험료 정산'});
+  if(t==='construction'&&a>=30000000) als.push({type:'info',ico:'🔗',txt:'<b>3천만원 이상 1개월 이상 공사</b> — <b>하도급지킴이</b> 시스템 등록 필수 (고정·노무비·선금계좌 개설 요청, 감독관도 가입 필요)'});
+  if(t==='construction'&&a>=1000000&&a<12000000000) als.push({type:'warning',ico:'🦺',txt:'<b>기술지도 재해예방 계약</b> — 공사금액 1억~120억 미만(토목 150억) 공사는 <b>착공 전일까지</b> 재해예방 기술지도 계약 체결 필수'});
+  if(t==='construction') als.push({type:'info',ico:'⏰',txt:'<b>준공 기한 준수</b> — 10일 이상 지연 시 3개월간 관내 수의계약 불가 (지연배상금 부과)'});
+  if(als.length===0) als.push({type:'success',ico:'✅',txt:'표준 계약 조건 — 일반 절차로 진행 가능합니다'});
+
+  var custom=loadCustomAlerts();
+  var combined=als.concat(custom.map(function(c){return{type:c.type,ico:c.ico,txt:c.txt,custom:true,cid:c.id};}));
+  document.getElementById('alerts-wrap').innerHTML=combined.map(function(al){
+    if(al.custom){
+      return '<div class="al '+al.type+' custom" data-cid="'+al.cid+'">'+
+        '<span class="al-ico">'+al.ico+'</span>'+
+        '<span>'+al.txt+'<span class="user-bdg">사용자</span></span>'+
+        '<span class="al-acts">'+
+        '<button class="al-act" onclick="editAlertItem(\''+al.cid+'\')">✏️</button>'+
+        '<button class="al-act del" onclick="delAlertItem(\''+al.cid+'\')">🗑️</button>'+
+        '</span></div>';
+    }
+    return '<div class="al '+al.type+'"><span class="al-ico">'+al.ico+'</span><span>'+al.txt+'</span></div>';
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// 체크리스트
+// ══════════════════════════════════════════════════════
+function renderChecklist(){
+  var a=S.amount, t=S.type, o=S.opts;
+  var items=[];
+  items.push({id:'cl1',txt:'지출 품의(차세대지방재정e-호조 연계) 완료',tag:'req'});
+  items.push({id:'cl2',txt:'계약목적물 분류 확인 (공사/용역/물품 구분)',tag:'req'});
+  items.push({id:'cl3',txt:'분리·분할발주 여부 검토',tag:'req'});
+  if(t==='construction') items.push({id:'cl4',txt:'전기·소방·통신공사 분리발주 여부 확인',tag:'req'});
+  if(t==='goods') items.push({id:'cl4',txt:'중소기업자간 경쟁제품 여부 확인 (중소기업확인서)',tag:'req'});
+  if(S.amount>=20000000) items.push({id:'cl5',txt:'계약심사 대상 여부 확인 (추정금액 기준)',tag:'warn'});
+  items.push({id:'cl6',txt:'계약요청 전 계약팀장과 사전 협의',tag:'warn'});
+  var ckLim=getSuuieLimits();
+  var ckPAmt=parseAmt(document.getElementById('project-amount').value);
+  if(o.has('suuie')||ckPAmt<=ckLim.limit2) items.push({id:'cl7',txt:'관내업체인지 확인 (관외 시 사유서 준비)',tag:'warn'});
+  if(o.has('suuie')||ckPAmt<=ckLim.limit2) items.push({id:'cl8',txt:'수의계약 낙찰율 적용 업체에 안내',tag:'ok'});
+  items.push({id:'cl9',txt:'과업지시서·시방서 특수규격·특정상표 지정 여부 점검',tag:'req'});
+  items.push({id:'cl10',txt:'예산과목 및 결재선(사무전결규칙) 확인',tag:'req'});
+  items.push({id:'cl11',txt:'하자보증 여부 사전 확인 (기존 동일공사 이력)',tag:'ok'});
+  if(t==='construction'&&a>=100000000) items.push({id:'cl12',txt:'기술지도계약 체결 (착공 전일까지, 1억~120억 공사)',tag:'warn'});
+  if(t==='construction') items.push({id:'cl13',txt:'착공계 착수일 기재 및 착수일 엄수 확인',tag:'req'});
+  if(t==='construction') items.push({id:'cl14',txt:'고용·산재보험 가입증명서 수령 (사업명·기간·금액 기재)',tag:'req'});
+  if(t==='construction') items.push({id:'cl15',txt:'직접시공계획서 제출 확인 (계약일 30일 이내, 4천만원 이상)',tag:'warn'});
+  if(t==='construction'&&a>=30000000) items.push({id:'cl16',txt:'하도급지킴이 시스템 등록 (3천만원·1개월 이상 공사)',tag:'warn'});
+  if(t==='construction') items.push({id:'cl17',txt:'노무비 구분관리 적용여부 확인서 징수 (착공 시)',tag:'warn'});
+  if(t==='service') items.push({id:'cl18',txt:'착수계 착수일자 기재 및 착수일 엄수 확인',tag:'req'});
+  if(t==='service') items.push({id:'cl19',txt:'책임기술자 배치기준 확인 (관련 법령)',tag:'req'});
+
+  var doneCount=0;
+  document.getElementById('check-wrap').innerHTML=items.map(function(it){
+    var done=checkedItems.has(it.id);
+    if(done) doneCount++;
+    return '<div class="check-item'+(done?' done':'')+'" onclick="toggleCheck(\''+it.id+'\')">'+
+      '<div class="check-cb">'+(done?'✓':'')+'</div>'+
+      '<div class="check-txt">'+esc(it.txt)+'<span class="ctag '+it.tag+'">'+(it.tag==='req'?'필수':it.tag==='warn'?'주의':it.tag==='info'?'정보':'권장')+'</span></div>'+
+      '</div>';
+  }).join('');
+  document.getElementById('check-progress').textContent=doneCount+'/'+items.length+' 완료';
+}
+
+function toggleCheck(id){
+  if(checkedItems.has(id)) checkedItems.delete(id); else checkedItems.add(id);
+  renderChecklist();
+}
+
+// ══════════════════════════════════════════════════════
+// 절차 흐름
+// ══════════════════════════════════════════════════════
+function renderFlow(){
+  var a=S.amount, t=S.type, o=S.opts;
+  var steps=[
+    {n:1,name:'사업 기획·품의',desc:'예산확보·결재',actor:'me'},
+    {n:2,name:'시행건의',desc:'차세대재정 등록',actor:'me'}
+  ];
+  var 심사Threshold=t==='construction'?100000000:t==='service'?50000000:20000000;
+  if(a>=심사Threshold) steps.push({n:'심',name:'계약심사',desc:'감사관 심사',actor:'audit'});
+  if(o.has('consult')) steps.push({n:'★',name:'계약부서 협의',desc:'사전 협의',actor:'consult'});
+  var fLim=getSuuieLimits();
+  var fPAmt=parseAmt(document.getElementById('project-amount').value);
+  if(o.has('suuie')||fPAmt<=fLim.limit2){
+    var suuieDesc;
+    if(S.quoteType==='single'||(!S.quoteType&&fPAmt<=fLim.limit1)) suuieDesc='1인 견적 수의계약';
+    else if(S.quoteType==='multiple') suuieDesc='2인 이상 견적 (소액수의)';
+    else suuieDesc='소액견적 (화성시 소재)';
+    steps.push({n:3,name:'수의계약',desc:suuieDesc,actor:'them'});
+  } else if(fPAmt<=fLim.limitNational){
+    steps.push({n:3,name:'경기도 제한 입찰',desc:'G2B 전자입찰',actor:'them'});
+  } else {
+    steps.push({n:3,name:'전국 G2B 공고',desc:'나라장터',actor:'them'});
+  }
+  steps.push({n:4,name:'계약체결',desc:'G2B 전자계약',actor:'them'});
+  if(t==='goods'){
+    steps.push({n:5,name:'납품 확인',desc:'납품계 접수',actor:'me'});
+  } else {
+    steps.push({n:5,name:'착수계 접수',desc:'감독·이행관리',actor:'me'});
+  }
+  if(o.has('advance')) steps.push({n:'선',name:'선금 지급',desc:'보증서 확인',actor:'consult'});
+  if(t==='construction'||t==='service') steps.push({n:'기',name:'기성 처리',desc:'기성계·검사원',actor:'me'});
+  if(a>=30000000) steps.push({n:6,name:'검사(팀장+입회)',desc:'회계팀장 入',actor:'consult'});
+  else steps.push({n:6,name:'검사·검수',desc:'담당+팀장',actor:'me'});
+  if(t==='construction'||t==='service') steps.push({n:7,name:'준공·정산',desc:'정산합의서',actor:'me'});
+  steps.push({n:8,name:'대가 지급',desc:'청구·검토·이체',actor:'them'});
+
+  document.getElementById('flow-wrap').innerHTML=steps.map(function(s){
+    return '<div class="flow-step '+s.actor+'" data-actor="'+s.actor+'">'+
+      '<div class="flow-num">'+s.n+'</div>'+
+      '<div class="flow-name">'+s.name+'</div>'+
+      '<div class="flow-desc">'+s.desc+'</div>'+
+      '<span class="flow-actor '+s.actor+'">'+(s.actor==='me'?'사업담당':s.actor==='consult'?'협의':s.actor==='audit'?'감사관':'계약부서')+'</span>'+
+      '</div>';
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// 서류 목록
+// ══════════════════════════════════════════════════════
+function renderDocs(){
+  var a=S.amount, t=S.type, o=S.opts;
+  var tw=t==='construction'?'공사':t==='service'?'용역':'물품';
+  var rStr=t==='construction'?'7.5':'5';
+
+  var hasGisung=(t==='construction'||t==='service');
+  var inspNum=hasGisung?'⑤':'④';
+  var payNum=hasGisung?'⑥':'⑤';
+  var stages={
+    pre:{ico:'📑',title:'① 계약 전 (내가 준비)',hCls:'me',docs:[]},
+    sign:{ico:'✍️',title:'② 계약체결 (업체 제출)',hCls:'vendor',docs:[]},
+    start:{ico:'🚀',title:t==='goods'?'③ 납품':'③ 착수',hCls:'me',docs:[]},
+    gisung:{ico:'🔄',title:'④ 기성 처리',hCls:'me',docs:[]},
+    inspect:{ico:'✅',title:inspNum+' 검사·준공',hCls:'me',docs:[]},
+    pay:{ico:'💵',title:payNum+' 대가청구',hCls:'vendor',docs:[]}
+  };
+
+  // ① 계약 전
+  var dcLim=getSuuieLimits();
+  var dcPAmt=parseAmt(document.getElementById('project-amount').value);
+  if(o.has('suuie')||dcPAmt<=dcLim.limit2) stages.pre.docs.push({name:'수의계약 요청 사유서',desc:'담당-팀장-부서장 결재',tag:'special',lbl:'수의',own:'me',fid:'suuie'});
+  if(o.has('outside')) stages.pre.docs.push({name:'관외업체 선정 사유서',desc:'검토자·확인자 서명',tag:'special',lbl:'관외',own:'me',fid:'outside'});
+  if(o.has('consult')) stages.pre.docs.push({name:'계약부서 협의 결과 보고',desc:'협의 사항 정리',tag:'consult-i',lbl:'협의',own:'me'});
+  stages.pre.docs.push({name:'견적서',desc:'업체 견적 양식',tag:'required',lbl:tw,own:'me',fid:'estimate'});
+  if(t==='construction'){
+    stages.pre.docs.push({name:'시방서·설계도서',desc:'공사 사양 명세',tag:'required',lbl:'공사',own:'me'});
+    stages.pre.docs.push({name:'산출내역서',desc:'단가·수량·금액',tag:'required',lbl:'공사',own:'me'});
+    stages.pre.docs.push({name:'인력·장비 투입계획서',desc:'기술자 배치기준',tag:'required',lbl:'공사',own:'me',fid:'manpower'});
+    if(a>=100000000) stages.pre.docs.push({name:'기술지도계약서',desc:'1억~120억 필수',tag:'conditional',lbl:'1억↑',own:'me'});
+  } else if(t==='service'){
+    stages.pre.docs.push({name:'과업지시서',desc:'용역 범위·결과물',tag:'required',lbl:'용역',own:'me'});
+    stages.pre.docs.push({name:'산출내역서',desc:'단가·수량·금액',tag:'required',lbl:'용역',own:'me'});
+  } else {
+    stages.pre.docs.push({name:'물품 규격서',desc:'품목·사양 명세',tag:'required',lbl:'물품',own:'me'});
+    if(a>=10000000) stages.pre.docs.push({name:'직접생산증명서',desc:'중소기업 경쟁제품',tag:'conditional',lbl:'1천↑',own:'me'});
+  }
+  stages.pre.docs.push({name:'지역기업 미이용 사유서',desc:'지역기업 없을 경우',tag:'conditional',lbl:'해당시',own:'me'});
+  stages.pre.docs.push({name:'원인행위 요청서',desc:'차세대재정 시스템',tag:'required',lbl:'e-호조',own:'me'});
+
+  // ② 계약체결
+  stages.sign.docs.push({name:'계약체결 필요서류 목록',desc:'전체 제출서류 안내',tag:'required',lbl:'안내',own:'me',fid:'contract-docs'});
+  stages.sign.docs.push({name:'사업자등록증 사본',desc:'원본대조필·인감날인',tag:'common',lbl:'공통',own:'vendor'});
+  stages.sign.docs.push({name:'통장 사본',desc:'대금 입금용',tag:'common',lbl:'공통',own:'vendor'});
+  stages.sign.docs.push({name:'인감증명서 (원본)',desc:'당일 발급',tag:'common',lbl:'공통',own:'vendor'});
+  stages.sign.docs.push({name:'사용인감계',desc:'인감 상이 시 첨부',tag:'common',lbl:'공통',own:'vendor',fid:'inkam'});
+  if(o.has('corp')){
+    stages.sign.docs.push({name:'법인등기부등본',desc:'당일 발급본',tag:'common',lbl:'법인',own:'vendor'});
+    stages.sign.docs.push({name:'법인인감증명서',desc:'법인사업자',tag:'common',lbl:'법인',own:'vendor'});
+  }
+  if(t==='construction') stages.sign.docs.push({name:'건설업등록증 사본',desc:a>=15000000?'1,500만원↑ 면허확인':'공사 필수',tag:'required',lbl:'공사',own:'vendor'});
+  else if(t==='service') stages.sign.docs.push({name:'관련 업 등록증',desc:'허가·인가·면허',tag:'required',lbl:'용역',own:'vendor'});
+  stages.sign.docs.push({name:tw+'입찰유의서 첨부생략 서약서',desc:'인감 날인',tag:'required',lbl:tw,own:'vendor',fid:'omit-pledge'});
+  if(a>=10000000) stages.sign.docs.push({name:'정부수입인지',desc:'홈택스 납부',tag:'conditional',lbl:'1천↑',own:'vendor'});
+  if(a<50000000) stages.sign.docs.push({name:'계약보증금 면제 각서',desc:rStr+'%',tag:'conditional',lbl:'5천↓',own:'vendor',fid:'bond-waiver'});
+  else stages.sign.docs.push({name:'계약보증증권 ('+rStr+'%)',desc:'G2B 응답 시',tag:'required',lbl:'5천↑',own:'vendor'});
+  stages.sign.docs.push({name:'청렴계약 이행서약서',desc:'인감 날인',tag:'common',lbl:'공통',own:'vendor',fid:'integrity'});
+  if(o.has('suuie')||a<=20000000){
+    stages.sign.docs.push({name:'수의계약 각서',desc:'결격사유 미해당',tag:'special',lbl:'수의',own:'vendor',fid:'suuie-pledge'});
+    stages.sign.docs.push({name:'수의계약 체결제한 확인서',desc:'친인척 결격 점검',tag:'special',lbl:'수의',own:'vendor',fid:'suuie-cert'});
+  }
+
+  // ③ 착수/납품
+  if(t==='construction'){
+    stages.start.docs.push({name:'착공계',desc:'착수일 엄수·감독관 경유',tag:'required',lbl:'공사',own:'me',fid:'start'});
+    stages.start.docs.push({name:'현장대리인계',desc:'책임기술자 지정',tag:'required',lbl:'공사',own:'me',fid:'site-rep'});
+    stages.start.docs.push({name:'재직증명서',desc:'자격증·경력증명서 포함',tag:'required',lbl:'공사',own:'vendor',fid:'site-rep-cert'});
+    stages.start.docs.push({name:'인력·장비 투입계획서',desc:'공종별 인력·장비',tag:'required',lbl:'공사',own:'me',fid:'manpower'});
+    stages.start.docs.push({name:'공사예정공정표',desc:'공정별 일정',tag:'required',lbl:'공사',own:'me',fid:'schedule'});
+    stages.start.docs.push({name:'직접시공계획서',desc:'계약일 30일 이내 (4천만원 이상)',tag:'conditional',lbl:'해당시',own:'me'});
+    stages.start.docs.push({name:'고용·산재보험 가입증명서',desc:'사업명·기간·금액 반드시 기재',tag:'required',lbl:'공사',own:'vendor'});
+    stages.start.docs.push({name:'산업안전보건관리비 사용계획서',desc:'내역서에 반영된 경우',tag:'conditional',lbl:'해당시',own:'me'});
+    stages.start.docs.push({name:'환경보전비 사용계획서',desc:'내역서에 반영된 경우',tag:'conditional',lbl:'해당시',own:'me'});
+    stages.start.docs.push({name:'건설기계대여금지급 보증서',desc:'현장별 보증 원칙 (도급액 1억↓ 5개월↓ 예외)',tag:'conditional',lbl:'해당시',own:'vendor'});
+    stages.start.docs.push({name:'노무비 구분관리 적용여부 확인서',desc:'착공 시 제출·합의서 포함',tag:'conditional',lbl:'해당시',own:'me',fid:'labor-check'});
+    stages.start.docs.push({name:'노무비 구분관리 합의서',desc:'구분관리 적용 시',tag:'conditional',lbl:'해당시',own:'me',fid:'labor-agree'});
+    if(a>=30000000) stages.start.docs.push({name:'하도급지킴이 계좌통장 사본',desc:'고정·노무비·선금 계좌 (3천만원·1개월↑)',tag:'conditional',lbl:'3천↑',own:'vendor'});
+    if(a>=100000000&&a<12000000000) stages.start.docs.push({name:'기술지도계약서',desc:'착공 전일까지 K2B 표준계약서 사용',tag:'conditional',lbl:'1억↑',own:'me'});
+  } else if(t==='service'){
+    stages.start.docs.push({name:'착수계',desc:'감독관 경유·착수일 기재',tag:'required',lbl:'용역',own:'me',fid:'start'});
+    stages.start.docs.push({name:'계약내역서',desc:'낙찰률 적용·법정요율 고정',tag:'required',lbl:'용역',own:'me'});
+    stages.start.docs.push({name:'현장대리인계',desc:'관련 법령 기술자 배치기준 확인',tag:'required',lbl:'용역',own:'me',fid:'site-rep'});
+    stages.start.docs.push({name:'재직증명서',desc:'자격증·경력증명서 포함',tag:'required',lbl:'용역',own:'vendor',fid:'site-rep-cert'});
+    stages.start.docs.push({name:'인력·장비 투입계획서',desc:'기술자 배치기준',tag:'required',lbl:'용역',own:'me',fid:'manpower'});
+    stages.start.docs.push({name:'용역예정공정표',desc:'과업별 일정',tag:'required',lbl:'용역',own:'me',fid:'schedule'});
+    stages.start.docs.push({name:'노무비 구분관리 합의서',desc:'단순노무용역·노무비 전용통장',tag:'conditional',lbl:'해당시',own:'me',fid:'labor-agree'});
+  } else {
+    stages.start.docs.push({name:'G2B 납품확인요청',desc:'납품 완료 시 나라장터 제출',tag:'required',lbl:'물품',own:'me'});
+    stages.start.docs.push({name:'납품계',desc:'납품신고서·감독관 경유',tag:'required',lbl:'물품',own:'vendor',fid:'delivery'});
+    stages.start.docs.push({name:'납품 사진',desc:'검수 증빙',tag:'required',lbl:'물품',own:'me'});
+  }
+  if(o.has('advance')) stages.start.docs.push({name:'선금 신청서류',desc:'신청서·계획서·각서·보증서',tag:'conditional',lbl:'선금',own:'me',fid:'advance'});
+
+  // ④ 기성 처리 (공사·용역)
+  if(t==='construction'){
+    stages.gisung.docs.push({name:'기성계',desc:'감독관 경유 제출',tag:'required',lbl:'공사',own:'me',fid:'gisung'});
+    stages.gisung.docs.push({name:'기성검사원',desc:'진행분 이행 서약',tag:'required',lbl:'공사',own:'vendor',fid:'gisung-cert'});
+    stages.gisung.docs.push({name:'기성내역서',desc:'낙찰률 적용 내역',tag:'required',lbl:'공사',own:'me'});
+    if(o.has('advance')) stages.gisung.docs.push({name:'선금정산(사용)내역서',desc:'공정률 이상 선금정산분 표기',tag:'conditional',lbl:'선금',own:'me'});
+    stages.gisung.docs.push({name:'기성 증빙 서류(사진)',desc:'진행 상황 사진',tag:'required',lbl:'공사',own:'me'});
+    stages.gisung.docs.push({name:'공사근로자 노무비 지급내역',desc:'지급대장·청구내역서·신분증·통장',tag:'conditional',lbl:'해당시',own:'vendor'});
+    stages.gisung.docs.push({name:'건설기계 사용 내역서',desc:'하도급지킴이 대상 시 장비대금 구분',tag:'conditional',lbl:'해당시',own:'me',fid:'conmachine'});
+  } else if(t==='service'){
+    stages.gisung.docs.push({name:'용역 기성계',desc:'감독관 경유 제출',tag:'required',lbl:'용역',own:'me',fid:'gisung'});
+    stages.gisung.docs.push({name:'용역 기성검사원',desc:'기성분 이행 서약',tag:'required',lbl:'용역',own:'vendor',fid:'gisung-cert'});
+    stages.gisung.docs.push({name:'기성내역서',desc:'진행분 이행내역',tag:'required',lbl:'용역',own:'me'});
+    if(o.has('advance')) stages.gisung.docs.push({name:'선금정산(사용)내역서',desc:'공정률 이상 선금정산분 표기',tag:'conditional',lbl:'선금',own:'me'});
+    stages.gisung.docs.push({name:'기성 증빙 서류(사진)',desc:'진행 상황 증빙',tag:'required',lbl:'용역',own:'me'});
+    stages.gisung.docs.push({name:'노무비 지급내역서',desc:'단순노무용역 (지급대장·청구내역서)',tag:'conditional',lbl:'단순노무',own:'vendor'});
+  }
+
+  // 검사·준공 단계
+  if(t==='construction'){
+    stages.inspect.docs.push({name:'준공계',desc:'준공일 엄수',tag:'required',lbl:'공사',own:'me',fid:'completion'});
+    stages.inspect.docs.push({name:'준공검사원',desc:'하자책임 서약',tag:'required',lbl:'공사',own:'vendor',fid:'completion-cert'});
+    stages.inspect.docs.push({name:'준공내역서 및 정산내역서',desc:'변경된 내역서로 첨부',tag:'required',lbl:'공사',own:'me'});
+    stages.inspect.docs.push({name:'정산합의서',desc:'금액 변동 시',tag:'conditional',lbl:'정산',own:'me',fid:'settlement'});
+    stages.inspect.docs.push({name:'공정별 사진(전-중-후)',desc:'준공 증빙',tag:'required',lbl:'공사',own:'me'});
+    stages.inspect.docs.push({name:'고용·산재보험 완납증명',desc:'해당공사명 기재 필수',tag:'required',lbl:'공사',own:'vendor'});
+    stages.inspect.docs.push({name:'환경보전비 사용내역서',desc:'세금계산서·이체증 포함',tag:'conditional',lbl:'해당시',own:'me'});
+    stages.inspect.docs.push({name:'산업안전보건관리비 사용내역서',desc:'세금계산서·이체증·사진',tag:'conditional',lbl:'해당시',own:'me'});
+    stages.inspect.docs.push({name:'품질관리비 사용내역서',desc:'세금계산서·이체증',tag:'conditional',lbl:'해당시',own:'me'});
+    stages.inspect.docs.push({name:'건설기계 사용 내역서',desc:'하도급지킴이 대상 시',tag:'conditional',lbl:'해당시',own:'me',fid:'conmachine'});
+    stages.inspect.docs.push({name:'건설기계 미투입확약서',desc:'건설기계 미사용 시',tag:'conditional',lbl:'해당시',own:'me',fid:'conmachine-none'});
+    if(o.has('advance')) stages.inspect.docs.push({name:'선금정산(사용)내역서 및 증빙',desc:'선금 수령 시 제출',tag:'conditional',lbl:'선금',own:'me'});
+    if(a>=30000000) stages.inspect.docs.push({name:'검사조서(팀장+회계팀장)',desc:'서명·날인 必 (3천만원↑)',tag:'consult-i',lbl:'협의',own:'me'});
+  } else if(t==='service'){
+    stages.inspect.docs.push({name:'준공계',desc:'완료일 엄수',tag:'required',lbl:'용역',own:'me',fid:'completion'});
+    stages.inspect.docs.push({name:'준공검사원',desc:'하자책임 서약',tag:'required',lbl:'용역',own:'vendor',fid:'completion-cert'});
+    stages.inspect.docs.push({name:'준공내역서',desc:'과업 이행분',tag:'required',lbl:'용역',own:'me'});
+    stages.inspect.docs.push({name:'정산합의서',desc:'금액 변동 시',tag:'conditional',lbl:'정산',own:'me',fid:'settlement'});
+    stages.inspect.docs.push({name:'기성 증빙 서류(사진)',desc:'진행 상황 증빙',tag:'required',lbl:'용역',own:'me'});
+    if(o.has('advance')) stages.inspect.docs.push({name:'선금정산(사용)내역서',desc:'선금 수령 시',tag:'conditional',lbl:'선금',own:'me'});
+    stages.inspect.docs.push({name:'노무비 지급내역서',desc:'단순노무용역 (지급대장·청구내역서)',tag:'conditional',lbl:'단순노무',own:'vendor'});
+    if(a>=30000000) stages.inspect.docs.push({name:'검사조서(팀장+회계팀장)',desc:'서명·날인 必 (3천만원↑)',tag:'consult-i',lbl:'협의',own:'me'});
+  } else {
+    stages.inspect.docs.push({name:'물품 검사(수)조서',desc:'납품 후 14일 내',tag:'required',lbl:'물품',own:'me',fid:'inspection-goods'});
+    stages.inspect.docs.push({name:'물품 검수요처서',desc:'관급자재 해당시',tag:'conditional',lbl:'관급',own:'me'});
+    if(a>=30000000) stages.inspect.docs.push({name:'회계팀장 입회 확인',desc:'팀장+회계 입회',tag:'consult-i',lbl:'협의',own:'me'});
+  }
+
+  // ⑤ 대가청구
+  stages.pay.docs.push({name:'대금청구서',desc:'계좌입금의뢰서 포함',tag:'required',lbl:'공통',own:'vendor',fid:'payment'});
+  stages.pay.docs.push({name:'전자세금계산서',desc:'직접 발행',tag:'required',lbl:'공통',own:'vendor'});
+  stages.pay.docs.push({name:'4대보험 완납증명',desc:'고용·산재 포함',tag:'required',lbl:'공통',own:'vendor'});
+  if(!o.has('suuie')&&t!=='goods') stages.pay.docs.push({name:'국세·지방세 완납증명',desc:'수의 제외',tag:'required',lbl:'경쟁',own:'vendor'});
+  if(a>=20000000&&t!=='goods') stages.pay.docs.push({name:'지역개발채권 매입필증',desc:'1.5%(청구시마다)',tag:'required',lbl:'2천↑',own:'vendor'});
+  if(t==='construction'){
+    if(a>20000000) stages.pay.docs.push({name:'하자보수증권',desc:'검사완료일부터',tag:'required',lbl:'공사',own:'vendor'});
+    else stages.pay.docs.push({name:'하자이행각서',desc:'2천↓ 대체',tag:'conditional',lbl:'공사',own:'vendor',fid:'warranty'});
+  } else if(t==='goods'){
+    if(a>=30000000) stages.pay.docs.push({name:'하자보수보증서',desc:'3천↑ 정식보증',tag:'required',lbl:'물품',own:'vendor'});
+    else stages.pay.docs.push({name:'하자보수 각서',desc:'3천↓ 각서',tag:'conditional',lbl:'물품',own:'vendor',fid:'warranty'});
+  }
+
+  var stageOrder=['pre','sign','start'];
+  if(hasGisung) stageOrder.push('gisung');
+  stageOrder.push('inspect','pay');
+  var total=0, html='';
+  stageOrder.forEach(function(k){
+    var st=stages[k];
+    total+=st.docs.length;
+    html+='<div class="doc-stage">'+
+      '<div class="doc-stage-hd '+st.hCls+'"><span>'+st.ico+' '+st.title+'</span><span class="doc-cnt">'+st.docs.length+'건</span></div>'+
+      '<div class="doc-list">';
+    st.docs.forEach(function(d){
+      var ownerTxt=d.own==='me'?'나':d.own==='vendor'?'업체':d.own==='audit'?'감사':'계약';
+      var hasDl=!!d.fid;
+      var dlBtn=hasDl?'<button class="dl-btn" data-fid="'+d.fid+'" title="'+esc(d.name)+' 서식 보기">📥</button>':'';
+      html+='<div class="doc-item '+d.tag+'" data-own="'+d.own+'" data-tag="'+d.tag+'">'+
+        '<div class="doc-acts">'+dlBtn+'<span class="doc-owner '+d.own+'">'+ownerTxt+'</span></div>'+
+        '<div class="doc-nm'+(hasDl?' wd':'')+'">'+esc(d.name)+'</div>'+
+        '<div class="doc-dc">'+esc(d.desc)+'</div>'+
+        '<span class="doc-tag '+d.tag+'">'+d.lbl+'</span>'+
+        '</div>';
+    });
+    html+='</div></div>';
+  });
+  document.getElementById('docs-grid').innerHTML=html;
+  document.getElementById('docs-total').textContent='(총 '+total+'건)';
+  document.querySelectorAll('#docs-grid .dl-btn').forEach(function(b){
+    b.addEventListener('click',function(e){e.stopPropagation();openForm(this.getAttribute('data-fid'));});
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// 서식 생성기
+// ══════════════════════════════════════════════════════
+var FORM_NAMES={
+  estimate:'견적서','suuie':'수의계약 요청 사유서','suuie-cert':'수의계약 체결제한 여부 확인서',
+  'suuie-pledge':'수의계약 각서','outside':'관외업체 선정 사유서','bond-waiver':'계약보증금 면제에 따른 각서',
+  integrity:'청렴계약 이행서약서','omit-pledge':'입찰유의서 첨부생략 서약서','inkam':'사용인감계',
+  'contract-docs':'계약체결 필요서류 목록','start':'착공계 / 착수신고서','schedule':'공정예정표',
+  'site-rep':'현장대리인계','site-rep-cert':'재직증명서','labor-agree':'노무비 구분관리 합의서',
+  'labor-check':'노무비 구분관리 적용여부 확인서','delivery':'납품계',
+  'gisung':'기성계','gisung-cert':'기성검사원',
+  completion:'준공계','completion-cert':'준공검사원','settlement':'정산합의서',
+  'inspection-goods':'물품 검사(수)조서','payment':'대금청구서','advance':'선금 신청서',
+  warranty:'하자이행각서','manpower':'인력·장비 투입계획서',
+  'conmachine':'건설기계 사용 내역서','conmachine-none':'건설기계 미투입확약서'
+};
+
+function openForm(fid){
+  if(!fid||!FORM_NAMES[fid]){alert('지원하지 않는 서식입니다.');return;}
+  currentFormId=fid;
+  var i=getInfo();
+  var title=FORM_NAMES[fid];
+  if(fid==='start') title=i.typeKey==='construction'?'착공계':'착수계';
+  if(fid==='schedule') title=i.typeKey==='construction'?'공사예정공정표':'용역예정공정표';
+  document.getElementById('modal-title').textContent=title;
+
+  // PDF 원본 표시 여부 결정
+  // 공사 공정표·기성 관련은 PDF에 없으므로 HTML 사용
+  var pdfPath=PDF_FORMS[fid];
+  if(fid==='schedule'&&i.typeKey==='construction') pdfPath=null;
+  if(fid==='gisung'&&i.typeKey==='construction') pdfPath=null;
+  if(fid==='gisung-cert'&&i.typeKey==='construction') pdfPath=null;
+
+  var body=document.getElementById('modal-body');
+  if(pdfPath){
+    body.style.cssText='padding:0;overflow:hidden;flex:1';
+    body.innerHTML=
+      '<embed src="'+pdfPath+'" type="application/pdf" style="width:100%;height:calc(90vh - 56px);display:block;border:none">'+
+      '<div style="padding:5px 14px;text-align:center;color:#999;font-size:10px;background:#f5f5f5;border-top:1px solid #e5e5e5">'+
+      '※ PDF가 표시되지 않으면 상단 <b>서식 원본 다운로드</b>를 클릭하세요</div>';
+  } else {
+    body.style.cssText='padding:26px 34px;overflow-y:auto;flex:1';
+    body.innerHTML=generateForm(fid,i);
+  }
+  updateDlBtnLabel();
+  document.getElementById('modal-ov').classList.add('on');
+}
+function closeModal(){
+  document.getElementById('modal-ov').classList.remove('on');
+  var body=document.getElementById('modal-body');
+  body.style.cssText='padding:26px 34px;overflow-y:auto;flex:1';
+  body.innerHTML='';
+  currentFormId='';
+}
+
+function generateForm(fid,i){
+  var tw=i.typeKey==='construction'?'공사':i.typeKey==='service'?'용역':'물품';
+  var nl=i.typeKey==='construction'?'공사명':i.typeKey==='service'?'용역명':'물품명';
+  var supBox='<table class="sup-tbl"><tr><th colspan="2" style="background:#E5E7EB">감독관 경유</th></tr>'+
+    '<tr><th>소속</th><td>'+v(i.dept,'&nbsp;')+'</td></tr>'+
+    '<tr><th>직급</th><td>'+v(i.officerRank,'&nbsp;')+'</td></tr>'+
+    '<tr><th>성명</th><td>'+v(i.officerName,'&nbsp;')+' (인)</td></tr></table>';
+
+  if(fid==='estimate'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:12px">견 적 서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:18%">'+nl+'</th><td colspan="3">'+v(i.name)+'</td></tr>'+
+      '<tr><th>견적금액</th><td colspan="3" style="font-weight:700">'+i.amountStr+' (금 '+i.amountHangul+')<br><span style="font-size:11px;font-weight:400;color:#666">※ 부가가치세 포함</span></td></tr>'+
+      '<tr><th>이행기간</th><td colspan="3">'+i.sDateStr+' ~ '+i.eDateStr+'</td></tr>'+
+      '<tr><th>업체명</th><td>'+v(i.vendor)+'</td><th style="width:14%">대표자</th><td>'+v(i.rep)+'</td></tr>'+
+      '</table>'+
+      '<table class="ftbl"><tr><th style="width:6%">No.</th><th style="width:34%">품 명</th><th style="width:18%">규 격</th><th style="width:8%">수량</th><th style="width:17%">단가</th><th style="width:17%">금액</th></tr>'+
+      '<tr><td style="text-align:center">1</td><td>'+v(i.name)+'</td><td style="text-align:center">-</td><td style="text-align:center">1</td><td style="text-align:right">'+i.amount.toLocaleString('ko-KR')+'</td><td style="text-align:right">'+i.amount.toLocaleString('ko-KR')+'</td></tr>'+
+      '<tr><th colspan="5" style="text-align:right">합 계</th><td style="text-align:right;font-weight:700">'+i.amountStr+'</td></tr></table>'+
+      '<p style="margin-top:12px">위 금액을 견적합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>상  호 : '+v(i.vendor)+'</p><p>대표자 : '+v(i.rep)+' (인)</p><p>사업자번호 : '+v(i.bizNum)+'</p><p>주  소 : '+v(i.address)+'</p><p>전  화 : '+v(i.phone)+'</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='suuie'){
+    return '<div class="pdoc">'+
+      '<div class="dsub">■ 수의계약 운영요령 [별지 제5호서식]</div>'+
+      '<h1 class="dtitle" style="letter-spacing:6px">수의계약 요청 사유서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:22%">계약건명</th><td>「'+v(i.name)+'」 '+tw+'</td></tr>'+
+      '<tr><th>소요예산</th><td>'+i.amountStr+' (금 '+i.amountHangul+')</td></tr>'+
+      '<tr><th>계약업체</th><td>'+v(i.vendor)+'<br>(사업자등록번호 : '+v(i.bizNum)+')</td></tr>'+
+      '<tr><th>수의계약<br>법적근거</th><td>「지방자치단체를 당사자로 하는 계약에 관한 법률」 시행령 제25조 제1항 제5호</td></tr>'+
+      '<tr><th>수의계약<br>사 유</th><td><p>○ 본 사업은 추정가격 '+fmtShort(i.amount)+' 이하의 '+tw+' 계약에 해당하여 수의계약이 가능함.</p><br><p>○ 위 업체('+v(i.vendor,'(업체명)')+'는 '+v(i.industry,'(해당 분야)')+' 분야 전문성을 보유한 업체로, 본 사업 수행에 필요한 역량을 갖추고 있음.</p><br><p>○ 본 사업의 원활한 추진을 위해 수의계약을 진행하고자 함.</p></td></tr></table>'+
+      '<div class="appr">'+
+      '<p>담  당 : 직급 '+v(i.officerRank,'________')+'   성명 : '+v(i.officerName,'________')+' (서명 또는 인)</p>'+
+      '<p>팀  장 : 직급 '+v(i.leaderRank,'________')+'   성명 : '+v(i.leaderName,'________')+' (서명 또는 인)</p>'+
+      '<p>부서장 : 직급 '+v(i.headRank,'________')+'   성명 : '+v(i.headName,'________')+' (서명 또는 인)</p>'+
+      '</div>'+
+      '<p style="margin-top:12px;text-align:center;font-weight:700">상기와 같이 수의계약 요청서를 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="drec">화성시 재무관(분임재무관) 귀하</div></div>';
+  }
+  if(fid==='suuie-cert'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px">수의계약 체결제한 여부 확인서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:22%">업체명</th><td>'+v(i.vendor)+'</td><th style="width:14%">대표자</th><td>'+v(i.rep)+'</td></tr>'+
+      '<tr><th>주  소</th><td colspan="3">'+v(i.address)+'</td></tr>'+
+      '<tr><th>사업자번호</th><td>'+v(i.bizNum)+'</td><th>업종</th><td>'+v(i.industry)+'</td></tr>'+
+      '<tr><th>계약건명</th><td colspan="3">'+v(i.name)+'</td></tr>'+
+      '<tr><th>계약금액</th><td colspan="3">'+i.amountStr+'</td></tr></table>'+
+      '<p style="margin:14px 0">상기 본인(법인)은 화성시와 위 '+tw+' 수의계약을 체결함에 있어, 아래 결격사유 중 어느 사유에도 해당하지 않음을 확인합니다.</p>'+
+      '<div class="sh">[수의계약 결격사유]</div>'+
+      '<ul class="ldisk">'+
+      '<li>견적서 제출 마감일 현재 부도·파산·해산·영업정지 등이 확정된 자</li>'+
+      '<li>입찰참가자격 제한기간 중에 있는 자</li>'+
+      '<li>부정당업자 제재 처분 후 6개월이 지나지 아니한 자</li>'+
+      '<li>최근 3개월 이내 10일 이상 지연배상금 부과 등 신용이 떨어진 자</li>'+
+      '<li>지방자치단체의 장 또는 지방의회의원의 배우자·직계존비속인 사업자</li>'+
+      '</ul>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>업체명 : '+v(i.vendor)+'</p><p>대표자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='suuie-pledge'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:10px">수의계약 각서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:18%">계약명</th><td colspan="3">'+v(i.name)+'</td></tr>'+
+      '<tr><th>업체명</th><td>'+v(i.vendor)+'</td><th style="width:14%">대표자</th><td>'+v(i.rep)+'</td></tr>'+
+      '<tr><th>사업자번호</th><td>'+v(i.bizNum)+'</td><th>계약금액</th><td>'+i.amountStr+'</td></tr>'+
+      '<tr><th>소재지</th><td colspan="3">'+v(i.address)+'</td></tr></table>'+
+      '<p style="margin:14px 0;line-height:1.9">상기 본인(법인)은 화성시와 위 '+tw+' 수의계약을 체결함에 있어, 수의계약 결격사유에 해당하지 아니함을 확약하며, 다음 사항을 각서합니다.</p>'+
+      '<ol style="margin:8px 0 8px 20px;line-height:1.9">'+
+      '<li>부도·파산·해산·영업정지 등이 확정되지 않은 자이며, 입찰참가자격 제한기간 중에 있지 아니합니다.</li>'+
+      '<li>지방자치단체의 장 또는 지방의회의원의 배우자·직계존비속이 아닙니다.</li>'+
+      '<li>위 각서 내용이 사실과 다를 경우 계약 해지 및 부정당업자 제재처분을 감수하겠습니다.</li>'+
+      '</ol>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>업체명 : '+v(i.vendor)+'</p><p>대표자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='outside'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:8px">관외 업체 선정 사유서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:12%" rowspan="3">담  당</th><th style="width:13%">소속</th><td style="width:25%">'+v(i.dept)+'</td><th style="width:12%">직급</th><td>'+v(i.officerRank)+'</td></tr>'+
+      '<tr><th>성명</th><td colspan="3">'+v(i.officerName)+'</td></tr>'+
+      '<tr><th>계약건명</th><td colspan="3">'+v(i.name)+' '+tw+'</td></tr>'+
+      '<tr><th>업  체<br>(소재지)</th><td>'+v(i.vendor)+'<br>('+v(i.address,'-')+')</td><th>전화번호</th><td colspan="2">'+v(i.phone,'___-____-____')+'</td></tr>'+
+      '<tr><th>관외업체<br>선정사유</th><td colspan="4" style="padding:12px">'+
+      '<p>○ 본 사업자는 '+v(i.industry,'(해당 분야)')+' 분야 전문성을 보유한 업체로, '+v(i.name,'본 사업')+'에 필요한 실무경험과 역량을 갖추고 있음.</p>'+
+      '<br><p>○ 관내 해당 분야 업체 현황을 확인한 결과, 관내 업체만으로는 사업 목적 달성이 어려운 상황임.</p>'+
+      '<br><p>○ 사업의 원활한 추진을 위해 위 관외업체를 선정하고자 함.</p>'+
+      '</td></tr>'+
+      '<tr><td colspan="5" style="text-align:center;padding:16px">'+
+      '<p style="font-weight:700;margin-bottom:12px">상기와 같이 검토하였음을 확인합니다.</p>'+
+      '<p style="text-align:right">검토자 '+v(i.officerRank,'____________')+'   성명 : '+v(i.officerName,'____________')+' (서명 또는 인)</p>'+
+      '<p style="text-align:right;margin-top:5px">확인자 '+v(i.leaderRank,'____________')+'   성명 : '+v(i.leaderName,'____________')+' (서명 또는 인)</p>'+
+      '<p style="margin-top:12px">'+today()+'</p>'+
+      '</td></tr></table></div>';
+  }
+  if(fid==='bond-waiver'){
+    var rate=i.typeKey==='construction'?7.5:5;
+    var bAmt=Math.round(i.amount*(rate/100));
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px">계약보증금 면제에 따른 각서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:18%">계 약 명</th><td colspan="3">'+v(i.name)+'</td></tr>'+
+      '<tr><th>계약상대자</th><td colspan="3">'+v(i.vendor)+' (대표자 '+v(i.rep)+')</td></tr>'+
+      '<tr><th>계 약 금 액</th><td colspan="3">금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</td></tr>'+
+      '<tr><th>계약 보증금</th><td colspan="3">계약금액의 '+rate+'% (₩ '+bAmt.toLocaleString('ko-KR')+')</td></tr>'+
+      '<tr><th>계약 년월일</th><td>'+i.sDateStr+'</td><th>준공기한</th><td>'+i.eDateStr+'</td></tr></table>'+
+      '<p style="margin:16px 0;line-height:1.9">상기 계약건에 계약보증금을 「지방자치단체를 당사자로 하는 계약에 관한 법률 시행령」 제53조 제1항 제2호에 의하여 면제함에 있어 본인이 계약기간 내 귀속사유가 발생할 경우 즉시 현금으로 납부할 것을 각서합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>주  소 : '+v(i.address)+'</p><p>상  호 : '+v(i.vendor)+'</p><p>대표자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='integrity'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:6px">청렴계약 이행서약서</h1>'+
+      '<table class="ftbl"><tr><th style="width:18%">계약명</th><td>'+v(i.name)+'</td></tr>'+
+      '<tr><th>업체명</th><td>'+v(i.vendor)+' (대표자 : '+v(i.rep)+')</td></tr></table>'+
+      '<p style="margin:12px 0;line-height:1.8;font-size:12px">당사는 공정하고 투명한 기업경영이 사회발전과 국가 경쟁력에 중요함을 깊이 인식하여, 귀 관서에서 발주하는 모든 공사·물품·용역 입찰에 참여할 때</p>'+
+      '<ol style="margin:8px 0 8px 18px;font-size:12px;line-height:1.8">'+
+      '<li>입찰가격 담합이나 특정인 낙찰을 위한 불공정 행위를 하지 않겠습니다.</li>'+
+      '<li>계약 과정에서 관계공무원에게 금품·향응을 제공하지 않겠습니다.</li>'+
+      '<li>위반사항 발견 시 낙찰자 결정 취소·계약 해지에 이의를 제기하지 않겠습니다.</li>'+
+      '<li>회사 임·직원이 불공정 행위를 하지 않도록 사규를 정비하겠습니다.</li>'+
+      '<li>공정한 직무수행을 방해하는 알선·청탁을 하지 않겠습니다.</li>'+
+      '</ol>'+
+      '<p style="margin:12px 0;font-size:12px;line-height:1.8">위 청렴계약 서약은 상호신뢰를 바탕으로 반드시 지킬 것을 서약합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>서약자 업체명 : '+v(i.vendor)+'</p><p>대 표 자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='omit-pledge'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px;font-size:17px">'+tw+'입찰유의서 및 '+tw+'계약일반조건 첨부생략 서약서</h1>'+
+      '<div class="dinfo"><p>○ 계 약 명 : '+v(i.name)+'</p><p>○ 업 체 명 : '+v(i.vendor)+'   대표자 : '+v(i.rep)+'</p></div>'+
+      '<p style="margin:16px 0;line-height:1.9;font-size:12.5px">발주기관에서 발주한 상기 '+tw+'에 대하여 「지방자치단체를 당사자로 하는 계약에 관한 법률 시행규칙」 제39조의 규정에 정한 입찰 및 계약에 관한 서류와 내용을 숙지하고 계약서류에 첨부할 '+tw+'입찰유의서 및 '+tw+'계약 일반조건은 회계 예규로 시행된 내용임을 인정하고 첨부를 생략함에 이의 없음을 서약합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>서약자 업체명 : '+v(i.vendor)+'</p><p>대 표 자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='inkam'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:12px">사 용 인 감 계</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:18%">계약명</th><td colspan="3">'+v(i.name)+'</td></tr>'+
+      '<tr><th>업체명</th><td>'+v(i.vendor)+'</td><th style="width:14%">대표자</th><td>'+v(i.rep)+'</td></tr>'+
+      '<tr><th>사업자번호</th><td colspan="3">'+v(i.bizNum)+'</td></tr>'+
+      '<tr><th>주  소</th><td colspan="3">'+v(i.address)+'</td></tr></table>'+
+      '<p style="margin:16px 0;line-height:1.9;font-size:12.5px">상기 본인(법인)은 「'+v(i.name,'(계약명)')+'」 '+tw+' 계약과 관련하여, 인감증명서에 등록된 인감 대신 아래 표시된 사용인감을 본 계약 관련 서류에 사용함을 신고합니다.</p>'+
+      '<table class="ftbl" style="margin-top:18px">'+
+      '<tr><th style="width:50%;height:110px;text-align:center">등 록 인 감<br><br><span style="font-size:10px;color:#666">(인감증명서 인감)</span></th><th style="text-align:center">사 용 인 감<br><br><span style="font-size:10px;color:#666">(실제 사용 인감)</span></th></tr>'+
+      '<tr><td style="height:120px;text-align:center;vertical-align:middle"><span style="color:#999;font-size:11px">(여기에 등록 인감 날인)</span></td><td style="text-align:center;vertical-align:middle"><span style="color:#999;font-size:11px">(여기에 사용 인감 날인)</span></td></tr></table>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>신고인 업체명 : '+v(i.vendor)+'</p><p>대 표 자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='contract-docs'){
+    var is수의=S.opts.has('suuie')||i.amount<=20000000;
+    var rStr2=i.typeKey==='construction'?'7.5%':'5%';
+    var bAmt2=Math.round(i.amount*(i.typeKey==='construction'?0.075:0.05));
+    var rows=['<tr><td style="text-align:center">1</td><td>사업자등록증 사본</td><td>원본대조필, 인감날인</td></tr>',
+      '<tr><td style="text-align:center">2</td><td>통장 사본</td><td>대금 입금용</td></tr>',
+      '<tr><td style="text-align:center">3</td><td>인감증명서(원본)</td><td>개인사업자 전자인감 가능</td></tr>',
+      '<tr><td style="text-align:center">4</td><td>사용인감계</td><td>인감 상이 시 첨부</td></tr>'];
+    var no=5;
+    if(S.opts.has('corp')){rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>법인등기부등본</td><td>법인사업자, 당일 발급</td></tr>');rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>법인인감증명서</td><td>법인사업자 한정</td></tr>');}
+    if(i.typeKey==='construction') rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>건설업등록증 사본</td><td>공사 필수 (1,500만원 이상 면허 확인)</td></tr>');
+    else if(i.typeKey==='service') rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>관련 업 등록증 사본</td><td>허가·인가·면허·등록·신고증</td></tr>');
+    rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>'+tw+'입찰유의서 첨부생략 서약서</td><td>인감 날인</td></tr>');
+    if(i.amount>=10000000) rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>정부수입인지</td><td>1,000만원 이상 홈택스 납부</td></tr>');
+    if(i.amount<50000000) rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>계약보증금 면제 각서</td><td>계약금액 '+rStr2+' = '+bAmt2.toLocaleString('ko-KR')+'원</td></tr>');
+    else rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>계약보증증권 ('+rStr2+')</td><td>금액 : '+bAmt2.toLocaleString('ko-KR')+'원</td></tr>');
+    rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>청렴계약 이행서약서</td><td>인감 날인</td></tr>');
+    if(is수의){rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>수의계약 각서</td><td>결격사유 미해당 확인</td></tr>');rows.push('<tr><td style="text-align:center">'+(no++)+'</td><td>수의계약 체결제한 확인서</td><td>친인척 결격 점검</td></tr>');}
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px;font-size:18px">계약체결 필요서류 목록</h1>'+
+      '<div class="dinfo"><p>○ 계 약 명 : '+v(i.name)+'</p><p>○ 계약금액 : '+i.amountStr+'  ('+tw+'  /  '+fmtShort(i.amount)+')</p></div>'+
+      '<div class="fnote">※ 모든 서류는 낙찰자 결정 통지일로부터 <b>10일 이내</b>에 계약 체결해야 합니다.</div>'+
+      '<table class="ftbl"><tr><th style="width:6%">No.</th><th style="width:36%">서 류 명</th><th>비 고</th></tr>'+rows.join('')+'</table>'+
+      '<div class="dfn">※ 위 서류는 기본 목록이며, 계약 내용에 따라 계약부서가 추가 서류를 요청할 수 있습니다.</div></div>';
+  }
+  if(fid==='start'){
+    return '<div class="pdoc">'+
+      (i.typeKey!=='goods'?supBox:'')+
+      '<h1 class="dtitle" style="letter-spacing:8px">'+(i.typeKey==='construction'?'착 공 계':'착 수 신 고 서')+'</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 계 약 금 액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</p>'+
+      '<p>○ 계 약 일 자 : '+i.sDateStr+'</p>'+
+      '<p>○ '+(i.typeKey==='construction'?'착 공':'착 수')+'일 자 : 20   년   월   일</p>'+
+      '<p>○ 완 수 기 한 : '+i.eDateStr+'</p>'+
+      '</div>'+
+      '<p style="margin:18px 0;text-align:center">상기와 같이 '+(i.typeKey==='construction'?'착공':'착수')+'하였기에 신고서를 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>회사명 : '+v(i.vendor)+'</p><p>주  소 : '+v(i.address)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='site-rep'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:6px">현 장 대 리 인 계</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 주       소 : ___________________________________________</p>'+
+      '<p>○ 주민등록번호 : _______-*******</p>'+
+      '<p>○ 성       명 : _______________</p>'+
+      '<p>○ 면허(자격증) 종목 및 등급 : _______________</p>'+
+      '<p>○ 면허(자격증) 등록 번호 : _______________</p>'+
+      '</div>'+
+      '<p style="margin:16px 0;text-align:center">위 사람을 현장대리인으로 선정하여 신고합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>주  소 : '+v(i.address)+'</p><p>상  호 : '+v(i.vendor)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='schedule'){
+    var isConst=i.typeKey==='construction';
+    var rows2=isConst?
+      ['가설공사','토공사','기초공사','골조공사','마감공사','준공청소','준공']:
+      ['조사 및 분석','중간보고','초안 작성','검토 및 수정','최종보고','납품 및 완료'];
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:6px">'+(isConst?'공 사':'용 역')+'예 정 공 정 표</h1>'+
+      '<div class="dinfo">'+
+      '<p>■ '+(isConst?'공사명':'용역명')+' : '+v(i.name)+'</p>'+
+      '<p>■ 계약기간 : '+i.sDateStr+' ~ '+i.eDateStr+'</p>'+
+      '</div>'+
+      '<table class="ftbl" style="margin-top:10px">'+
+      '<tr><th style="width:20%">세부공종</th><th>1주</th><th>2주</th><th>3주</th><th>4주</th><th>5주</th><th>6주</th><th>7주</th><th>8주</th></tr>'+
+      rows2.map(function(r){return '<tr><td style="font-size:11px">'+r+'</td>'+'<td></td>'.repeat(8)+'</tr>';}).join('')+
+      '</table>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>회사명 : '+v(i.vendor)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='manpower'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px;font-size:18px">인력 및 장비 투입계획서</h1>'+
+      '<div class="dinfo"><p>■ 공사명 : '+v(i.name)+'</p></div>'+
+      '<div class="sh">◦ 인력투입계획</div>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:20%">공종별</th><th>1일</th><th>5일</th><th>10일</th><th>15일</th><th>20일</th><th>25일</th><th>30일</th><th>계</th></tr>'+
+      '<tr><td>보통인부</td>'+'<td></td>'.repeat(8)+'</tr>'+
+      '<tr><td>기술인부</td>'+'<td></td>'.repeat(8)+'</tr>'+
+      '</table>'+
+      '<div class="sh" style="margin-top:12px">◦ 장비투입계획</div>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:20%">장비명</th><th>1일</th><th>5일</th><th>10일</th><th>15일</th><th>20일</th><th>25일</th><th>30일</th><th>계</th></tr>'+
+      '<tr><td style="height:30px"></td>'+'<td></td>'.repeat(8)+'</tr>'+
+      '</table>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='labor-agree'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px;font-size:17px">노무비 구분관리 및 지급확인제 합의서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:20%">공사(용역)명</th><td colspan="3">'+v(i.name)+'</td></tr>'+
+      '<tr><th>계약상대자</th><td>'+v(i.vendor)+'</td><th style="width:15%">대표자</th><td>'+v(i.rep)+'</td></tr>'+
+      '<tr><th>영업소 소재지</th><td colspan="3">'+v(i.address)+'</td></tr></table>'+
+      '<p style="margin:14px 0;line-height:1.9">위 시설공사의 계약에 대하여 「노무비 구분관리 및 지급확인제」 운영을 위하여 계약상대자는 다음 사항에 대하여 합의하고, 합의사항을 성실히 이행할 것을 확약합니다.</p>'+
+      '<p><b>제1조</b> 발주기관은 매월 노무비를 계약상대자 전용계좌로 지급합니다.</p>'+
+      '<p><b>제2조</b> 계약상대자는 지급받은 노무비를 근로자에게 지급 후 지급내역을 보고합니다.</p>'+
+      '<p><b>제3조</b> 노무비 청구는 잔여 기성액을 초과할 수 없습니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>계약상대자 성 명 : '+v(i.rep)+' (인)</p><p>주       소 : '+v(i.address)+'</p><p>사업자번호 : '+v(i.bizNum)+'</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='delivery'){
+    return '<div class="pdoc">'+
+      supBox+
+      '<h1 class="dtitle" style="letter-spacing:10px">납 품 계</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 계 약 금 액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</p>'+
+      '<p>○ 물  품  명 : _______________</p>'+
+      '<p>○ 계 약 기 간 : '+i.sDateStr+' ~ '+i.eDateStr+'</p>'+
+      '<p>○ 실제 납품일 : 20   년   월   일</p>'+
+      '</div>'+
+      '<p style="margin:18px 0;text-align:center">상기와 같이 납품하였기에 납품신고서를 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>업체명 : '+v(i.vendor)+'</p><p>주  소 : '+v(i.address)+'</p><p>대표자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='completion'){
+    return '<div class="pdoc">'+
+      (i.typeKey!=='goods'?supBox:'')+
+      '<h1 class="dtitle" style="letter-spacing:10px">준 공 계</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 계 약 금 액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</p>'+
+      '<p>○ 준 공 금 액 : 금               원 (금                   원)</p>'+
+      '<p>○ 정산준공금액 : 금               원 (금                   원)</p>'+
+      '<p>○ 계 약 일 자 : '+i.sDateStr+'</p>'+
+      '<p>○ 착 수 일 자 : 20   년   월   일</p>'+
+      '<p>○ 준 공 기 한 : '+i.eDateStr+'</p>'+
+      '<p>○ 준 공 일 자 : 20   년   월   일</p>'+
+      '</div>'+
+      '<p style="margin:18px 0;text-align:center">상기와 같이 준공되었기에 준공신고서를 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>회사명 : '+v(i.vendor)+'</p><p>주  소 : '+v(i.address)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='completion-cert'){
+    return '<div class="pdoc">'+
+      supBox+
+      '<h1 class="dtitle" style="letter-spacing:6px">준 공 검 사 원</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 계 약 금 액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</p>'+
+      '<p>○ 준 공 금 액 : 금               원</p>'+
+      '<p>○ 계 약 일 자 : '+i.sDateStr+'</p>'+
+      '<p>○ 착 수 일 자 : 20   년   월   일</p>'+
+      '<p>○ 준 공 기 한 : '+i.eDateStr+'</p>'+
+      '<p>○ 준 공 일 자 : 20   년   월   일</p>'+
+      '</div>'+
+      '<p style="margin:14px 0;line-height:1.9">위 '+tw+'의 시행에 있어 전반에 걸쳐 과업지시서, 계약조건 및 기타 약정대로 어김없이 준공하였음을 확약하며, 하자 발견 시 즉시 변상 또는 보완할 것을 서약하고 이에 준공검사원을 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>회사명 : '+v(i.vendor)+'</p><p>주  소 : '+v(i.address)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='settlement'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:6px">정 산 합 의 서</h1>'+
+      '<div class="dinfo">'+
+      '<p>□ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>□ 계약일자 : '+i.sDateStr+'</p>'+
+      '<p>□ 계약업체 : '+v(i.vendor)+'</p>'+
+      '</div>'+
+      '<p style="margin:14px 0">「'+v(i.name,'   ')+'」건에 대하여 아래와 같이 정산하는데 합의합니다.</p>'+
+      '<div class="sh">1. 정산합의내역</div>'+
+      '<div class="rc">'+
+      '<p>○ 계약금액</p>'+
+      '<p>  &lt;당초&gt; 금 '+i.amount.toLocaleString('ko-KR')+'원 (금 '+i.amountHangul+')</p>'+
+      '<p>  &lt;정산&gt; 금                  원 (금                          원)</p>'+
+      '<p>○ 정산 사유 : ___________________________________________</p>'+
+      '</div>'+
+      '<div class="sh">2. 본 정산 합의서에 명시된 이외의 사항은 원 계약서에 의한다.</div>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>주  소 : '+v(i.address)+'</p><p>상  호 : '+v(i.vendor)+'</p><p>대표자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='inspection-goods'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px;font-size:18px">물품 검사(수)조서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:20%">물품명</th><td colspan="3">'+v(i.name)+'</td></tr>'+
+      '<tr><th>계약업체</th><td>'+v(i.vendor)+'</td><th style="width:15%">대표자</th><td>'+v(i.rep)+'</td></tr>'+
+      '<tr><th>계약금액</th><td>'+i.amountStr+'</td><th>납품일</th><td>20   년   월   일</td></tr>'+
+      '<tr><th>검사결과</th><td colspan="3"><br><br></td></tr>'+
+      '<tr><th>검사자</th><td>'+v(i.leaderRank)+' '+v(i.leaderName)+'</td><th>입회자</th><td>___________</td></tr></table>'+
+      '<p style="margin:14px 0">위 물품에 대하여 검사한 결과 이상 없음을 확인합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='payment'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:10px">청 구 서</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 계 약 금 액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</p>'+
+      '<p>○ 준 공 금 액 : 금               원 (금                   원)</p>'+
+      '<p>○ 계 약 기 간 : '+i.sDateStr+' ~ '+i.eDateStr+'</p>'+
+      '<p>○ 준 공 일 자 : 20   년   월   일</p>'+
+      '<p>○ 기 수 령 액 :                  원</p>'+
+      '<p>○ 청 구 금 액 :                  원</p>'+
+      '</div>'+
+      '<div class="sh">○ 입금계좌</div>'+
+      '<table class="ftbl"><tr><th style="width:25%">은행명</th><th style="width:35%">계좌번호</th><th style="width:20%">예금주</th><th>입금액</th></tr>'+
+      '<tr><td style="height:30px"></td><td></td><td></td><td></td></tr></table>'+
+      '<p style="margin:14px 0;text-align:center">상기와 같이 준공금을 청구하오니 지급하여 주시길 바랍니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>회사명 : '+v(i.vendor)+'</p><p>주  소 : '+v(i.address)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='advance'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:6px">선 금 신 청 서</h1>'+
+      '<table class="ftbl">'+
+      '<tr><th style="width:22%">계약건명</th><td colspan="3">'+v(i.name)+'</td></tr>'+
+      '<tr><th>계약금액</th><td>'+i.amountStr+'</td><th style="width:16%">지급한도</th><td>계약금액의 30~50%</td></tr>'+
+      '<tr><th>선금신청액</th><td>금               원</td><th>신청사유</th><td>자재확보 등</td></tr>'+
+      '<tr><th>계약업체</th><td>'+v(i.vendor)+'</td><th>대표자</th><td>'+v(i.rep)+'</td></tr></table>'+
+      '<p style="margin:14px 0;line-height:1.9">위와 같이 선금을 신청하며, 선금을 당해 계약 목적 달성을 위한 용도로만 사용하고, 준공 시 정산내역을 제출하겠습니다.</p>'+
+      '<div class="sh">붙임</div>'+
+      '<ul class="ldisk"><li>선금 사용계획서 1부</li><li>선금 사용각서 1부</li><li>선금 보증서 1부</li></ul>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>신청자 : '+v(i.vendor)+'</p><p>대 표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='warranty'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:8px">하 자 이 행 각 서</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 계 약 일 자 : '+i.sDateStr+'</p>'+
+      '<p>○ 계 약 금 액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</p>'+
+      '<p>○ 하자보수 기간 :       년   월   일 ~       년   월   일</p>'+
+      '<p>○ 계약이행자 : '+v(i.vendor)+'</p>'+
+      '</div>'+
+      '<p style="margin:16px 0;line-height:1.9">위 계약건에 대하여 하자보증금이 면제되었으나, 하자보증금을 귀 기관에 귀속사유가 발생할 경우에는 즉시 현금으로 납입할 것을 확약하고 본 각서를 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>주  소 : '+v(i.address)+'</p><p>상  호 : '+v(i.vendor)+'</p><p>대표자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='gisung'){
+    var isConst=i.typeKey==='construction';
+    return '<div class="pdoc">'+
+      supBox+
+      '<h1 class="dtitle" style="letter-spacing:8px">'+(isConst?'기 성 계':'용 역 기 성 계')+'</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 계 약 금 액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</p>'+
+      '<p>○ 계 약 일 자 : '+i.sDateStr+'</p>'+
+      '<p>○ 착 '+(isConst?'공':'수')+'일 자 : 20   년   월   일</p>'+
+      '<p>○ 준 공 기 한 : '+i.eDateStr+'</p>'+
+      '<p>○ 금회 기성액 : 금               원 (금                   원)</p>'+
+      '<p>○ 누적 기성액 : 금               원 (금                   원)</p>'+
+      '</div>'+
+      '<p style="margin:18px 0;text-align:center">상기와 같이 기성 '+(isConst?'준공':'준공')+'되었기에 기성부분 준공신고서를 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>회사명 : '+v(i.vendor)+'</p><p>주  소 : '+v(i.address)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='gisung-cert'){
+    var isConst2=i.typeKey==='construction';
+    var tw2=isConst2?'공사':'용역';
+    return '<div class="pdoc">'+
+      supBox+
+      '<h1 class="dtitle" style="letter-spacing:6px">기 성 검 사 원</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 계 약 명 : '+v(i.name)+'</p>'+
+      '<p>○ 계 약 금 액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원 (금 '+i.amountHangul+')</p>'+
+      '<p>○ 계 약 일 자 : '+i.sDateStr+'</p>'+
+      '<p>○ 착 '+(isConst2?'공':'수')+'일 자 : 20   년   월   일</p>'+
+      '<p>○ 준 공 기 한 : '+i.eDateStr+'</p>'+
+      '<p>○ 금회 기성액 : 금               원 (금                   원)</p>'+
+      '<p>○ 누적 기성액 : 금               원 (금                   원)</p>'+
+      '</div>'+
+      '<p style="margin:14px 0;line-height:1.9">위 '+tw2+'의 시행에 있어 '+tw2+' 전반에 걸쳐 과업지시서, 계약조건 및 기타 약정대로 어김없이 기성하였음을 확약하며, 만일 '+tw2+' 감독 및 검사에 관한 하자 발견 시 즉시 변상 또는 보완할 것을 서약하고 이에 기성검사원을 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>회사명 : '+v(i.vendor)+'</p><p>주  소 : '+v(i.address)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='site-rep-cert'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:8px">재 직 증 명 서</h1>'+
+      '<div class="dinfo">'+
+      '<p>○ 회 사 명 : '+v(i.vendor)+'</p>'+
+      '<p>○ 주       소 : '+v(i.address)+'</p>'+
+      '<p>○ 성       명 : _______________</p>'+
+      '<p>○ 주민등록번호 : _______-*******   <span style="font-size:10px;color:#666">(주민번호 앞자리 6자리만 기재)</span></p>'+
+      '<p>○ 직  위 / 직 책 : _______________</p>'+
+      '<p>○ 재 직 기 간 : _______________</p>'+
+      '<p>○ 첨 부 서 류 : 자격증 사본 1부, 건설기술자 경력증명서 1부</p>'+
+      '</div>'+
+      '<p style="margin:18px 0;text-align:center">위와 같이 재직하고 있음을 증명합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>회사명 : '+v(i.vendor)+'</p><p>주  소 : '+v(i.address)+'</p><p>대  표 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='labor-check'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:2px;font-size:17px">「노무비 구분관리 및 지급확인제」 적용여부 확인서</h1>'+
+      '<div class="dinfo">'+
+      '<p>1. 공 사 명 : '+v(i.name)+'</p>'+
+      '<p>2. 노무비 구분관리 적용여부</p>'+
+      '<p style="padding-left:16px">□ 적 용 &nbsp;&nbsp;&nbsp; □ 적용제외</p>'+
+      '</div>'+
+      '<table class="ftbl" style="margin-top:10px">'+
+      '<tr><th style="width:30%;background:#F9FAFB">구분</th><th>예외사유</th></tr>'+
+      '<tr><td style="font-size:11px">3-a. 구분관리제만 적용제외<br><span style="color:#888">(지급확인제는 적용)</span></td><td style="font-size:11px">'+
+      '① 노무비 청구기일 전 근로자 전원에게 선지급한 경우<br>'+
+      '② 계좌개설 불가 사유로 현금지급하는 경우<br>'+
+      '③ 계약기간이 1개월 미만인 공사</td></tr>'+
+      '<tr><td style="font-size:11px">3-b. 구분관리제 및<br>지급확인제 모두 적용제외</td><td style="font-size:11px">'+
+      '① 직접노무비 지급대상 전원이 계약상대자의 상용근로자인 경우<br>'+
+      '② 천재지변 등으로 동 제도를 적용할 수 없다고 발주기관이 인정하는 경우</td></tr></table>'+
+      '<p style="margin-top:10px"><b>4. 공사 근로자 명부</b></p>'+
+      '<table class="ftbl"><tr><th>성명</th><th>생년월일</th><th>임금(월)</th><th>연락처</th><th>비고</th></tr>'+
+      '<tr><td style="height:25px"></td><td></td><td></td><td></td><td></td></tr>'+
+      '<tr><td style="height:25px"></td><td></td><td></td><td></td><td></td></tr>'+
+      '<tr><td style="height:25px"></td><td></td><td></td><td></td><td></td></tr></table>'+
+      '<p style="margin:8px 0;font-size:11px">붙임 : 4대보험 가입증명서 등 사본 각 1부</p>'+
+      '<p style="text-align:center;margin-top:12px">상기 공사의 건설근로자 노무비 구분관리 및 지급확인제 관련 자료를 상기와 같이 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>계약상대자 : '+v(i.vendor)+' 대표자 '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='conmachine'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px;font-size:18px">건설기계 사용 내역서</h1>'+
+      '<p style="text-align:right;margin-bottom:8px">감독관 경유: '+v(i.officerName)+'  (인)</p>'+
+      '<div class="dinfo">'+
+      '<p>□ 사업공사명 : '+v(i.name)+'</p>'+
+      '<p>□ 장비업체명 : _______________</p>'+
+      '<p>□ 장비기종명 : _______________</p>'+
+      '</div>'+
+      '<table class="ftbl" style="margin-top:8px">'+
+      '<tr><th colspan="4" style="background:#F9FAFB">건설기계 사용자</th><th colspan="4" style="background:#F9FAFB">건설기계</th><th rowspan="2">사용일수</th><th rowspan="2">임대료(원)</th><th rowspan="2">연락처</th><th rowspan="2">비고</th></tr>'+
+      '<tr><th>성명</th><th>주소</th><th>기종</th><th>형식</th><th>등록번호</th><th>소유자</th><th colspan="2">확인</th></tr>'+
+      '<tr><td style="height:30px"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'+
+      '<tr><th colspan="8" style="text-align:right">합계</th><td></td><td></td><td></td><td></td></tr></table>'+
+      '<p style="margin:12px 0;line-height:1.8;font-size:11.5px">상기 공사 사업에 관련하여 위와 같이 건설기계 사용이 틀림없으며, 추후 기계장비 투입 및 임대료 미변제에 대한 일체의 민·형사상 책임은 계약상대자에게 있음을 확인합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>계약상대자 상 호 : '+v(i.vendor)+'</p><p>주         소 : '+v(i.address)+'</p><p>대   표   자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  if(fid==='conmachine-none'){
+    return '<div class="pdoc">'+
+      '<h1 class="dtitle" style="letter-spacing:4px;font-size:18px">건설기계 미투입확약서</h1>'+
+      '<p style="text-align:right;margin-bottom:8px">감독관 경유: '+v(i.officerName)+'  (인)</p>'+
+      '<div class="dinfo">'+
+      '<p>1. 공 사 명 : '+v(i.name)+'</p>'+
+      '<p>2. 계약금액 : 금 '+i.amount.toLocaleString('ko-KR')+' 원</p>'+
+      '</div>'+
+      '<p style="margin:18px 0;line-height:1.9">상기 공사에 관련하여 건설기계관리법 시행령 제2조 별표1에 따른 건설기계 투입내역이 일체 없음을 확인하며, 추후 기계장비 투입 및 임대료 미변제에 대한 일체의 민·형사상 책임은 계약상대자에게 있음을 확약합니다. 이에 당해 공사와 관련해 건설기계 등으로 민원이 발생치 않도록 할 것을 확약하며 이에 각서를 제출합니다.</p>'+
+      '<div class="ddate">'+today()+'</div>'+
+      '<div class="dsign"><p>계약상대자 상 호 : '+v(i.vendor)+'</p><p>주         소 : '+v(i.address)+'</p><p>대   표   자 : '+v(i.rep)+' (인)</p></div>'+
+      '<div class="drec">화성시 (분임)재무관 귀하</div></div>';
+  }
+  return '<p style="color:#999;text-align:center;padding:20px">서식을 불러오는 중입니다...</p>';
+}
+
+// ══════════════════════════════════════════════════════
+// PDF 원본 서식 매핑 (forms/ 폴더의 실제 파일)
+// ══════════════════════════════════════════════════════
+var PDF_FORMS = {
+  'start':           'forms/착공계_착수계.pdf',
+  'site-rep':        'forms/현장대리인계.pdf',
+  'site-rep-cert':   'forms/재직증명서.pdf',
+  'manpower':        'forms/인력장비투입계획서.pdf',
+  'schedule':        'forms/용역예정공정표.pdf',
+  'gisung':          'forms/기성계.pdf',
+  'gisung-cert':     'forms/기성검사원.pdf',
+  'completion':      'forms/준공계.pdf',
+  'delivery':        'forms/납품계.pdf',
+  'completion-cert': 'forms/준공검사원.pdf',
+  'warranty':        'forms/하자이행각서.pdf',
+  'payment':         'forms/청구서.pdf',
+  'settlement':      'forms/정산합의서.pdf',
+  'conmachine':      'forms/건설기계사용내역서.pdf',
+  'conmachine-none': 'forms/건설기계미투입확약서.pdf',
+  'labor-check':     'forms/노무비구분관리확인서.pdf',
+  'labor-agree':     'forms/노무비구분관리합의서.pdf'
+};
+
+// ══════════════════════════════════════════════════════
+// 모달 유틸
+// ══════════════════════════════════════════════════════
+function dlOriginalPDF(){
+  var pdfPath = PDF_FORMS[currentFormId];
+  if(pdfPath){
+    var a=document.createElement('a');
+    a.href=pdfPath;
+    a.download=FORM_NAMES[currentFormId]+'_서식원본.pdf';
+    a.click();
+  } else {
+    // PDF 원본 없는 서식 → HTML로 대체 다운로드
+    var html='<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>'+FORM_NAMES[currentFormId]+'</title>'+
+      '<style>body{font-family:\'Malgun Gothic\',serif;padding:40px;color:black}table{width:100%;border-collapse:collapse;margin:12px 0}td,th{border:1px solid black;padding:8px;font-size:13px;vertical-align:middle}th{background:#F3F4F6;font-weight:700;text-align:center}h1{text-align:center;margin-bottom:20px}p{margin:4px 0;line-height:1.8}li{line-height:1.8}</style>'+
+      '</head><body>'+document.getElementById('modal-body').innerHTML+'</body></html>';
+    var b=new Blob([html],{type:'text/html;charset=utf-8'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download=(FORM_NAMES[currentFormId]||'form')+'_'+todayShort()+'.html';
+    a.click();
+  }
+}
+function updateDlBtnLabel(){
+  var btn=document.getElementById('btn-dl-pdf');
+  if(!btn) return;
+  if(PDF_FORMS[currentFormId]){
+    btn.textContent='📄 서식 원본 다운로드';
+    btn.title='화성시 공식 서식 PDF 파일 다운로드';
+  } else {
+    btn.textContent='📥 서식 다운로드 (HTML)';
+    btn.title='PDF 원본 없음 — HTML 서식 다운로드';
+  }
+}
+function printForm(){
+  var pdfPath=PDF_FORMS[currentFormId];
+  if(pdfPath){
+    var w=window.open(pdfPath,'_blank');
+    if(w) setTimeout(function(){try{w.print();}catch(e){}},1500);
+  } else {
+    var w=window.open('','_blank');
+    w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:\'Malgun Gothic\',serif;padding:40px;color:black}table{width:100%;border-collapse:collapse;margin:12px 0}td,th{border:1px solid black;padding:8px;font-size:13px;vertical-align:middle}th{background:#F3F4F6;font-weight:700;text-align:center}h1{text-align:center;margin-bottom:20px}p{margin:4px 0;line-height:1.8}li{line-height:1.8}</style></head><body>'+document.getElementById('modal-body').innerHTML+'<script>window.print();<\/script></body></html>');
+    w.document.close();
+  }
+}
+function copyModalTxt(){
+  var txt=document.getElementById('modal-body').innerText;
+  navigator.clipboard.writeText(txt).then(function(){alert('텍스트가 클립보드에 복사되었습니다.');}).catch(function(){alert('복사 실패 — 직접 선택 후 복사해주세요.');});
+}
+
+// ══════════════════════════════════════════════════════
+// 빠른 작업
+// ══════════════════════════════════════════════════════
+function copyInfo(){
+  var i=getInfo();
+  var txt='[화성시 계약 정보]\n'+
+    '계약명: '+i.name+'\n계약금액: '+i.amountStr+'\n계약기간: '+i.sDate+' ~ '+i.eDate+'\n'+
+    '업체명: '+i.vendor+'\n대표자: '+i.rep+'\n사업자번호: '+i.bizNum+'\n'+
+    '주소: '+i.address+'\n전화: '+i.phone+'\n업종: '+i.industry;
+  navigator.clipboard.writeText(txt).then(function(){alert('계약정보가 복사되었습니다.');}).catch(function(){alert('복사 실패');});
+}
+function copyDocs(){
+  var grids=document.querySelectorAll('#docs-grid .doc-nm');
+  var list=[];
+  grids.forEach(function(el){list.push('☐ '+el.textContent.trim());});
+  navigator.clipboard.writeText('[필요 서류 목록]\n'+list.join('\n')).then(function(){alert('서류 목록이 복사되었습니다. ('+list.length+'건)');}).catch(function(){alert('복사 실패');});
+}
+function dlAllForms(){
+  // PDF 원본이 있는 서식은 안내, HTML 서식만 일괄 묶어 다운로드
+  var i=getInfo();
+  var all='<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>화성시 계약 서식 모음</title>'+
+    '<style>body{font-family:\'Malgun Gothic\',serif;padding:30px;color:black}.form-section{margin-bottom:60px;page-break-after:always}table{width:100%;border-collapse:collapse;margin:12px 0}td,th{border:1px solid black;padding:8px;font-size:13px;vertical-align:middle}th{background:#F3F4F6;font-weight:700;text-align:center}h1{text-align:center;margin-bottom:20px}p{margin:4px 0;line-height:1.8}li{line-height:1.8}.note{background:#FEF3C7;border-left:3px solid #F59E0B;padding:8px 12px;margin:10px 0;font-size:11px;color:#78350F}</style>'+
+    '</head><body>'+
+    '<div class="note">※ PDF 원본이 있는 서식(착공계, 준공계, 기성계 등)은 개별 서식 버튼의 "서식 원본 다운로드"를 이용하세요.<br>아래는 자동 생성 서식(수의계약 관련, 보증금 각서 등) 모음입니다.</div>';
+  Object.keys(FORM_NAMES).forEach(function(fid){
+    if(PDF_FORMS[fid]) return; // PDF 원본 있는 것은 제외
+    var content=generateForm(fid,i);
+    if(content&&content.indexOf('불러오는 중')<0){
+      all+='<div class="form-section">'+content+'</div>';
+    }
+  });
+  all+='</body></html>';
+  var b=new Blob([all],{type:'text/html;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(b);
+  a.download='화성시_자동생성서식_'+todayShort()+'.html';
+  a.click();
+}
+function printPage(){ window.print(); }
+
+// ══════════════════════════════════════════════════════
+// 주의사항 편집
+// ══════════════════════════════════════════════════════
+function loadCustomAlerts(){
+  try{var r=localStorage.getItem(CUSTOM_ALERT_KEY);return r?JSON.parse(r):[];}catch(e){return[];}
+}
+function saveCustomAlerts(arr){
+  try{localStorage.setItem(CUSTOM_ALERT_KEY,JSON.stringify(arr));}catch(e){}
+}
+function openAlertEd(id){
+  editAlertId=id||null;
+  document.getElementById('alert-ed-title').textContent=id?'📝 주의사항 편집':'📝 주의사항 추가';
+  document.getElementById('al-ico-inp').value='📌';
+  document.getElementById('al-txt-inp').value='';
+  selAlertType='warning';
+  document.querySelectorAll('.al-type-btn').forEach(function(b){b.classList.toggle('active',b.dataset.type==='warning');});
+  if(id){
+    var arr=loadCustomAlerts();
+    var found=arr.find(function(c){return c.id===id;});
+    if(found){
+      document.getElementById('al-ico-inp').value=found.ico||'📌';
+      document.getElementById('al-txt-inp').value=found.txt||'';
+      selAlertType=found.type||'warning';
+      document.querySelectorAll('.al-type-btn').forEach(function(b){b.classList.toggle('active',b.dataset.type===selAlertType);});
+    }
+  }
+  document.getElementById('alert-ed-ov').classList.add('on');
+}
+function closeAlertEd(){document.getElementById('alert-ed-ov').classList.remove('on');editAlertId=null;}
+function saveAlertItem(){
+  var txt=document.getElementById('al-txt-inp').value.trim();
+  if(!txt){alert('내용을 입력해주세요.');return;}
+  var arr=loadCustomAlerts();
+  if(editAlertId){
+    for(var i=0;i<arr.length;i++){if(arr[i].id===editAlertId){arr[i].ico=document.getElementById('al-ico-inp').value||'📌';arr[i].txt=txt;arr[i].type=selAlertType;break;}}
+  } else {
+    arr.push({id:'c'+Date.now(),ico:document.getElementById('al-ico-inp').value||'📌',txt:txt,type:selAlertType});
+  }
+  saveCustomAlerts(arr);
+  closeAlertEd();
+  calculate();
+}
+function editAlertItem(id){openAlertEd(id);}
+function delAlertItem(id){
+  if(!confirm('삭제하시겠습니까?'))return;
+  var arr=loadCustomAlerts().filter(function(c){return c.id!==id;});
+  saveCustomAlerts(arr);
+  calculate();
+}
+function clearCustomAlerts(){
+  if(!confirm('사용자 추가 주의사항을 모두 삭제하시겠습니까?'))return;
+  saveCustomAlerts([]);
+  calculate();
+}
+
+// ══════════════════════════════════════════════════════
+// 날짜 입력 (년/월/일 분리형)
+// ══════════════════════════════════════════════════════
+function setupDateInput(yId,mId,dId,hidId){
+  var yEl=document.getElementById(yId),mEl=document.getElementById(mId),
+      dEl=document.getElementById(dId),hidEl=document.getElementById(hidId);
+  function sync(){
+    var y=yEl.value.trim(),m=mEl.value.trim(),d=dEl.value.trim();
+    hidEl.value=(y.length===4&&m&&d)?y+'-'+m.padStart(2,'0')+'-'+d.padStart(2,'0'):'';
+    calculate();
+  }
+  yEl.addEventListener('input',function(e){
+    var v=e.target.value.replace(/\D/g,'').slice(0,4);
+    e.target.value=v;
+    if(v.length===4) mEl.focus();
+    sync();
+  });
+  mEl.addEventListener('input',function(e){
+    var v=e.target.value.replace(/\D/g,'').slice(0,2);
+    var n=parseInt(v,10)||0;
+    if(v.length===1&&n>=2&&n<=9){e.target.value=v;dEl.focus();sync();return;}
+    if(v.length===2){if(n<1||n>12)v=v.slice(0,1);else dEl.focus();}
+    e.target.value=v;
+    sync();
+  });
+  dEl.addEventListener('input',function(e){
+    var v=e.target.value.replace(/\D/g,'').slice(0,2);
+    var n=parseInt(v,10)||0;
+    if(v.length===2&&(n<1||n>31))v=v.slice(0,1);
+    e.target.value=v;
+    sync();
+  });
+  mEl.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!e.target.value)yEl.focus();});
+  dEl.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!e.target.value)mEl.focus();});
+}
+
+// ══════════════════════════════════════════════════════
+// 담당자 저장/불러오기 (다중 프로필, localStorage 영속)
+// ══════════════════════════════════════════════════════
+var APPROVER_FIELDS=['dept','officer-rank','officer-name','leader-rank','leader-name','head-rank','head-name'];
+var PROFILES_KEY='hwaseong_approver_profiles_v2';
+
+function getProfiles(){
+  try{var r=localStorage.getItem(PROFILES_KEY);return r?JSON.parse(r):{};}catch(e){return{};}
+}
+function setProfiles(obj){
+  try{localStorage.setItem(PROFILES_KEY,JSON.stringify(obj));}catch(e){alert('저장 실패: '+e.message);}
+}
+function escHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function saveApprovers(){
+  var dept=document.getElementById('dept').value.trim();
+  var name=document.getElementById('officer-name').value.trim();
+  var autoName=(dept&&name)?dept+' / '+name:(name||dept||'');
+  var profileName=prompt('프로필 이름을 입력하세요\n(비우면 자동명칭 사용):',autoName);
+  if(profileName===null) return;
+  profileName=profileName.trim()||autoName||('저장_'+new Date().toLocaleDateString('ko-KR'));
+  var profiles=getProfiles();
+  if(profiles[profileName]&&!confirm('"'+profileName+'" 프로필이 이미 있습니다. 덮어쓰시겠습니까?')) return;
+  var data={_name:profileName,_savedAt:new Date().toISOString()};
+  APPROVER_FIELDS.forEach(function(id){var el=document.getElementById(id);if(el)data[id]=el.value;});
+  profiles[profileName]=data;
+  setProfiles(profiles);
+  updateSavedInfo();
+  renderProfileList();
+  alert('✅ "'+profileName+'" 프로필이 저장되었습니다.');
+}
+
+function loadProfile(profileName){
+  var profiles=getProfiles();
+  var data=profiles[profileName];
+  if(!data){alert('프로필을 찾을 수 없습니다.');return;}
+  APPROVER_FIELDS.forEach(function(id){var el=document.getElementById(id);if(el&&data[id]!==undefined)el.value=data[id];});
+  calculate();
+  toggleProfileList();
+  alert('✅ "'+profileName+'" 로드 완료\n(저장일시: '+new Date(data._savedAt).toLocaleString('ko-KR')+')');
+}
+
+function deleteProfile(profileName){
+  if(!confirm('"'+profileName+'" 프로필을 삭제하시겠습니까?'))return;
+  var profiles=getProfiles();
+  delete profiles[profileName];
+  setProfiles(profiles);
+  updateSavedInfo();
+  renderProfileList();
+}
+
+function clearAllProfiles(){
+  var keys=Object.keys(getProfiles());
+  if(!keys.length){alert('저장된 프로필이 없습니다.');return;}
+  if(!confirm('저장된 프로필 전체('+keys.length+'개)를 삭제하시겠습니까?'))return;
+  try{localStorage.removeItem(PROFILES_KEY);}catch(e){}
+  updateSavedInfo();
+  renderProfileList();
+  alert('🗑️ 저장된 담당자 정보가 삭제되었습니다.');
+}
+
+function toggleProfileList(){
+  var wrap=document.getElementById('profile-list-wrap');
+  var open=wrap.style.display==='block';
+  if(!open) renderProfileList();
+  wrap.style.display=open?'none':'block';
+}
+
+function renderProfileList(){
+  var profiles=getProfiles();
+  var keys=Object.keys(profiles);
+  var inner=document.getElementById('profile-list-inner');
+  if(!keys.length){inner.innerHTML='<div class="pfl-empty">저장된 프로필이 없습니다.</div>';return;}
+  keys.sort(function(a,b){return new Date(profiles[b]._savedAt)-new Date(profiles[a]._savedAt);});
+  inner.innerHTML=keys.map(function(k){
+    var d=profiles[k];
+    var dt=d._savedAt?new Date(d._savedAt).toLocaleString('ko-KR'):'';
+    var kEsc=k.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return '<div class="pfl-item">'+
+      '<button class="pfl-load" onclick="loadProfile(\''+kEsc+'\')">'+
+        '<span class="pfl-name">'+escHtml(k)+'</span>'+
+        '<span class="pfl-date">'+escHtml(dt)+'</span>'+
+      '</button>'+
+      '<button class="pfl-del" onclick="deleteProfile(\''+kEsc+'\')" title="삭제">×</button>'+
+    '</div>';
+  }).join('');
+}
+
+function updateSavedInfo(){
+  var el=document.getElementById('saved-info');
+  try{
+    var profiles=getProfiles();
+    var keys=Object.keys(profiles);
+    if(!keys.length){el.classList.remove('on');return;}
+    keys.sort(function(a,b){return new Date(profiles[b]._savedAt)-new Date(profiles[a]._savedAt);});
+    var latest=profiles[keys[0]];
+    var dt=latest._savedAt?new Date(latest._savedAt).toLocaleString('ko-KR'):'알 수 없음';
+    el.innerHTML='💾 <b>'+keys.length+'개 프로필 저장됨</b> · 최근: '+escHtml(keys[0])+' ('+dt+')';
+    el.classList.add('on');
+  }catch(e){el.classList.remove('on');}
+}
+
+function autoLoad(){
+  var profiles=getProfiles();
+  var keys=Object.keys(profiles);
+  if(!keys.length) return;
+  var anyFilled=APPROVER_FIELDS.some(function(id){var el=document.getElementById(id);return el&&el.value;});
+  if(anyFilled) return;
+  keys.sort(function(a,b){return new Date(profiles[b]._savedAt)-new Date(profiles[a]._savedAt);});
+  var data=profiles[keys[0]];
+  APPROVER_FIELDS.forEach(function(id){var el=document.getElementById(id);if(el&&data[id]!==undefined&&!el.value)el.value=data[id];});
+  updateSavedInfo();
+}
+
+// ══════════════════════════════════════════════════════
+// 초기화
+// ══════════════════════════════════════════════════════
+function resetForm(){
+  if(!confirm('입력한 내용을 모두 초기화하시겠습니까?'))return;
+  ['contract-name','vendor-name','rep','biz-num','address','industry','phone','start-date','end-date','start-y','start-m','start-d','end-y','end-m','end-d'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('project-amount').value='20,000,000';
+  document.getElementById('nego-rate').value='0';
+  document.getElementById('nego-amt').textContent='감액 0원';
+  S.amount=20000000;
+  S.opts.clear();
+  S.conType='general';
+  document.querySelectorAll('.opt').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('#type-btns button').forEach(function(b){b.classList.remove('active');});
+  document.querySelector('[data-type="construction"]').classList.add('active');
+  S.type='construction';
+  document.querySelectorAll('.con-type-btn').forEach(function(x){x.classList.remove('active');});
+  var genConBtn=document.querySelector('.con-type-btn[data-contype="general"]');
+  if(genConBtn) genConBtn.classList.add('active');
+  document.getElementById('amt-display').textContent='2천만원';
+  document.getElementById('amount-input').value='20,000,000';
+  checkedItems.clear();
+  deselLoc();
+  updateTypeUI();
+  calculate();
+}
+
+// ══════════════════════════════════════════════════════
+// 입찰방법 기준값 계산 (지방계약법 시행령 제30조, 화성시 기준)
+// ══════════════════════════════════════════════════════
+function getSuuieLimits(){
+  var t=S.type, ct=S.conType||'general';
+  var isSpecial=S.opts.has('disability')||S.opts.has('women')||S.opts.has('social');
+
+  // ─ 라. 1인 견적 수의계약 상한 ─
+  var limit1=isSpecial?50000000:20000000; // 특수기업 5천만, 일반 2천만
+
+  // ─ 다. 소액견적 수의계약 상한 (화성시 지역제한) ─
+  var limit2;
+  if(t==='construction'){
+    if(ct==='specialty') limit2=200000000;       // 전문공사 2억
+    else if(ct==='electrical') limit2=160000000; // 전기·정보·소방·기타 1.6억
+    else limit2=400000000;                        // 일반공사 4억
+  } else {
+    limit2=100000000; // 용역·물품 1억
+  }
+
+  // ─ 나→가 경계: 지역제한(경기도) → 전국입찰 ─
+  var limitNational;
+  if(t==='construction'){
+    if(ct==='general') limitNational=10000000000;  // 일반공사 100억
+    else limitNational=1000000000;                  // 전문·전기·소방 10억
+  } else {
+    limitNational=500000000; // 용역·물품 5억 (일반용역·물품 기준)
+  }
+
+  return {limit1:limit1, limit2:limit2, limitNational:limitNational, isSpecial:isSpecial};
+}
+
+function checkSuuieLimit(){
+  var pAmt=parseAmt(document.getElementById('project-amount').value);
+  var t=S.type, ct=S.conType||'general';
+  var lim=getSuuieLimits();
+  var won=function(n){return n.toLocaleString('ko-KR')+'원';};
+
+  // 소액견적 상한 초과 → 완전 불가
+  if(pAmt>lim.limit2){
+    var typeNames={construction:{general:'일반공사 (4억↓)',specialty:'전문공사 (2억↓)',electrical:'전기·정보·소방·기타공사 (1.6억↓)'},service:'용역',goods:'물품구입'};
+    var tName=t==='construction'?typeNames.construction[ct]:(typeNames[t]);
+    var limitStr=won(lim.limit2);
+    return {blocked:true, msg:
+      '⛔ 수의계약 불가 — '+tName+'\n\n'+
+      '현재 사업금액(추정가격): '+won(pAmt)+'\n'+
+      '소액견적 수의계약 상한: '+limitStr+'\n\n'+
+      '▸ 경기도 지역제한 경쟁입찰 또는 전국 일반입찰로 진행하십시오.\n'+
+      '(지방계약법 시행령 제30조 / 화성시 예규)'};
+  }
+  return {blocked:false};
+}
+
+// 수의계약 선택 해제 (알림 없이 조용히)
+function deselSuuie(){
+  if(!S.opts.has('suuie')) return;
+  S.opts.delete('suuie');
+  var btn=document.querySelector('[data-opt="suuie"]');
+  if(btn) btn.classList.remove('active');
+}
+
+// 소재지/견적방식 선택 해제
+function deselLoc(){
+  var oldLoc=S.location;
+  S.location=null; S.quoteType=null;
+  document.querySelectorAll('.bid-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.qt-btn').forEach(function(b){b.classList.remove('active');});
+  var qs=document.getElementById('qt-sec');
+  if(qs) qs.style.display='none';
+  // 경기도·전국에서 해제되면 강제 설정된 관외업체도 함께 해제
+  if(oldLoc==='gyeonggi'||oldLoc==='national'){
+    S.opts.delete('outside');
+    var ob=document.querySelector('[data-opt="outside"]');
+    if(ob) ob.classList.remove('active','locked');
+  }
+}
+
+// 견적방식 섹션 표시/숨김 + 한도 힌트 갱신
+function updateQtSec(){
+  var qs=document.getElementById('qt-sec');
+  if(!qs) return;
+  qs.style.display=(S.location==='hwaseong')?'':'none';
+  var hint=document.getElementById('qt-single-hint');
+  if(hint){ var lim=getSuuieLimits(); hint.textContent=lim.isSpecial?'5천만원↓':'2천만원↓'; }
+}
+
+// ══════════════════════════════════════════════════════
+// 절차/서류 범주 필터
+// ══════════════════════════════════════════════════════
+var FILTER_LABELS={me:'사업담당자 준비',them:'계약부서 처리',vendor:'업체 제출',consult:'협의 필요'};
+
+function clearFilter(){
+  document.getElementById('flow-wrap').classList.remove('fil-active');
+  document.getElementById('docs-grid').classList.remove('fil-active');
+  document.querySelectorAll('.flow-step.fil-hi').forEach(function(el){el.classList.remove('fil-hi');});
+  document.querySelectorAll('.doc-item.fil-hi').forEach(function(el){el.classList.remove('fil-hi');});
+  document.querySelectorAll('.leg.fil-on').forEach(function(el){el.classList.remove('fil-on');});
+  var hint=document.getElementById('filter-hint');
+  if(hint) hint.textContent='';
+}
+
+function filterByActor(fil){
+  // 같은 필터 재클릭 → 해제
+  if(activeFilter===fil){ activeFilter=null; clearFilter(); return; }
+  activeFilter=fil;
+  clearFilter();
+
+  // 선택 legend 강조
+  document.querySelectorAll('.leg[data-filter]').forEach(function(el){
+    el.classList.toggle('fil-on', el.dataset.filter===fil);
+  });
+  var hint=document.getElementById('filter-hint');
+  if(hint) hint.textContent='[ '+FILTER_LABELS[fil]+' 필터 중 — 다시 클릭하면 해제 ]';
+
+  // 절차 흐름 필터
+  var flowWrap=document.getElementById('flow-wrap');
+  flowWrap.classList.add('fil-active');
+  flowWrap.querySelectorAll('.flow-step').forEach(function(el){
+    var a=el.dataset.actor;
+    var match=(fil==='me'&&a==='me')||(fil==='them'&&a==='them')||
+              (fil==='vendor'&&(a==='them'||a==='vendor'))||
+              (fil==='consult'&&(a==='consult'||a==='audit'));
+    if(match) el.classList.add('fil-hi');
+  });
+
+  // 서류 목록 필터 (계약부서 처리는 flow 전용)
+  if(fil!=='them'){
+    var docsGrid=document.getElementById('docs-grid');
+    docsGrid.classList.add('fil-active');
+    docsGrid.querySelectorAll('.doc-item').forEach(function(el){
+      var own=el.dataset.own, tag=el.dataset.tag;
+      var match=(fil==='me'&&own==='me')||(fil==='vendor'&&own==='vendor')||
+                (fil==='consult'&&tag==='consult-i');
+      if(match) el.classList.add('fil-hi');
+    });
+  }
+}
+
+function reapplyFilter(){
+  if(!activeFilter) return;
+  var f=activeFilter; activeFilter=null;
+  filterByActor(f);
+}
+
+// ══════════════════════════════════════════════════════
+// 이벤트 바인딩
+// ══════════════════════════════════════════════════════
+(function(){
+  // 계약 유형 버튼
+  document.querySelectorAll('#type-btns button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#type-btns button').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+      S.type=this.dataset.type;
+      S.conType='general';
+      document.querySelectorAll('.con-type-btn').forEach(function(x){x.classList.remove('active');});
+      var genBtn=document.querySelector('.con-type-btn[data-contype="general"]');
+      if(genBtn) genBtn.classList.add('active');
+      if(checkSuuieLimit().blocked) deselSuuie();
+      deselLoc();
+      updateTypeUI();
+      calculate();
+    });
+  });
+
+  // 금액 계산
+  function recalc(){
+    var pAmt=parseAmt(document.getElementById('project-amount').value);
+    var nRate=parseFloat(document.getElementById('nego-rate').value)||0;
+    if(nRate<0)nRate=0; if(nRate>100)nRate=100;
+    var cut=Math.round(pAmt*(nRate/100));
+    S.amount=pAmt-cut;
+    document.getElementById('amount-input').value=S.amount.toLocaleString('ko-KR');
+    document.getElementById('amt-display').textContent=fmtShort(S.amount);
+    document.getElementById('nego-amt').textContent='감액 '+cut.toLocaleString('ko-KR')+'원';
+    // 금액 변경으로 수의계약 한도 초과 시 조용히 해제
+    if(checkSuuieLimit().blocked) deselSuuie();
+    // 금액 변경으로 소재지 선택이 무효화될 경우 자동 해제
+    if(S.location==='hwaseong'){
+      var rLim=getSuuieLimits();
+      if(pAmt>rLim.limit2){
+        deselLoc();
+      } else if(S.quoteType==='single'&&pAmt>rLim.limit1){
+        S.quoteType=null;
+        document.querySelectorAll('.qt-btn').forEach(function(x){x.classList.remove('active');});
+      }
+    }
+    calculate();
+  }
+  document.getElementById('project-amount').addEventListener('input',function(e){
+    var n=parseAmt(e.target.value);
+    e.target.value=n.toLocaleString('ko-KR');
+    recalc();
+  });
+  document.getElementById('nego-rate').addEventListener('input',recalc);
+
+  // 빠른 금액 버튼
+  document.querySelectorAll('.qb').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.getElementById('project-amount').value=parseInt(this.dataset.amount,10).toLocaleString('ko-KR');
+      recalc();
+    });
+  });
+
+  // 텍스트 입력 → calculate (biz-num·phone은 아래 포매터에서 직접 호출)
+  ['contract-name','vendor-name','rep','address','industry','dept','officer-rank','officer-name','leader-rank','leader-name','head-rank','head-name'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.addEventListener('input',calculate);
+  });
+
+  // 네고율: 0이면 포커스 시 자동 클리어
+  var negoEl=document.getElementById('nego-rate');
+  negoEl.addEventListener('focus',function(){if(parseFloat(this.value)===0)this.value='';});
+  negoEl.addEventListener('blur',function(){if(this.value===''||isNaN(parseFloat(this.value))){this.value='0';recalc();}});
+
+  // 날짜 분리 입력 초기화
+  setupDateInput('start-y','start-m','start-d','start-date');
+  setupDateInput('end-y','end-m','end-d','end-date');
+
+  // 사업자등록번호 자동 하이픈 (XXX-XX-XXXXX)
+  document.getElementById('biz-num').addEventListener('input',function(e){
+    var v=e.target.value.replace(/\D/g,'').slice(0,10);
+    if(v.length<=3) e.target.value=v;
+    else if(v.length<=5) e.target.value=v.slice(0,3)+'-'+v.slice(3);
+    else e.target.value=v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5);
+    calculate();
+  });
+
+  // 전화번호 자동 하이픈
+  document.getElementById('phone').addEventListener('input',function(e){
+    var v=e.target.value.replace(/\D/g,'');
+    var f;
+    if(v.startsWith('02')){
+      v=v.slice(0,10);
+      if(v.length<=2) f=v;
+      else if(v.length<=5) f=v.slice(0,2)+'-'+v.slice(2);
+      else if(v.length<=9) f=v.slice(0,2)+'-'+v.slice(2,5)+'-'+v.slice(5);
+      else f=v.slice(0,2)+'-'+v.slice(2,6)+'-'+v.slice(6);
+    } else {
+      v=v.slice(0,11);
+      if(v.length<=3) f=v;
+      else if(v.length<=6) f=v.slice(0,3)+'-'+v.slice(3);
+      else if(v.length<=10) f=v.slice(0,3)+'-'+v.slice(3,6)+'-'+v.slice(6);
+      else f=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7);
+    }
+    e.target.value=f||v;
+    calculate();
+  });
+
+  // 공사 세부유형 버튼
+  document.querySelectorAll('.con-type-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.con-type-btn').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+      S.conType=this.dataset.contype;
+      if(checkSuuieLimit().blocked) deselSuuie();
+      deselLoc();
+      calculate();
+    });
+  });
+
+  // 업체 소재지 버튼 (재클릭 = 해제)
+  document.querySelectorAll('.bid-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      var loc=this.dataset.loc;
+      if(S.location===loc){ deselLoc(); calculate(); return; }
+      // 이전 소재지가 경기도·전국이었으면 강제 관외업체 해제
+      if(S.location==='gyeonggi'||S.location==='national'){
+        S.opts.delete('outside');
+        var ob=document.querySelector('[data-opt="outside"]');
+        if(ob) ob.classList.remove('active','locked');
+      }
+      document.querySelectorAll('.bid-btn').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+      S.location=loc;
+      S.quoteType=null;
+      document.querySelectorAll('.qt-btn').forEach(function(x){x.classList.remove('active');});
+      // 경기도·전국 선택 시 관외업체 자동 강제 선택
+      if(loc==='gyeonggi'||loc==='national'){
+        S.opts.add('outside');
+        var ob2=document.querySelector('[data-opt="outside"]');
+        if(ob2) ob2.classList.add('active','locked');
+      }
+      updateQtSec();
+      calculate();
+    });
+  });
+
+  // 견적방식 버튼 (재클릭 = 해제)
+  document.querySelectorAll('.qt-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      var qt=this.dataset.qt;
+      if(S.quoteType===qt){ S.quoteType=null; this.classList.remove('active'); calculate(); return; }
+      document.querySelectorAll('.qt-btn').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+      S.quoteType=qt;
+      calculate();
+    });
+  });
+
+  // 추가 조건 버튼
+  document.querySelectorAll('.opt').forEach(function(b){
+    b.addEventListener('click',function(){
+      var opt=this.dataset.opt;
+      if(S.opts.has(opt)){
+        // 관외업체: 경기도·전국 소재 선택 중이면 해제 불가
+        if(opt==='outside'&&(S.location==='gyeonggi'||S.location==='national')){
+          alert('경기도·전국 소재 업체는 관외업체 조건이 필수입니다.\n소재지를 변경하거나 해제하면 자동으로 풀립니다.');
+          return;
+        }
+        S.opts.delete(opt);
+        this.classList.remove('active');
+      } else {
+        // 수의계약 선택 시 한도 검사
+        if(opt==='suuie'){
+          var chk=checkSuuieLimit();
+          if(chk.blocked){alert(chk.msg);return;}
+          if(chk.warn&&!confirm(chk.msg)) return;
+        }
+        S.opts.add(opt);
+        this.classList.add('active');
+      }
+      // 특수기업 토글 시 수의계약 한도 재확인
+      if(opt==='disability'||opt==='women'||opt==='social'){
+        if(checkSuuieLimit().blocked) deselSuuie();
+      }
+      calculate();
+    });
+  });
+
+  // 주의사항 유형 버튼
+  document.querySelectorAll('.al-type-btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.al-type-btn').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active');
+      selAlertType=this.dataset.type;
+    });
+  });
+
+  // 모달 외부 클릭 닫기
+  document.getElementById('modal-ov').addEventListener('click',function(e){if(e.target.id==='modal-ov')closeModal();});
+  document.getElementById('alert-ed-ov').addEventListener('click',function(e){if(e.target.id==='alert-ed-ov')closeAlertEd();});
+
+  // ESC 닫기
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal();closeAlertEd();}});
+
+  updateTypeUI();
+  autoLoad();
+  calculate();
+  updateQtSec();
+})();
+</script>
+</body>
+</html>

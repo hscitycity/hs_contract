@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>화성시 계약업무 — 관리자</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+/* ── 관리자 전용 레이아웃 ── */
+.admin-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── 탭 내비게이션 ── */
+.tab-nav {
+  display: flex;
+  gap: 2px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 4px;
+  box-shadow: var(--shadow-sm);
+}
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-radius: var(--r-md);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-mute);
+  transition: var(--tr);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.tab-btn:hover { background: var(--bg); color: var(--text); }
+.tab-btn.active { background: var(--primary); color: white; }
+
+/* ── 탭 패널 ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── 통계 카드 그리드 ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stat-card .s-lbl { font-size: 10.5px; color: var(--text-mute); font-weight: 600; }
+.stat-card .s-val { font-size: 22px; font-weight: 700; color: var(--primary); }
+.stat-card .s-sub { font-size: 10px; color: var(--text-light); }
+.stat-card.accent .s-val { color: var(--accent); }
+
+/* ── 콘텐츠 그리드 ── */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.content-grid.wide { grid-template-columns: 2fr 1fr; }
+
+/* ── 패널 카드 ── */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.panel-hd {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+}
+.panel-hd h2 { font-size: 12px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+.panel-bd { padding: 14px 16px; }
+
+/* ── 빈 상태 ── */
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-light);
+}
+.empty-state .e-ico { font-size: 32px; margin-bottom: 8px; }
+.empty-state .e-txt { font-size: 12px; }
+
+/* ── 항목 목록 ── */
+.item-list { display: flex; flex-direction: column; gap: 6px; }
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 12px;
+  transition: var(--tr);
+}
+.item-row:hover { border-color: var(--border-strong); background: var(--accent-light); }
+.item-row .i-main { flex: 1; font-weight: 600; }
+.item-row .i-sub { color: var(--text-mute); font-size: 11px; }
+.item-row .i-acts { display: flex; gap: 4px; }
+.act-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 3px 7px;
+  font-size: 10px;
+  cursor: pointer;
+  color: var(--text-mute);
+  transition: var(--tr);
+  font-family: inherit;
+}
+.act-btn:hover { border-color: var(--primary); color: var(--primary); }
+.act-btn.danger:hover { border-color: var(--consult-red); color: var(--consult-red); }
+</style>
+</head>
+<body>
+
+<!-- ── 헤더 ── -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo">
+      <img src="../assets/hs_logo.gif" alt="화성특례시" onerror="this.parentElement.style.display='none'">
+    </div>
+    <div class="header-title">
+      <h1>🛠️ 화성시 계약업무 <span class="role-tag">관리자</span></h1>
+      <div class="sub">시스템 설정 · 알림 관리 · 데이터 관리 · 사용자 안내</div>
+    </div>
+  </div>
+  <div class="hdr-btns">
+    <a href="../화성시_계약업무_대시보드.html">
+      <button class="btn-hdr secondary">← 대시보드로</button>
+    </a>
+  </div>
+</div>
+
+<!-- ── 본문 ── -->
+<div class="admin-wrap">
+
+  <!-- 탭 내비게이션 -->
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-btn active" data-tab="overview" onclick="switchTab('overview')">📊 현황</button>
+    <button class="tab-btn" data-tab="alerts" onclick="switchTab('alerts')">🔔 알림 관리</button>
+    <button class="tab-btn" data-tab="forms" onclick="switchTab('forms')">📄 서식 관리</button>
+    <button class="tab-btn" data-tab="profiles" onclick="switchTab('profiles')">👤 담당자 관리</button>
+    <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">⚙️ 설정</button>
+  </nav>
+
+  <!-- ══ 탭: 현황 ══ -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="stat-grid" style="margin-bottom:10px">
+      <div class="stat-card">
+        <div class="s-lbl">저장된 담당자 프로필</div>
+        <div class="s-val" id="s-profiles">-</div>
+        <div class="s-sub">localStorage 기준</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="s-lbl">사용자 정의 알림</div>
+        <div class="s-val" id="s-alerts">-</div>
+        <div class="s-sub">대시보드에 표시 중</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-lbl">등록된 서식</div>
+        <div class="s-val" id="s-forms">-</div>
+        <div class="s-sub">forms/ 폴더 기준</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-lbl">기준 연도</div>
+        <div class="s-val" style="font-size:14px" id="s-updated">-</div>
+        <div class="s-sub">시스템 기준일</div>
+      </div>
+    </div>
+
+    <div class="content-grid wide">
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>🔔 사용자 정의 알림 현황</h2>
+          <button class="act-btn" onclick="switchTab('alerts')">알림 관리 →</button>
+        </div>
+        <div class="panel-bd" id="overview-alerts">
+          <div class="empty-state"><div class="e-ico">🔔</div><div class="e-txt">불러오는 중...</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>👤 저장된 담당자</h2>
+          <button class="act-btn" onclick="switchTab('profiles')">관리 →</button>
+        </div>
+        <div class="panel-bd" id="overview-profiles">
+          <div class="empty-state"><div class="e-ico">👤</div><div class="e-txt">불러오는 중...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 탭: 알림 관리 ══ -->
+  <div class="tab-panel" id="tab-alerts">
+    <div class="panel">
+      <div class="panel-hd">
+        <h2>🔔 사용자 정의 알림 관리</h2>
+        <button class="btn-hdr" onclick="openAddAlert()">+ 알림 추가</button>
+      </div>
+      <div class="panel-bd">
+        <div class="al info" style="margin-bottom:12px">
+          <span class="al-ico">ℹ️</span>
+          <span>여기서 추가한 알림은 대시보드의 <b>주의사항 패널</b>에 실시간으로 표시됩니다. localStorage에 저장됩니다.</span>
+        </div>
+        <div id="alerts-list">
+          <div class="empty-state"><div class="e-ico">📋</div><div class="e-txt">등록된 사용자 정의 알림이 없습니다.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 탭: 서식 관리 ══ -->
+  <div class="tab-panel" id="tab-forms">
+    <div class="panel">
+      <div class="panel-hd">
+        <h2>📄 서식 파일 목록</h2>
+      </div>
+      <div class="panel-bd">
+        <div class="al warning" style="margin-bottom:12px">
+          <span class="al-ico">⚠️</span>
+          <span>서식 파일은 <b>../forms/</b> 폴더에 직접 추가하세요. PDF 파일은 대시보드에서 미리보기·다운로드 됩니다.</span>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>파일명</th><th>용도</th><th>상태</th></tr></thead>
+          <tbody id="forms-list">
+            <tr><td colspan="3" style="text-align:center;color:var(--text-light);padding:20px">로딩 중...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 탭: 담당자 관리 ══ -->
+  <div class="tab-panel" id="tab-profiles">
+    <div class="panel">
+      <div class="panel-hd">
+        <h2>👤 저장된 담당자 프로필</h2>
+        <button class="act-btn danger" onclick="clearAllProfiles()">전체 삭제</button>
+      </div>
+      <div class="panel-bd">
+        <div class="al info" style="margin-bottom:12px">
+          <span class="al-ico">ℹ️</span>
+          <span>대시보드에서 저장한 담당자 정보입니다. 브라우저 localStorage에 저장되며, 컴퓨터를 바꾸면 이전되지 않습니다.</span>
+        </div>
+        <div id="profiles-list">
+          <div class="empty-state"><div class="e-ico">👤</div><div class="e-txt">저장된 담당자 프로필이 없습니다.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 탭: 설정 ══ -->
+  <div class="tab-panel" id="tab-settings">
+    <div class="content-grid">
+      <div class="panel">
+        <div class="panel-hd"><h2>⚙️ 시스템 기준 정보</h2></div>
+        <div class="panel-bd" style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <label>기준 연도</label>
+            <input type="text" class="inp" value="2026" id="set-year" style="width:120px">
+          </div>
+          <div>
+            <label>담당 부서</label>
+            <input type="text" class="inp" id="set-dept" placeholder="예: 화성시청 계약팀">
+          </div>
+          <div>
+            <label>시스템 버전 메모</label>
+            <input type="text" class="inp" id="set-version" placeholder="예: 2026년 1월 기준">
+          </div>
+          <button class="btn btn-primary" style="width:fit-content" onclick="saveSettings()">저장</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd"><h2>🗑️ 데이터 초기화</h2></div>
+        <div class="panel-bd" style="display:flex;flex-direction:column;gap:8px">
+          <div class="al warning">
+            <span class="al-ico">⚠️</span>
+            <span>아래 버튼은 브라우저 localStorage 데이터를 삭제합니다. 복구할 수 없습니다.</span>
+          </div>
+          <button class="btn btn-ghost" onclick="clearAlerts()">사용자 정의 알림 전체 삭제</button>
+          <button class="btn btn-ghost" onclick="clearAllProfiles()">담당자 프로필 전체 삭제</button>
+          <button class="btn btn-danger" onclick="clearAll()">전체 데이터 초기화</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /admin-wrap -->
+
+<!-- ── 알림 추가 모달 ── -->
+<div class="modal-ov" id="alert-modal">
+  <div class="modal">
+    <div class="modal-hd">
+      <h2>🔔 사용자 정의 알림 추가</h2>
+      <button class="btn-close" onclick="closeAlertModal()">×</button>
+    </div>
+    <div class="modal-bd" style="display:flex;flex-direction:column;gap:10px">
+      <div>
+        <label>알림 유형</label>
+        <select class="inp" id="al-type">
+          <option value="warning">⚠️ 경고 (주황)</option>
+          <option value="info">ℹ️ 정보 (파랑)</option>
+          <option value="consult">↔️ 협의 (빨강)</option>
+          <option value="success">✅ 완료 (초록)</option>
+        </select>
+      </div>
+      <div>
+        <label>아이콘 이모지</label>
+        <input type="text" class="inp" id="al-ico" placeholder="예: 📌" maxlength="4" style="width:80px">
+      </div>
+      <div>
+        <label>알림 내용 <span style="color:var(--consult-red)">*</span></label>
+        <textarea class="inp" id="al-txt" rows="3" placeholder="알림 내용을 입력하세요. &lt;b&gt;굵게&lt;/b&gt; 사용 가능"></textarea>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeAlertModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveAlert()">추가</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/common.js"></script>
+<script>
+/* ── 탭 전환 ── */
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.tab === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(function(p) {
+    p.classList.toggle('active', p.id === 'tab-' + name);
+  });
+  if (name === 'overview') renderOverview();
+  if (name === 'alerts') renderAlerts();
+  if (name === 'profiles') renderProfiles();
+  if (name === 'forms') renderForms();
+}
+
+/* ── localStorage 키 (대시보드와 동일하게 맞춤) ── */
+var ALERTS_KEY = 'customAlerts';
+var PROFILES_KEY = 'contractProfiles';
+
+function loadCustomAlerts() { return lsGet(ALERTS_KEY) || []; }
+function saveCustomAlerts(arr) { lsSet(ALERTS_KEY, arr); }
+function loadProfiles() { return lsGet(PROFILES_KEY) || {}; }
+
+/* ── 현황 탭 ── */
+function renderOverview() {
+  var alerts = loadCustomAlerts();
+  var profiles = loadProfiles();
+  var profileKeys = Object.keys(profiles);
+
+  document.getElementById('s-alerts').textContent = alerts.length;
+  document.getElementById('s-profiles').textContent = profileKeys.length;
+  document.getElementById('s-forms').textContent = KNOWN_FORMS.length;
+  document.getElementById('s-updated').textContent = (lsGet('settings') || {}).year || '2026년';
+
+  var alertsEl = document.getElementById('overview-alerts');
+  if (alerts.length === 0) {
+    alertsEl.innerHTML = '<div class="empty-state"><div class="e-ico">🔔</div><div class="e-txt">등록된 사용자 정의 알림이 없습니다.</div></div>';
+  } else {
+    alertsEl.innerHTML = '<div class="item-list">' + alerts.slice(0, 5).map(function(al) {
+      var bCls = al.type === 'warning' ? 'warning' : al.type === 'consult' ? 'danger' : al.type === 'success' ? 'success' : 'primary';
+      return '<div class="item-row">' +
+        '<span style="font-size:16px">' + (al.ico || '📌') + '</span>' +
+        '<span class="i-main">' + (al.txt || '').replace(/<[^>]+>/g, '').slice(0, 40) + '</span>' +
+        '<span class="badge badge-' + bCls + '">' + al.type + '</span>' +
+        '</div>';
+    }).join('') + (alerts.length > 5 ? '<div style="text-align:center;font-size:11px;color:var(--text-light);margin-top:6px">외 ' + (alerts.length - 5) + '건 더...</div>' : '') + '</div>';
+  }
+
+  var profilesEl = document.getElementById('overview-profiles');
+  if (profileKeys.length === 0) {
+    profilesEl.innerHTML = '<div class="empty-state"><div class="e-ico">👤</div><div class="e-txt">저장된 담당자가 없습니다.</div></div>';
+  } else {
+    profilesEl.innerHTML = '<div class="item-list">' + profileKeys.map(function(k) {
+      var p = profiles[k];
+      return '<div class="item-row">' +
+        '<span class="i-main">' + esc(k) + '</span>' +
+        '<span class="i-sub">' + esc(p.officerName || '-') + ' ' + esc(p.officerRank || '') + '</span>' +
+        '</div>';
+    }).join('') + '</div>';
+  }
+}
+
+/* ── 알림 관리 탭 ── */
+function renderAlerts() {
+  var alerts = loadCustomAlerts();
+  var el = document.getElementById('alerts-list');
+  if (alerts.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="e-ico">📋</div><div class="e-txt">등록된 사용자 정의 알림이 없습니다.<br>위의 [+ 알림 추가] 버튼을 눌러 추가하세요.</div></div>';
+    return;
+  }
+  el.innerHTML = '<div class="item-list">' + alerts.map(function(al) {
+    return '<div class="item-row">' +
+      '<span style="font-size:16px">' + (al.ico || '📌') + '</span>' +
+      '<span class="i-main">' + (al.txt || '').replace(/<[^>]+>/g, '').slice(0, 60) + '</span>' +
+      '<span class="badge badge-gray">' + al.type + '</span>' +
+      '<span class="i-acts"><button class="act-btn danger" onclick="deleteAlert(\'' + al.id + '\')">삭제</button></span>' +
+      '</div>';
+  }).join('') + '</div>';
+}
+
+function openAddAlert() {
+  document.getElementById('al-type').value = 'warning';
+  document.getElementById('al-ico').value = '';
+  document.getElementById('al-txt').value = '';
+  document.getElementById('alert-modal').classList.add('open');
+}
+function closeAlertModal() { document.getElementById('alert-modal').classList.remove('open'); }
+
+function saveAlert() {
+  var txt = document.getElementById('al-txt').value.trim();
+  if (!txt) { showToast('알림 내용을 입력하세요.', 'error'); return; }
+  var arr = loadCustomAlerts();
+  arr.push({ id: genId(), type: document.getElementById('al-type').value, ico: document.getElementById('al-ico').value || '📌', txt: txt });
+  saveCustomAlerts(arr);
+  closeAlertModal();
+  renderAlerts();
+  renderOverview();
+  showToast('알림이 추가되었습니다.', 'success');
+}
+function deleteAlert(id) {
+  saveCustomAlerts(loadCustomAlerts().filter(function(a) { return a.id !== id; }));
+  renderAlerts(); renderOverview();
+  showToast('알림이 삭제되었습니다.', 'info');
+}
+function clearAlerts() {
+  if (!confirm('사용자 정의 알림을 모두 삭제하시겠습니까?')) return;
+  saveCustomAlerts([]);
+  renderAlerts(); renderOverview();
+  showToast('알림이 초기화되었습니다.', 'info');
+}
+
+/* ── 서식 관리 탭 ── */
+var KNOWN_FORMS = [
+  { file: '../forms/착공계_착수계.pdf', name: '착공계 / 착수계', use: '공사·용역 착수 시' },
+  { file: '../forms/기성계.pdf', name: '기성계', use: '기성 청구 시' },
+  { file: '../forms/기성검사원.pdf', name: '기성검사원', use: '기성 검사' },
+  { file: '../forms/준공계.pdf', name: '준공계', use: '공사 준공 시' },
+  { file: '../forms/준공검사원.pdf', name: '준공검사원', use: '준공 검사' },
+  { file: '../forms/납품계.pdf', name: '납품계', use: '물품 납품 시' },
+  { file: '../forms/청구서.pdf', name: '청구서', use: '대가 청구' },
+  { file: '../forms/정산합의서.pdf', name: '정산합의서', use: '공사 정산' },
+  { file: '../forms/인력장비투입계획서.pdf', name: '인력·장비 투입계획서', use: '공사 착수 전' },
+  { file: '../forms/용역예정공정표.pdf', name: '용역 예정공정표', use: '용역 착수 시' },
+  { file: '../forms/하자이행각서.pdf', name: '하자이행각서', use: '하자보수 관련' },
+  { file: '../forms/현장대리인계.pdf', name: '현장대리인계', use: '공사 현장대리인' },
+  { file: '../forms/노무비구분관리합의서.pdf', name: '노무비 구분관리 합의서', use: '하도급지킴이 등록' },
+  { file: '../forms/노무비구분관리확인서.pdf', name: '노무비 구분관리 확인서', use: '착공 시' },
+  { file: '../forms/건설기계사용내역서.pdf', name: '건설기계 사용내역서', use: '건설기계 투입 시' },
+  { file: '../forms/건설기계미투입확약서.pdf', name: '건설기계 미투입 확약서', use: '건설기계 없을 시' },
+  { file: '../forms/재직증명서.pdf', name: '재직증명서', use: '담당자 확인' }
+];
+
+function renderForms() {
+  document.getElementById('forms-list').innerHTML = KNOWN_FORMS.map(function(f) {
+    return '<tr>' +
+      '<td><a href="' + f.file + '" target="_blank" style="color:var(--primary);text-decoration:none;font-weight:600">📄 ' + esc(f.name) + '</a></td>' +
+      '<td style="color:var(--text-mute)">' + esc(f.use) + '</td>' +
+      '<td><span class="badge badge-success">등록됨</span></td>' +
+      '</tr>';
+  }).join('');
+}
+
+/* ── 담당자 관리 탭 ── */
+function renderProfiles() {
+  var profiles = loadProfiles();
+  var keys = Object.keys(profiles);
+  var el = document.getElementById('profiles-list');
+  if (keys.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="e-ico">👤</div><div class="e-txt">저장된 담당자 프로필이 없습니다.<br>대시보드에서 담당자 정보 저장 시 여기에 표시됩니다.</div></div>';
+    return;
+  }
+  el.innerHTML = '<div class="item-list">' + keys.map(function(k) {
+    var p = profiles[k];
+    return '<div class="item-row">' +
+      '<span style="font-size:18px">👤</span>' +
+      '<span class="i-main">' + esc(k) + '</span>' +
+      '<span class="i-sub">' + esc((p.officerRank || '') + ' ' + (p.officerName || '-')) + (p.dept ? ' · ' + esc(p.dept) : '') + '</span>' +
+      '<span class="i-acts"><button class="act-btn danger" onclick="deleteProfile(\'' + esc(k) + '\')">삭제</button></span>' +
+      '</div>';
+  }).join('') + '</div>';
+}
+function deleteProfile(key) {
+  if (!confirm('[' + key + '] 프로필을 삭제하시겠습니까?')) return;
+  var p = loadProfiles(); delete p[key]; lsSet(PROFILES_KEY, p);
+  renderProfiles(); renderOverview();
+  showToast('프로필이 삭제되었습니다.', 'info');
+}
+function clearAllProfiles() {
+  if (!confirm('담당자 프로필을 모두 삭제하시겠습니까?')) return;
+  lsDel(PROFILES_KEY);
+  renderProfiles(); renderOverview();
+  showToast('담당자 프로필이 초기화되었습니다.', 'info');
+}
+
+/* ── 설정 ── */
+function saveSettings() {
+  lsSet('settings', { year: document.getElementById('set-year').value, dept: document.getElementById('set-dept').value, version: document.getElementById('set-version').value });
+  showToast('설정이 저장되었습니다.', 'success');
+}
+function loadSettings() {
+  var s = lsGet('settings') || {};
+  if (s.year) document.getElementById('set-year').value = s.year;
+  if (s.dept) document.getElementById('set-dept').value = s.dept;
+  if (s.version) document.getElementById('set-version').value = s.version;
+}
+
+/* ── 전체 초기화 ── */
+function clearAll() {
+  if (!confirm('모든 데이터(알림·담당자·설정)를 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) return;
+  Object.keys(localStorage).filter(function(k) { return k.startsWith('hscity_'); }).forEach(function(k) { localStorage.removeItem(k); });
+  renderOverview(); renderAlerts(); renderProfiles();
+  showToast('전체 데이터가 초기화되었습니다.', 'warning');
+}
+
+/* ── 모달 닫기 ── */
+document.getElementById('alert-modal').addEventListener('click', function(e) { if (e.target === this) closeAlertModal(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAlertModal(); });
+
+/* ── 초기화 ── */
+(function() {
+  loadSettings();
+  renderOverview();
+  renderForms();
+})();
+</script>
+</body>
+</html>
