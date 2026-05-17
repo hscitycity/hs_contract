@@ -821,6 +821,33 @@ select.inp { appearance: none; background-image: url("data:image/svg+xml,%3Csvg 
 'use strict';
 
 /* ══════════════════════════════════════════════════════
+   API 데이터 연동 (/api/data ↔ backend/data/contract_data.json)
+   ══════════════════════════════════════════════════════ */
+var API_DATA = '/api/data';
+var _dataCache = null;
+
+async function apiLoad() {
+  try {
+    var r = await fetch(API_DATA);
+    _dataCache = await r.json();
+  } catch(e) {
+    _dataCache = {};
+  }
+  return _dataCache;
+}
+
+async function apiSave(data) {
+  _dataCache = data;
+  try {
+    await fetch(API_DATA, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+  } catch(e) { console.warn('저장 실패', e); }
+}
+
+/* ══════════════════════════════════════════════════════
    인라인 유틸리티 함수 (common.js 의존성 제거)
    ══════════════════════════════════════════════════════ */
 
@@ -834,18 +861,19 @@ function esc(s) {
     .replace(/"/g, '&quot;');
 }
 
-/* ── localStorage 래퍼 (prefix: hscity_) ── */
-var LS_PREFIX = 'hscity_';
+/* ── 데이터 캐시 래퍼 (API 연동) ── */
 function lsGet(key) {
-  try { var r = localStorage.getItem(LS_PREFIX + key); return r ? JSON.parse(r) : null; }
-  catch (e) { return null; }
+  return (_dataCache && _dataCache[key] !== undefined) ? _dataCache[key] : null;
 }
 function lsSet(key, val) {
-  try { localStorage.setItem(LS_PREFIX + key, JSON.stringify(val)); return true; }
-  catch (e) { return false; }
+  if (!_dataCache) _dataCache = {};
+  _dataCache[key] = val;
+  apiSave(_dataCache);
+  return true;
 }
 function lsDel(key) {
-  try { localStorage.removeItem(LS_PREFIX + key); } catch (e) {}
+  if (_dataCache) delete _dataCache[key];
+  apiSave(_dataCache || {});
 }
 
 /* ── 간단 UUID 생성 ── */
@@ -986,23 +1014,17 @@ function getDefaultData() {
   };
 }
 
-/* ── localStorage 읽기 / 쓰기 (hwaseong_contract_data) ── */
+/* ── 계약 데이터 읽기 / 쓰기 (API 캐시 경유) ── */
 function loadContractData() {
-  try {
-    var raw = localStorage.getItem('hwaseong_contract_data');
-    return raw ? JSON.parse(raw) : getDefaultData();
-  } catch (e) {
-    return getDefaultData();
-  }
+  /* _dataCache.contractData 키 아래 저장, 없으면 기본값 */
+  if (_dataCache && _dataCache.contractData) return _dataCache.contractData;
+  return getDefaultData();
 }
 function saveContractData(data) {
-  try {
-    localStorage.setItem('hwaseong_contract_data', JSON.stringify(data));
-    return true;
-  } catch (e) {
-    showToast('저장 실패: 저장 공간이 부족합니다.', 'error');
-    return false;
-  }
+  if (!_dataCache) _dataCache = {};
+  _dataCache.contractData = data;
+  apiSave(_dataCache);
+  return true;
 }
 
 /* ── forms/ 폴더 PDF 목록 (드롭다운 자동 인식용) ── */
@@ -1670,12 +1692,9 @@ function updateStats() {
 /* ── 전체 데이터 초기화 (subtypes 포함) ── */
 function clearAll() {
   if (!confirm('모든 데이터(알림·담당자·설정·절차·서식·부서·기준금액·세부유형)를 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) return;
-  /* hscity_ prefix 키 전체 삭제 */
-  Object.keys(localStorage)
-    .filter(function(k) { return k.startsWith('hscity_'); })
-    .forEach(function(k) { localStorage.removeItem(k); });
-  /* hwaseong_contract_data 삭제 (procedures, forms, departments, thresholds, subtypes 포함) */
-  localStorage.removeItem('hwaseong_contract_data');
+  /* 서버 측 JSON 파일도 비움 */
+  fetch(API_DATA, { method: 'DELETE' }).catch(function() {});
+  _dataCache = {};
   /* 현재 섹션 재렌더 */
   updateStats();
   renderProcSteps();
@@ -1705,9 +1724,12 @@ document.getElementById('dept-name').addEventListener('keydown', function(e) { i
 document.getElementById('subtype-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') addSubtype(); });
 
 /* ══════════════════════════════════════════════════════
-   페이지 초기화
+   페이지 초기화 (API에서 데이터 로드 후 렌더)
    ══════════════════════════════════════════════════════ */
-(function() {
+(async function() {
+  /* API에서 데이터 먼저 로드 */
+  await apiLoad();
+
   /* 설정 폼 초기값 로드 */
   loadSettingsForm();
   /* 서식 파일 드롭다운 옵션 생성 */

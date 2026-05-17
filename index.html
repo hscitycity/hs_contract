@@ -871,6 +871,33 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
 
 <script>
 // ══════════════════════════════════════════════════════
+// API 데이터 연동 (/api/data ↔ backend/data/contract_data.json)
+// ══════════════════════════════════════════════════════
+var API_DATA = '/api/data';
+var _dataCache = null;
+
+async function apiLoad() {
+  try {
+    var r = await fetch(API_DATA);
+    _dataCache = await r.json();
+  } catch(e) {
+    _dataCache = {};
+  }
+  return _dataCache;
+}
+
+async function apiSave(data) {
+  _dataCache = data;
+  try {
+    await fetch(API_DATA, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+  } catch(e) { console.warn('저장 실패', e); }
+}
+
+// ══════════════════════════════════════════════════════
 // 상태
 // ══════════════════════════════════════════════════════
 var S = { type:'construction', conType:'general', amount:20000000, opts: new Set(), location:null, quoteType:null, bidMethod:null };
@@ -2481,10 +2508,12 @@ function printPage(){ window.print(); }
 // 주의사항 편집
 // ══════════════════════════════════════════════════════
 function loadCustomAlerts(){
-  try{var r=localStorage.getItem(CUSTOM_ALERT_KEY);return r?JSON.parse(r):[];}catch(e){return[];}
+  return (_dataCache && Array.isArray(_dataCache.customAlerts)) ? _dataCache.customAlerts : [];
 }
 function saveCustomAlerts(arr){
-  try{localStorage.setItem(CUSTOM_ALERT_KEY,JSON.stringify(arr));}catch(e){}
+  if(!_dataCache) _dataCache = {};
+  _dataCache.customAlerts = arr;
+  apiSave(_dataCache);
 }
 function openAlertEd(id){
   editAlertId=id||null;
@@ -2575,10 +2604,13 @@ var APPROVER_FIELDS=['dept','officer-rank','officer-name','leader-rank','leader-
 var PROFILES_KEY='hwaseong_approver_profiles_v2';
 
 function getProfiles(){
-  try{var r=localStorage.getItem(PROFILES_KEY);return r?JSON.parse(r):{};}catch(e){return{};}
+  return (_dataCache && _dataCache.approverProfiles && typeof _dataCache.approverProfiles === 'object')
+    ? _dataCache.approverProfiles : {};
 }
 function setProfiles(obj){
-  try{localStorage.setItem(PROFILES_KEY,JSON.stringify(obj));}catch(e){alert('저장 실패: '+e.message);}
+  if(!_dataCache) _dataCache = {};
+  _dataCache.approverProfiles = obj;
+  apiSave(_dataCache);
 }
 function escHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -2625,7 +2657,7 @@ function clearAllProfiles(){
   var keys=Object.keys(getProfiles());
   if(!keys.length){alert('저장된 프로필이 없습니다.');return;}
   if(!confirm('저장된 프로필 전체('+keys.length+'개)를 삭제하시겠습니까?'))return;
-  try{localStorage.removeItem(PROFILES_KEY);}catch(e){}
+  if(_dataCache) { delete _dataCache.approverProfiles; apiSave(_dataCache); }
   updateSavedInfo();
   renderProfileList();
   alert('🗑️ 저장된 담당자 정보가 삭제되었습니다.');
@@ -3109,15 +3141,18 @@ function reapplyFilter(){
 
   updateTypeUI(); // renderSubtypeGrid 포함
   updateBidRec();
-  autoLoad();
-  calculate();
-  updateQtSec();
+  // API에서 데이터 로드 후 담당자 프로필 자동 적용
+  apiLoad().then(function() {
+    autoLoad();
+    calculate();
+    updateQtSec();
+  });
 })();
 
 // ══════════════════════════════════════════════════════
 // 파일 자동 추출 (드래그앤드롭 + 파일 선택)
 // ══════════════════════════════════════════════════════
-var EXTRACT_API = 'http://localhost:8000/api/extract';
+var EXTRACT_API = '/api/extract';
 
 function clearUpload(){
   document.getElementById('upload-input').value='';

@@ -1,16 +1,20 @@
 """
-화성시 계약업무 시스템 — 파일 자동 추출 백엔드
-실행: python backend/main.py  또는  uvicorn backend.main:app --reload
+화성시 계약업무 시스템 — 백엔드
+실행: python backend/main.py
 """
 
 import io
 import re
 import zipfile
+import json
 
-from fastapi import FastAPI, File, UploadFile
+from pathlib import Path
+from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, JSONResponse
 
-app = FastAPI(title="화성시 계약 추출 API")
+app = FastAPI(title="화성시 계약업무 API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,6 +22,25 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── 경로 설정 ─────────────────────────────────────────────
+BASE_DIR = Path(__file__).parent.parent
+DATA_FILE = BASE_DIR / "backend" / "data" / "contract_data.json"
+DATA_FILE.parent.mkdir(exist_ok=True)
+
+
+# ── 데이터 읽기 / 쓰기 ────────────────────────────────────
+def read_data() -> dict:
+    if DATA_FILE.exists():
+        return json.loads(DATA_FILE.read_text(encoding="utf-8"))
+    return {}
+
+
+def write_data(data: dict):
+    DATA_FILE.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
 
 # ── 추출 정규식 패턴 ──────────────────────────────────────
 PATTERNS = {
@@ -82,18 +105,14 @@ def extract_text_hwpx(content: bytes) -> str:
         with zipfile.ZipFile(io.BytesIO(content)) as z:
             for name in z.namelist():
                 lower = name.lower()
-                # 본문 XML만 추출 (header, styles 제외)
                 if lower.endswith(".xml") and any(k in lower for k in ("section", "content", "body")):
                     try:
                         xml_bytes = z.read(name)
-                        # lxml로 텍스트 노드 전체 추출
                         from lxml import etree
                         root = etree.fromstring(xml_bytes)
-                        # 네임스페이스 무시하고 모든 텍스트 수집
                         texts = [t.strip() for t in root.itertext() if t.strip()]
                         parts.append(" ".join(texts))
                     except Exception:
-                        # XML 파싱 실패 시 raw 텍스트로 폴백
                         try:
                             raw = z.read(name).decode("utf-8", errors="ignore")
                             raw = re.sub(r"<[^>]+>", " ", raw)
@@ -112,7 +131,6 @@ def extract_text_docx(content: bytes) -> str:
     for para in doc.paragraphs:
         if para.text.strip():
             lines.append(para.text.strip())
-    # 표 내 텍스트도 추출
     for table in doc.tables:
         for row in table.rows:
             for cell in row.cells:
@@ -124,31 +142,21 @@ def extract_text_docx(content: bytes) -> str:
 # ── 필드 파싱 ────────────────────────────────────────────
 def parse_fields(text: str) -> dict:
     result = {
-        "name": "",
-        "amount": "",
-        "start_date": "",
-        "end_date": "",
-        "vendor": "",
-        "rep": "",
-        "biz_num": "",
-        "address": "",
-        "phone": "",
-        "industry": "",
+        "name": "", "amount": "", "start_date": "", "end_date": "",
+        "vendor": "", "rep": "", "biz_num": "", "address": "",
+        "phone": "", "industry": "",
     }
 
-    # 사업자등록번호 (패턴이 단순하므로 직접)
     m = re.search(r"\d{3}-\d{2}-\d{5}", text)
     if m:
         result["biz_num"] = m.group(0)
 
-    # 금액
     for pat in PATTERNS["amount"]:
         m = re.search(pat, text)
         if m:
             result["amount"] = m.group(1).replace(",", "")
             break
 
-    # 날짜 필드
     for key in ("start_date", "end_date"):
         for pat in PATTERNS[key]:
             m = re.search(pat, text)
@@ -156,17 +164,15 @@ def parse_fields(text: str) -> dict:
                 result[key] = m.group(1).strip()
                 break
 
-    # 문자열 필드 (첫 번째 매칭 사용)
     for key in ("vendor", "rep", "address", "phone", "name"):
         for pat in PATTERNS[key]:
             m = re.search(pat, text, re.MULTILINE | re.DOTALL)
             if m:
-                val = m.group(1).strip().split("\n")[0].strip()  # 첫 줄만
+                val = m.group(1).strip().split("\n")[0].strip()
                 if len(val) >= 2:
                     result[key] = val[:120]
                     break
 
-    # 전화번호 정리 (하이픈 통일)
     if result["phone"]:
         result["phone"] = re.sub(r"[-\s]+", "-", result["phone"])
 
@@ -176,7 +182,26 @@ def parse_fields(text: str) -> dict:
     return result
 
 
-# ── 엔드포인트 ───────────────────────────────────────────
+# ── API: 계약 데이터 (JSON 파일 영속) ────────────────────
+@app.get("/api/data")
+def get_data():
+    return JSONResponse(content=read_data())
+
+
+@app.post("/api/data")
+async def save_data(request: Request):
+    body = await request.json()
+    write_data(body)
+    return {"status": "saved"}
+
+
+@app.delete("/api/data")
+def clear_data():
+    write_data({})
+    return {"status": "cleared"}
+
+
+# ── API: 파일 자동 추출 ───────────────────────────────────
 @app.post("/api/extract")
 async def extract(file: UploadFile = File(...)):
     content = await file.read()
@@ -196,7 +221,6 @@ async def extract(file: UploadFile = File(...)):
                 "phone": "", "industry": "", "extracted_count": 0,
                 "error": "지원하지 않는 파일 형식"
             }
-
         return parse_fields(text)
 
     except Exception as e:
@@ -208,11 +232,17 @@ async def extract(file: UploadFile = File(...)):
         }
 
 
-@app.get("/")
-def health():
-    return {"status": "ok", "service": "화성시 계약 추출 API"}
+# ── 정적 파일 서빙 ───────────────────────────────────────
+app.mount("/assets", StaticFiles(directory=str(BASE_DIR / "assets")), name="assets")
+app.mount("/forms",  StaticFiles(directory=str(BASE_DIR / "forms")),  name="forms")
+app.mount("/admin",  StaticFiles(directory=str(BASE_DIR / "admin"), html=True), name="admin")
+
+
+@app.get("/", response_class=FileResponse)
+def index():
+    return FileResponse(str(BASE_DIR / "index.html"))
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=False)
