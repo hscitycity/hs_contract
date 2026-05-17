@@ -69,10 +69,10 @@
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.6;min-height:100vh;padding-top:70px}
+body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.6;min-height:100vh}
 
 /* ── HEADER ── */
-.header{background:#FFFFFF;color:var(--text);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm);border-bottom:3px solid var(--accent);position:fixed;top:0;left:0;right:0;z-index:9999}
+.header{background:#FFFFFF;color:var(--text);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm);border-bottom:3px solid var(--accent)}
 .header-left{display:flex;align-items:center;gap:14px}
 .header-logo{height:44px;flex-shrink:0;display:flex;align-items:center}
 .header-logo img{height:40px;width:auto;display:block}
@@ -85,7 +85,7 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
 
 /* ── MAIN LAYOUT ── */
 .main{display:grid;grid-template-columns:320px 1fr;gap:10px;padding:10px;max-width:1700px;margin:0 auto}
-.left-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:13px;height:fit-content;position:sticky;top:80px;max-height:calc(100vh - 90px);overflow-y:auto;box-shadow:var(--shadow-sm);scrollbar-width:thin}
+.left-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:13px;height:fit-content;position:sticky;top:10px;max-height:calc(100vh - 20px);overflow-y:auto;box-shadow:var(--shadow-sm);scrollbar-width:thin}
 .right-panel{display:flex;flex-direction:column;gap:9px}
 
 /* ── SECTION TITLE ── */
@@ -372,16 +372,14 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
 .stp-locked{opacity:.5;pointer-events:none}
 .stp-hd{display:flex;align-items:center;gap:6px;padding:7px 9px;cursor:pointer;user-select:none;background:var(--bg);transition:var(--tr)}
 .stp-hd:hover{background:var(--accent-light)}
-.stp-done>.stp-hd{background:var(--secondary)}
-.stp-done>.stp-hd:hover{background:var(--primary)}
+.stp-done>.stp-hd{background:var(--light-blue)}
+.stp-done>.stp-hd:hover{background:#D6E8FF}
 .stp-n{width:19px;height:19px;border-radius:50%;background:var(--border-strong);color:var(--text-mute);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--tr)}
 .stp-done>.stp-hd .stp-n{background:var(--accent);color:white}
 .stp-title{font-size:11.5px;font-weight:700;color:var(--text-mute);flex:1}
-.stp-done>.stp-hd .stp-title{color:white}
+.stp-done>.stp-hd .stp-title{color:var(--primary)}
 .stp-bdg{font-size:10px;color:var(--primary);font-weight:600;background:var(--card);padding:1px 7px;border-radius:20px;border:1px solid var(--border)}
-.stp-done>.stp-hd .stp-bdg{color:var(--secondary);background:rgba(255,255,255,.9);border-color:rgba(255,255,255,.2)}
 .stp-chv{font-size:10px;color:var(--text-mute);transition:transform .2s;min-width:10px;text-align:center}
-.stp-done>.stp-hd .stp-chv{color:rgba(255,255,255,.8)}
 .stp-body{padding:9px 10px}
 .stp-body.collapsed{display:none}
 
@@ -417,28 +415,6 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
 .db-rank{font-size:11px;font-weight:700;color:var(--primary);background:var(--card);padding:1px 9px;border-radius:20px;border:1px solid var(--primary)}
 .db-note{font-size:10px;color:var(--consult-red);margin-top:5px;padding-top:4px;border-top:1px dashed var(--border)}
 .hidden{display:none!important}
-
-/* ── 파일 자동 추출 박스 ── */
-.upload-box{border:2px dashed var(--border-strong);border-radius:var(--r-md);padding:14px 12px;text-align:center;background:var(--bg);transition:var(--tr);margin-bottom:10px;cursor:default}
-.upload-box.drag-over{border-style:solid;border-color:var(--primary);background:var(--light-blue)}
-.upload-box.has-file{border-style:solid;border-color:var(--accent);background:var(--accent-light)}
-.upload-fname-row{display:flex;align-items:center;gap:5px;background:white;border:1px solid var(--border);border-radius:var(--r-sm);padding:4px 8px;margin-bottom:8px;font-size:10.5px}
-.upload-fname{flex:1;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
-.upload-xclear{background:none;border:none;cursor:pointer;color:var(--text-light);font-size:14px;line-height:1;padding:0 2px;transition:var(--tr);flex-shrink:0}
-.upload-xclear:hover{color:var(--consult-red)}
-.upload-ico{font-size:20px;margin-bottom:4px}
-.upload-title{font-size:11.5px;font-weight:700;color:var(--primary);margin-bottom:7px}
-.upload-drop-lbl{font-size:10.5px;color:var(--text-mute);border:1.5px dashed var(--border);border-radius:var(--r-sm);padding:8px 10px;margin-bottom:5px}
-.upload-or{font-size:10px;color:var(--text-light);margin:4px 0}
-.upload-btn{background:var(--primary);color:white;border:none;padding:5px 14px;border-radius:var(--r-sm);cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;transition:var(--tr);margin-bottom:7px}
-.upload-btn:hover{background:var(--secondary)}
-.upload-hint{font-size:9.5px;color:var(--text-light);line-height:1.6}
-.upload-spinner{width:22px;height:22px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 7px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── 전체 펼치기/접기 버튼 ── */
-.stp-all-btn{flex:1;padding:4px 0;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--card);font-size:10px;cursor:pointer;color:var(--text-mute);font-family:inherit;transition:var(--tr)}
-.stp-all-btn:hover{background:var(--accent-light);border-color:var(--accent);color:var(--accent)}
 </style>
 </head>
 <body>
@@ -462,12 +438,6 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
 
 <!-- ════ 좌측 입력 패널 ════ -->
 <div class="left-panel">
-
-  <!-- 전체 펼치기/접기 -->
-  <div style="display:flex;gap:4px;margin-bottom:6px">
-    <button onclick="expandAllStps()" class="stp-all-btn">▼ 전체 펼치기</button>
-    <button onclick="collapseAllStps()" class="stp-all-btn">▲ 전체 접기</button>
-  </div>
 
   <!-- STEP 1: 계약 유형 -->
   <div class="stp stp-done" id="stp-1">
@@ -509,10 +479,7 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
     </div>
     <div class="stp-body" id="stp3-body">
       <div class="fr">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px">
-          <label class="fl" style="margin-bottom:0">사업 금액 (추정가격 기준, 원)</label>
-          <span id="pamt-display" style="font-size:12px;font-weight:700;color:var(--primary);background:var(--light-blue);padding:1px 9px;border-radius:20px;border:1px solid var(--border)">금 2천만원</span>
-        </div>
+        <label class="fl">사업 금액 (추정가격 기준, 원)</label>
         <input type="text" class="fi" id="project-amount" value="20,000,000">
         <div class="quick-row">
           <button class="qb" data-amount="5000000">500만</button>
@@ -524,8 +491,8 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
         </div>
       </div>
       <div class="bid-rec" id="bid-rec">
-        <span class="rec-lbl">🔍 입찰방법별 검토</span>
-        <div id="bid-rec-content" class="rec-item">금액을 입력하면 자동 검토됩니다</div>
+        <span class="rec-lbl">🎯 입찰방법 추천</span>
+        <div id="bid-rec-content" class="rec-item">금액을 입력하면 자동 추천됩니다</div>
       </div>
       <div class="bid-method-grid">
         <button class="bid-m-btn bm-suuie" data-bm="suuie"><span class="bm-ico">🏙️</span><span class="bm-lbl">수의계약</span><span class="bm-sub">화성시 소재</span></button>
@@ -591,9 +558,7 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
 
   <!-- STEP 6: 전결규정 (상시 표시) -->
   <div class="decision-box" id="decision-box-wrap">
-    <div class="db-hd">📋 전결규정 (자동 산출)
-      <button onclick="document.getElementById('decision-img-ov').classList.add('on')" style="font-size:9px;border:1px solid var(--primary);border-radius:4px;padding:1px 7px;background:white;color:var(--primary);cursor:pointer;font-family:inherit;font-weight:600;margin-left:auto">📄 원본 보기</button>
-    </div>
+    <div class="db-hd">📋 전결규정 (자동 산출)</div>
     <div id="decision-content"><div style="font-size:11px;color:var(--text-mute)">금액 입력 후 자동 표시됩니다</div></div>
   </div>
 
@@ -612,29 +577,6 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
         <input type="text" class="fi" id="amount-input" value="20,000,000" readonly style="background:var(--me-green-light);font-weight:700;color:var(--me-green);flex:1">
         <span class="amt-pill" id="amt-display" style="background:var(--me-green);color:white">2천만원</span>
       </div>
-    </div>
-
-    <!-- 파일 자동 추출 박스 -->
-    <div class="upload-box" id="upload-box">
-      <div id="upload-fname-row" class="upload-fname-row hidden">
-        <span>📎</span>
-        <span id="upload-fname" class="upload-fname"></span>
-        <button class="upload-xclear" onclick="clearUpload()" title="파일 초기화">✕</button>
-      </div>
-      <div id="upload-idle">
-        <div class="upload-ico">📎</div>
-        <div class="upload-title">계약서·견적서 파일에서 자동 추출</div>
-        <div class="upload-drop-lbl">파일을 여기에 끌어다 놓으세요</div>
-        <div class="upload-or">또는</div>
-        <button class="upload-btn" onclick="document.getElementById('upload-input').click()">📂 파일 선택</button>
-        <input type="file" id="upload-input" accept=".pdf,.hwpx,.docx" style="display:none">
-        <div class="upload-hint">지원 형식: PDF · HWPX · DOCX<br>※ 추출 후 각 항목 직접 수정 가능</div>
-      </div>
-      <div id="upload-loading" class="hidden" style="padding:8px 0">
-        <div class="upload-spinner"></div>
-        <div style="font-size:11px;color:var(--text-mute)">파일 분석 중...</div>
-      </div>
-      <div id="upload-result" class="hidden"></div>
     </div>
 
     <div class="sec">✏️ 계약 정보</div>
@@ -856,19 +798,6 @@ body{font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,Bl
   </div>
 </div>
 
-<!-- ════ 전결규정표 이미지 모달 ════ -->
-<div class="modal-ov" id="decision-img-ov">
-  <div class="modal" style="max-width:960px">
-    <div class="modal-hdr">
-      <h3>📋 전결규정표 (화성특례시)</h3>
-      <button class="modal-close" onclick="document.getElementById('decision-img-ov').classList.remove('on')">✕</button>
-    </div>
-    <div class="modal-body" style="padding:12px;text-align:center">
-      <img src="assets/전결규정표.jpg" alt="전결규정표" style="max-width:100%;height:auto;display:block;border-radius:var(--r-sm)" onerror="this.parentElement.innerHTML='<div style=\'padding:30px;color:var(--text-mute);font-size:13px\'>⚠️ 이미지를 불러올 수 없습니다.<br>assets/전결규정표.jpg 파일을 확인하세요.</div>'">
-    </div>
-  </div>
-</div>
-
 <script>
 // ══════════════════════════════════════════════════════
 // 상태
@@ -911,34 +840,6 @@ function toggleStp(n){
   body.classList.toggle('collapsed',!collapsed);
   chv.textContent=collapsed?'▼':'▶';
 }
-// ── 다음 스텝 자동 열기 ──
-function openNextStp(n){
-  var next=n+1;
-  if(next>5) return;
-  var body=document.getElementById('stp'+next+'-body');
-  var chv=document.getElementById('stp'+next+'-chv');
-  if(body&&body.classList.contains('collapsed')){
-    body.classList.remove('collapsed');
-    if(chv) chv.textContent='▼';
-  }
-}
-
-function expandAllStps(){
-  [1,2,3,4,5].forEach(function(n){
-    var body=document.getElementById('stp'+n+'-body');
-    var chv=document.getElementById('stp'+n+'-chv');
-    if(body) body.classList.remove('collapsed');
-    if(chv) chv.textContent='▼';
-  });
-}
-function collapseAllStps(){
-  [1,2,3,4,5].forEach(function(n){
-    var body=document.getElementById('stp'+n+'-body');
-    var chv=document.getElementById('stp'+n+'-chv');
-    if(body) body.classList.add('collapsed');
-    if(chv) chv.textContent='▶';
-  });
-}
 
 // ── 스텝 배지 업데이트 ──
 function updateStp1Badge(){
@@ -965,16 +866,12 @@ function updateStp4Badge(){
   var opts=['corp','outside','consult','joint','advance'];
   var cnt=0; for(var i=0;i<opts.length;i++){if(S.opts.has(opts[i]))cnt++;}
   el.textContent=cnt>0?cnt+'개 선택':'';
-  var stp4=document.getElementById('stp-4');
-  if(stp4) stp4.classList.toggle('stp-done', cnt>0);
 }
 function updateStp5Badge(){
   var el=document.getElementById('stp5-bdg');
   if(!el) return;
   var LBL={hwaseong:'화성시',gyeonggi:'경기도',national:'전국'};
   el.textContent=S.location?LBL[S.location]:'';
-  var stp5=document.getElementById('stp-5');
-  if(stp5) stp5.classList.toggle('stp-done', !!S.location);
 }
 
 // ── 폼 섹션 표시/숨김 ──
@@ -1006,7 +903,6 @@ function renderSubtypeGrid(){
       updateStp3Badge();
       updateBidRec();
       calculate();
-      openNextStp(2); // 다음 스텝(입찰방법·금액) 자동 열기
     });
   });
 }
@@ -1043,69 +939,24 @@ function setLocBtn(loc){
   updateStp5Badge();
 }
 
-// ── 입찰방법별 검토 & SME 공지 ──
+// ── 입찰방법 추천 & SME 공지 ──
 function updateBidRec(){
   var pAmt=parseAmt(document.getElementById('project-amount').value);
   var lim=getSuuieLimits();
-  var suuieMax=lim.limit2>0?lim.limit2:lim.limit1;
-
-  // 입찰방법 버튼 sub-text 동적 업데이트 (유형·세부유형 변경 시 금액 범위 갱신)
-  document.querySelectorAll('.bid-m-btn').forEach(function(btn){
-    var sub=btn.querySelector('.bm-sub');
-    if(!sub) return;
-    if(btn.dataset.bm==='suuie'){
-      sub.textContent=lim.limit2>0
-        ? '1인 ~'+fmtShort(lim.limit1)+' / 2인↑ ~'+fmtShort(lim.limit2)
-        : '1인 ~'+fmtShort(lim.limit1);
-    } else if(btn.dataset.bm==='restricted'){
-      sub.textContent='~'+fmtShort(lim.limitNational)+' (경기도)';
-    } else {
-      sub.textContent=fmtShort(lim.limitNational)+' 초과 (전국)';
-    }
-  });
-
-  // 색상 구분 3행 검토 결과
   var recEl=document.getElementById('bid-rec-content');
   if(recEl){
-    // 각 방법별 상태 결정
-    var rows=[];
-
-    // 라/다. 수의계약
+    var rec='';
     if(pAmt<=lim.limit1){
-      rows.push({ok:2,mark:'✅',label:'라. 수의계약 (1인 견적)',range:'~'+fmtShort(lim.limit1)});
+      rec='<span class="rec-hi">라. 수의계약 추천</span> — '+fmtShort(pAmt)+' ≤ '+fmtShort(lim.limit1)+' (1인 견적 가능)';
     } else if(lim.limit2>0&&pAmt<=lim.limit2){
-      rows.push({ok:1,mark:'⚠',label:'다. 수의계약 (2인↑ 견적)',range:'~'+fmtShort(lim.limit2)});
+      rec='<span class="rec-hi">다. 수의계약 추천</span> — '+fmtShort(pAmt)+' ≤ '+fmtShort(lim.limit2)+' (2인 이상 견적)';
+    } else if(pAmt<=lim.limitNational){
+      rec='<span class="rec-hi">나. 경기도 지역제한 추천</span> — '+fmtShort(pAmt)+' ≤ '+fmtShort(lim.limitNational);
     } else {
-      rows.push({ok:0,mark:'✗',label:'수의계약',range:'상한 '+fmtShort(suuieMax)});
+      rec='<span class="rec-hi">가. 전국 일반경쟁입찰</span> — '+fmtShort(pAmt)+' > '+fmtShort(lim.limitNational);
     }
-
-    // 나. 경기도 지역제한
-    if(pAmt>suuieMax&&pAmt<=lim.limitNational){
-      rows.push({ok:2,mark:'✅',label:'나. 경기도 지역제한',range:'~'+fmtShort(lim.limitNational)});
-    } else if(pAmt<=suuieMax){
-      rows.push({ok:-1,mark:'○',label:'나. 경기도 지역제한',range:'~'+fmtShort(lim.limitNational)});
-    } else {
-      rows.push({ok:0,mark:'✗',label:'나. 경기도 지역제한',range:'상한 '+fmtShort(lim.limitNational)});
-    }
-
-    // 가. 전국 일반경쟁
-    if(pAmt>lim.limitNational){
-      rows.push({ok:2,mark:'✅',label:'가. 전국 일반경쟁',range:fmtShort(lim.limitNational)+' 초과'});
-    } else {
-      rows.push({ok:-1,mark:'○',label:'가. 전국 일반경쟁',range:fmtShort(lim.limitNational)+' 초과'});
-    }
-
-    recEl.innerHTML=rows.map(function(r){
-      var c=r.ok===2?'var(--primary)':r.ok===1?'var(--warning)':r.ok===0?'var(--consult-red)':'var(--text-mute)';
-      var fw=r.ok===2?'700':'500';
-      return '<div style="display:flex;align-items:center;gap:5px;margin-bottom:2px">'+
-        '<span style="color:'+c+';font-size:10.5px;min-width:14px;font-weight:700">'+r.mark+'</span>'+
-        '<span style="color:'+c+';font-weight:'+fw+';font-size:10.5px;flex:1">'+r.label+'</span>'+
-        '<span style="font-size:9.5px;color:var(--text-mute)">'+r.range+'</span>'+
-        '</div>';
-    }).join('');
+    recEl.innerHTML=rec;
   }
-
   // 중소기업 우선조달 공지
   var smeEl=document.getElementById('sme-notice');
   if(smeEl){
@@ -1119,66 +970,23 @@ function updateBidRec(){
   }
 }
 
-// ── 전결규정 박스 렌더링 (① 예산집행품의시 / ② 입찰공고·지출원인행위시) ──
+// ── 전결규정 박스 렌더링 ──
 function renderDecisionBox(){
   var a=S.amount, t=S.type;
-  var pAmt=parseAmt(document.getElementById('project-amount').value);
   var el=document.getElementById('decision-content');
   if(!el) return;
-
-  // ① 예산집행품의시 전결권자·결재선
-  var rank1, line1;
-  if(t==='construction'){
-    if(a>2000000000)     {rank1='시장';       line1='담당→팀장→과장→국장→부시장→시장';}
-    else if(a>1000000000){rank1='부시장';     line1='담당→팀장→과장→국장→부시장';}
-    else if(a>100000000) {rank1='국장';       line1='담당→팀장→과장→국장';}
-    else                 {rank1='과장';       line1='담당→팀장→과장';}
-  } else {
-    // 용역·물품
-    if(a>1000000000)     {rank1='시장';       line1='담당→팀장→과장→국장→부시장→시장';}
-    else if(a>500000000) {rank1='부시장';     line1='담당→팀장→과장→국장→부시장';}
-    else if(a>100000000) {rank1='국장';       line1='담당→팀장→과장→국장';}
-    else                 {rank1='과장';       line1='담당→팀장→과장';}
-  }
-
-  // ② 입찰공고·지출원인행위시 전결권자 (추정가격 기준)
-  var rank2, note2;
-  if(t==='construction'){
-    if(pAmt>=100000000){rank2='재무관';   note2='국장 (1억↑)';}
-    else               {rank2='분임재무관';note2='과장 (1억 미만)';}
-  } else {
-    // 용역·물품: 입찰공고 기준
-    if(pAmt>=50000000){rank2='재무관';   note2='국장 (5천만↑)';}
-    else              {rank2='분임재무관';note2='과장 (5천만 미만)';}
-  }
-
-  // 계약심사 여부
+  var rank, lineArr;
+  if(a<100000000){      rank='과장';    lineArr=['담당자','팀장','과장']; }
+  else if(a<1000000000){rank='국장';    lineArr=['담당자','팀장','과장','국장']; }
+  else{                 rank='시장·부시장'; lineArr=['담당자','팀장','과장','국장','시장·부시장']; }
   var 심사Threshold=t==='construction'?100000000:t==='service'?50000000:20000000;
   var needs심사=a>=심사Threshold;
   var 심사Lbl=t==='construction'?'공사 1억↑':t==='service'?'용역 5천만↑':'물품 2천만↑';
-
-  var cellStyle='background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:7px 9px;min-width:0';
-  var numStyle='font-size:9px;font-weight:700;color:var(--text-mute);margin-bottom:5px;white-space:nowrap';
-  var lineStyle='font-size:9px;color:var(--text-mute);line-height:1.6;margin-top:3px';
-
   var html=
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">'+
-    // ① 예산집행품의시
-    '<div style="'+cellStyle+'">'+
-      '<div style="'+numStyle+'">① 예산집행품의시</div>'+
-      '<div style="text-align:center;margin-bottom:4px"><span class="db-rank">'+rank1+'</span></div>'+
-      '<div style="'+lineStyle+'">'+line1.split('→').join('<br>→ ')+'</div>'+
-    '</div>'+
-    // ② 입찰공고·지출원인행위시
-    '<div style="'+cellStyle+'">'+
-      '<div style="'+numStyle+'">② 입찰공고·지출원인</div>'+
-      '<div style="text-align:center;margin-bottom:4px"><span class="db-rank" style="font-size:10px">'+rank2+'</span></div>'+
-      '<div style="'+lineStyle+'">'+note2+'</div>'+
-    '</div>'+
-    '</div>';
-
+    '<div class="db-row"><span class="db-lbl">전결권자</span><span class="db-rank">'+rank+'</span></div>'+
+    '<div class="db-row"><span class="db-lbl">결재선</span><span class="db-val" style="font-size:10.5px">'+lineArr.join(' → ')+'</span></div>';
   if(S.opts.has('consult')){
-    html+='<div style="font-size:10px;color:var(--consult-red);margin-bottom:4px">↔️ 계약부서 협의 필요</div>';
+    html+='<div class="db-row"><span class="db-lbl"></span><span class="db-val" style="font-size:10.5px;color:var(--consult-red)">+ 계약부서 협의 필요</span></div>';
   }
   if(needs심사){
     html+='<div class="db-note">⚠️ 계약심사 대상 — 감사관 심사 필요 ('+심사Lbl+')</div>';
@@ -2893,7 +2701,6 @@ function reapplyFilter(){
       updateTypeUI(); // renderSubtypeGrid 포함
       updateBidRec();
       calculate();
-      openNextStp(1); // 다음 스텝(세부유형) 자동 열기
     });
   });
 
@@ -2926,15 +2733,15 @@ function reapplyFilter(){
       else setLocBtn('national');
       updateBidMBtns();
       updateStp3Badge();
+      // STEP 4, 5 접힘 상태 유지 (사용자가 원하면 열기)
       document.getElementById('stp-3').classList.add('stp-done');
       showForms();
       calculate();
-      openNextStp(3); // 다음 스텝(추가조건) 자동 열기
     });
   });
 
-  // 금액 계산 (window._recalc으로 전역 노출 — 업로드 추출 시 외부 호출용)
-  var recalc = window._recalc = function(){
+  // 금액 계산
+  function recalc(){
     var pAmt=parseAmt(document.getElementById('project-amount').value);
     var nRate=parseFloat(document.getElementById('nego-rate').value)||0;
     if(nRate<0)nRate=0; if(nRate>100)nRate=100;
@@ -2943,9 +2750,6 @@ function reapplyFilter(){
     document.getElementById('amount-input').value=S.amount.toLocaleString('ko-KR');
     document.getElementById('amt-display').textContent=fmtShort(S.amount);
     document.getElementById('nego-amt').textContent='감액 '+cut.toLocaleString('ko-KR')+'원';
-    // 사업금액 한국어 즉시 표시
-    var padEl=document.getElementById('pamt-display');
-    if(padEl) padEl.textContent='금 '+fmtShort(pAmt);
     // 금액 변경으로 수의계약 한도 초과 시 조용히 해제
     if(S.bidMethod==='suuie'&&checkSuuieLimit().blocked) deselSuuie();
     // 1인 견적 한도 초과 시 견적방식 자동 해제
@@ -3018,23 +2822,14 @@ function reapplyFilter(){
     calculate();
   });
 
-  // 업체 소재지 버튼 (STEP 5 — 수동 조정, 재클릭 = 선택 해제)
+  // 업체 소재지 버튼 (STEP 5 — 수동 조정, 재클릭 = bidMethod 기본값 복원)
   document.querySelectorAll('.bid-btn').forEach(function(b){
     b.addEventListener('click',function(){
       var loc=this.dataset.loc;
       if(S.location===loc){
-        // 재클릭: 선택 해제
-        S.location=null;
-        document.querySelectorAll('.bid-btn').forEach(function(x){x.classList.remove('active');});
-        // 경기도·전국이었으면 강제 설정된 관외업체도 해제
-        if(loc==='gyeonggi'||loc==='national'){
-          S.opts.delete('outside');
-          var ob=document.querySelector('[data-opt="outside"]');
-          if(ob) ob.classList.remove('active','locked');
-        }
-        updateStp5Badge();
-        calculate();
-        return;
+        // 재클릭: bidMethod 기본값으로 복원
+        if(S.bidMethod) setLocBtn(S.bidMethod==='suuie'?'hwaseong':S.bidMethod==='restricted'?'gyeonggi':'national');
+        calculate(); return;
       }
       setLocBtn(loc);
       // 소재지 변경 시 견적방식 초기화 (화성시 외에서는 견적방식 불필요)
@@ -3085,7 +2880,6 @@ function reapplyFilter(){
       }
       updateStp4Badge();
       calculate();
-      openNextStp(4); // 다음 스텝(업체 소재지) 자동 열기
     });
   });
 
@@ -3103,153 +2897,13 @@ function reapplyFilter(){
   document.getElementById('alert-ed-ov').addEventListener('click',function(e){if(e.target.id==='alert-ed-ov')closeAlertEd();});
 
   // ESC 닫기
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal();closeAlertEd();document.getElementById('decision-img-ov').classList.remove('on');}});
-  // 전결규정표 모달 외부 클릭 닫기
-  document.getElementById('decision-img-ov').addEventListener('click',function(e){if(e.target.id==='decision-img-ov')this.classList.remove('on');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeModal();closeAlertEd();}});
 
   updateTypeUI(); // renderSubtypeGrid 포함
   updateBidRec();
   autoLoad();
   calculate();
   updateQtSec();
-})();
-
-// ══════════════════════════════════════════════════════
-// 파일 자동 추출 (드래그앤드롭 + 파일 선택)
-// ══════════════════════════════════════════════════════
-var EXTRACT_API = 'http://localhost:8000/api/extract';
-
-function clearUpload(){
-  document.getElementById('upload-input').value='';
-  document.getElementById('upload-fname-row').classList.add('hidden');
-  document.getElementById('upload-result').classList.add('hidden');
-  document.getElementById('upload-idle').classList.remove('hidden');
-  document.getElementById('upload-loading').classList.add('hidden');
-  document.getElementById('upload-box').classList.remove('has-file');
-}
-
-function showUploadResult(type, msg){
-  var el=document.getElementById('upload-result');
-  el.classList.remove('hidden');
-  var cols={
-    success:{bg:'#DCFCE7',col:'#14532D',bd:'#16A34A'},
-    warn:   {bg:'#FEF0E6',col:'#7C2D00',bd:'#F47920'},
-    error:  {bg:'#FEE2E2',col:'#7F1D1D',bd:'#DC2626'}
-  };
-  var c=cols[type]||cols.error;
-  el.style.cssText='margin-top:6px;padding:7px 10px;border-radius:6px;font-size:11px;font-weight:600;'
-    +'background:'+c.bg+';color:'+c.col+';border-left:3px solid '+c.bd+';text-align:left';
-  el.textContent=msg;
-}
-
-function fillDateFields(prefix, dateStr){
-  var m=dateStr.match(/(\d{4})[년.\-]\s*(\d{1,2})[월.\-]\s*(\d{1,2})/);
-  if(!m) return;
-  var yEl=document.getElementById(prefix+'-y');
-  var mEl=document.getElementById(prefix+'-m');
-  var dEl=document.getElementById(prefix+'-d');
-  var hEl=document.getElementById(prefix+'-date');
-  if(yEl) yEl.value=m[1];
-  if(mEl) mEl.value=m[2].padStart(2,'0');
-  if(dEl) dEl.value=m[3].padStart(2,'0');
-  if(hEl) hEl.value=m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
-}
-
-function handleUploadFile(file){
-  if(!file) return;
-  var nm=(file.name||'').toLowerCase();
-  if(!nm.endsWith('.pdf')&&!nm.endsWith('.hwpx')&&!nm.endsWith('.docx')){
-    showUploadResult('error','⚠️ 지원하지 않는 형식입니다. PDF / HWPX / DOCX 파일을 선택하세요.');
-    return;
-  }
-  // 파일명 표시
-  document.getElementById('upload-fname').textContent=file.name;
-  document.getElementById('upload-fname-row').classList.remove('hidden');
-  document.getElementById('upload-idle').classList.add('hidden');
-  document.getElementById('upload-loading').classList.remove('hidden');
-  document.getElementById('upload-result').classList.add('hidden');
-  document.getElementById('upload-box').classList.add('has-file');
-
-  var fd=new FormData();
-  fd.append('file', file);
-
-  fetch(EXTRACT_API, {method:'POST', body:fd})
-    .then(function(r){
-      if(!r.ok) throw new Error('서버 오류 HTTP '+r.status);
-      return r.json();
-    })
-    .then(function(data){
-      document.getElementById('upload-loading').classList.add('hidden');
-
-      // 폼 필드 채우기
-      var mapping={
-        'contract-name': data.name,
-        'vendor-name':   data.vendor,
-        'rep':           data.rep,
-        'biz-num':       data.biz_num,
-        'address':       data.address,
-        'phone':         data.phone,
-        'industry':      data.industry
-      };
-      for(var id in mapping){
-        if(mapping[id]){
-          var el=document.getElementById(id);
-          if(el) el.value=mapping[id];
-        }
-      }
-
-      // 금액: input 이벤트 트리거로 recalc 호출
-      if(data.amount){
-        var n=parseInt(String(data.amount).replace(/[^0-9]/g,''),10)||0;
-        if(n>0){
-          var paEl=document.getElementById('project-amount');
-          paEl.value=n.toLocaleString('ko-KR');
-          paEl.dispatchEvent(new Event('input'));
-        }
-      }
-
-      // 날짜
-      if(data.start_date) fillDateFields('start', data.start_date);
-      if(data.end_date)   fillDateFields('end',   data.end_date);
-
-      calculate();
-
-      var cnt=data.extracted_count||0;
-      if(cnt>0) showUploadResult('success','✅ '+cnt+'개 항목이 자동 입력되었습니다');
-      else      showUploadResult('warn',   '⚠️ 일부 항목을 읽지 못했습니다. 직접 입력해주세요');
-    })
-    .catch(function(e){
-      document.getElementById('upload-loading').classList.add('hidden');
-      document.getElementById('upload-idle').classList.remove('hidden');
-      showUploadResult('error',
-        '⚠️ 연결 실패 — 백엔드 서버를 먼저 실행하세요:\n'
-        +'  cd backend && pip install -r requirements.txt\n'
-        +'  python main.py');
-    });
-}
-
-// 드래그앤드롭 + 파일 선택 이벤트 바인딩
-(function(){
-  var box=document.getElementById('upload-box');
-  var inp=document.getElementById('upload-input');
-  if(!box||!inp) return;
-
-  box.addEventListener('dragover', function(e){
-    e.preventDefault();
-    box.classList.add('drag-over');
-  });
-  box.addEventListener('dragleave', function(e){
-    if(!box.contains(e.relatedTarget)) box.classList.remove('drag-over');
-  });
-  box.addEventListener('drop', function(e){
-    e.preventDefault();
-    box.classList.remove('drag-over');
-    var f=e.dataTransfer.files[0];
-    if(f) handleUploadFile(f);
-  });
-  inp.addEventListener('change', function(){
-    if(this.files[0]) handleUploadFile(this.files[0]);
-  });
 })();
 </script>
 </body>

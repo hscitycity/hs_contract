@@ -110,6 +110,16 @@
 .tbl-amount td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; text-align: center; }
 .tbl-amount tr:last-child td { border-bottom: none; }
 .tbl-amount tr:hover td { background: var(--accent-light); }
+
+/* ══ 수의계약 기준금액 설정 ══ */
+.threshold-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.thr-item { display: flex; flex-direction: column; gap: 7px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px; }
+.thr-label { font-size: 13px; font-weight: 700; color: var(--text); }
+.thr-input-wrap { display: flex; align-items: center; gap: 5px; }
+.thr-unit { font-size: 15px; font-weight: 700; color: var(--primary); flex-shrink: 0; }
+.thr-inp { text-align: right; font-size: 14px; font-weight: 700; color: var(--primary); }
+.thr-suffix { font-size: 11.5px; color: var(--text-mute); white-space: nowrap; flex-shrink: 0; }
+.thr-hint { font-size: 10.5px; color: var(--text-light); border-top: 1px dashed var(--border); padding-top: 6px; }
 </style>
 </head>
 <body>
@@ -323,9 +333,36 @@
 
       <div class="page-title">👤 담당부서 관리</div>
 
+      <!-- 담당부서 목록 (hwaseong_contract_data.departments) -->
       <div class="panel">
         <div class="panel-hd">
-          <h2>👤 저장된 담당자 프로필</h2>
+          <h2>🏢 담당부서 목록 <span class="badge badge-gray" id="dept-count" style="margin-left:4px">-</span></h2>
+          <button class="btn-hdr" onclick="openAddDept()">+ 부서 추가</button>
+        </div>
+        <div class="panel-bd" style="padding:0">
+          <table class="tbl" style="margin:0">
+            <thead>
+              <tr>
+                <th style="width:48px;text-align:center">번호</th>
+                <th>부서명</th>
+                <th style="width:90px">담당자명</th>
+                <th style="width:140px">연락처</th>
+                <th>업무범위</th>
+                <th style="width:52px;text-align:center">수정</th>
+                <th style="width:52px;text-align:center">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="dept-tbody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-light);padding:24px">로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 대시보드 담당자 프로필 (hscity_contractProfiles) -->
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>👤 대시보드 담당자 프로필</h2>
           <button class="act-btn danger" onclick="clearAllProfiles()">전체 삭제</button>
         </div>
         <div class="panel-bd">
@@ -378,6 +415,53 @@
             <button class="btn btn-ghost" onclick="clearAllProfiles()">담당자 프로필 전체 삭제</button>
             <button class="btn btn-danger" onclick="clearAll()">⚠️ 전체 데이터 초기화</button>
           </div>
+        </div>
+      </div>
+
+      <!-- 수의계약 기준금액 설정 (hwaseong_contract_data.thresholds) -->
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>💰 수의계약 기준금액 설정</h2>
+          <span class="badge badge-warning">경쟁입찰 기준</span>
+        </div>
+        <div class="panel-bd">
+          <div class="al info" style="margin-bottom:14px">
+            <span class="al-ico">ℹ️</span>
+            <span>이 금액 이상인 경우 경쟁입찰(나라장터)을 진행합니다. 변경 시 관련 법령을 반드시 확인하세요.</span>
+          </div>
+          <div class="threshold-grid">
+            <!-- 공사 기준금액 -->
+            <div class="thr-item">
+              <div class="thr-label">🏗️ 공사</div>
+              <div class="thr-input-wrap">
+                <span class="thr-unit">₩</span>
+                <input type="text" class="inp thr-inp" id="thr-공사" placeholder="200,000,000">
+                <span class="thr-suffix">원</span>
+              </div>
+              <div class="thr-hint">현행 기준: 2억원 이상 → 경쟁입찰</div>
+            </div>
+            <!-- 용역 기준금액 -->
+            <div class="thr-item">
+              <div class="thr-label">📋 용역</div>
+              <div class="thr-input-wrap">
+                <span class="thr-unit">₩</span>
+                <input type="text" class="inp thr-inp" id="thr-용역" placeholder="50,000,000">
+                <span class="thr-suffix">원</span>
+              </div>
+              <div class="thr-hint">현행 기준: 5천만원 이상 → 경쟁입찰</div>
+            </div>
+            <!-- 물품 기준금액 -->
+            <div class="thr-item">
+              <div class="thr-label">📦 물품</div>
+              <div class="thr-input-wrap">
+                <span class="thr-unit">₩</span>
+                <input type="text" class="inp thr-inp" id="thr-물품" placeholder="50,000,000">
+                <span class="thr-suffix">원</span>
+              </div>
+              <div class="thr-hint">현행 기준: 5천만원 이상 → 경쟁입찰</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:16px" onclick="saveThresholds()">💾 기준금액 저장</button>
         </div>
       </div>
 
@@ -451,6 +535,42 @@
     <div class="modal-ft">
       <button class="btn btn-ghost" onclick="closeFormItemModal()">취소</button>
       <button class="btn btn-primary" onclick="saveFormItem()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     모달: 담당부서 추가 / 수정
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-ov" id="dept-modal">
+  <div class="modal">
+    <div class="modal-hd">
+      <h2 id="dept-modal-title">🏢 부서 추가</h2>
+      <button class="btn-close" onclick="closeDeptModal()">×</button>
+    </div>
+    <div class="modal-bd" style="display:flex;flex-direction:column;gap:12px">
+      <!-- 수정 모드 식별용 숨김 필드 -->
+      <input type="hidden" id="dept-edit-id">
+      <div>
+        <label>부서명 <span style="color:var(--consult-red)">*</span></label>
+        <input type="text" class="inp" id="dept-name" placeholder="예: 계약팀">
+      </div>
+      <div>
+        <label>담당자명</label>
+        <input type="text" class="inp" id="dept-officer" placeholder="예: 홍길동">
+      </div>
+      <div>
+        <label>연락처 <span class="fs-11 text-mute">(자동 하이픈)</span></label>
+        <input type="text" class="inp" id="dept-phone" placeholder="예: 031-369-3000" maxlength="14">
+      </div>
+      <div>
+        <label>업무범위</label>
+        <textarea class="inp" id="dept-scope" rows="2" placeholder="예: 공사·용역·물품 입찰 및 계약업무 전반"></textarea>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeDeptModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveDept()">저장</button>
     </div>
   </div>
 </div>
@@ -546,7 +666,15 @@ function getDefaultData() {
       { id: 'f15', name: '건설기계 사용내역서',     types: ['공사'],                 file: '../forms/건설기계사용내역서.pdf' },
       { id: 'f16', name: '건설기계 미투입 확약서',  types: ['공사'],                 file: '../forms/건설기계미투입확약서.pdf' },
       { id: 'f17', name: '재직증명서',              types: ['공사', '용역', '물품'], file: '../forms/재직증명서.pdf' }
-    ]
+    ],
+    /* 담당부서 목록 (초기 빈 배열 — 직접 등록) */
+    departments: [],
+    /* 수의계약 기준금액 — 현행 지방계약법 예규 기준 */
+    thresholds: {
+      '공사': 200000000,   /* 2억원 */
+      '용역': 50000000,    /* 5천만원 */
+      '물품': 50000000     /* 5천만원 */
+    }
   };
 }
 
@@ -878,6 +1006,155 @@ function deleteFormItem(id) {
 }
 
 /* ══════════════════════════════════════════════════════
+   담당부서 관리 (hwaseong_contract_data.departments)
+   ══════════════════════════════════════════════════════ */
+
+/* 담당부서 목록 테이블 렌더링 */
+function renderDepts() {
+  var data  = loadContractData();
+  var depts = data.departments || [];
+
+  /* 건수 배지 갱신 */
+  var countEl = document.getElementById('dept-count');
+  if (countEl) countEl.textContent = depts.length + '건';
+
+  var tbody = document.getElementById('dept-tbody');
+
+  if (depts.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-light);padding:28px">' +
+      '등록된 담당부서가 없습니다. [+ 부서 추가] 버튼으로 추가하세요.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = depts.map(function(d, i) {
+    return '<tr>' +
+      '<td style="text-align:center;color:var(--text-mute);font-weight:700">' + (i + 1) + '</td>' +
+      '<td style="font-weight:700">' + esc(d.name) + '</td>' +
+      '<td>' + esc(d.officer || '-') + '</td>' +
+      '<td style="font-size:11.5px">' + esc(d.phone || '-') + '</td>' +
+      '<td style="font-size:11.5px;color:var(--text-mute)">' + esc(d.scope || '-') + '</td>' +
+      '<td style="text-align:center">' +
+        '<button class="act-btn" onclick="openEditDept(\'' + d.id + '\')">수정</button>' +
+      '</td>' +
+      '<td style="text-align:center">' +
+        '<button class="act-btn danger" onclick="deleteDept(\'' + d.id + '\')">삭제</button>' +
+      '</td>' +
+      '</tr>';
+  }).join('');
+}
+
+/* 부서 추가 모달 열기 */
+function openAddDept() {
+  document.getElementById('dept-modal-title').textContent = '🏢 부서 추가';
+  document.getElementById('dept-edit-id').value  = '';
+  document.getElementById('dept-name').value     = '';
+  document.getElementById('dept-officer').value  = '';
+  document.getElementById('dept-phone').value    = '';
+  document.getElementById('dept-scope').value    = '';
+  document.getElementById('dept-modal').classList.add('open');
+  document.getElementById('dept-name').focus();
+}
+
+/* 부서 수정 모달 열기 */
+function openEditDept(id) {
+  var data = loadContractData();
+  var dept = null;
+  /* id 일치 항목 탐색 */
+  (data.departments || []).forEach(function(d) { if (d.id === id) dept = d; });
+  if (!dept) return;
+
+  document.getElementById('dept-modal-title').textContent = '🏢 부서 수정';
+  document.getElementById('dept-edit-id').value  = id;
+  document.getElementById('dept-name').value     = dept.name;
+  document.getElementById('dept-officer').value  = dept.officer || '';
+  document.getElementById('dept-phone').value    = dept.phone   || '';
+  document.getElementById('dept-scope').value    = dept.scope   || '';
+  document.getElementById('dept-modal').classList.add('open');
+  document.getElementById('dept-name').focus();
+}
+
+/* 부서 모달 닫기 */
+function closeDeptModal() {
+  document.getElementById('dept-modal').classList.remove('open');
+}
+
+/* 부서 저장 (추가 / 수정 공통) */
+function saveDept() {
+  var name    = document.getElementById('dept-name').value.trim();
+  var officer = document.getElementById('dept-officer').value.trim();
+  var phone   = document.getElementById('dept-phone').value.trim();
+  var scope   = document.getElementById('dept-scope').value.trim();
+  var editId  = document.getElementById('dept-edit-id').value;
+
+  if (!name) { showToast('부서명을 입력하세요.', 'error'); return; }
+
+  var data = loadContractData();
+  if (!data.departments) data.departments = [];
+
+  if (editId) {
+    /* 수정: id 일치 항목만 교체 */
+    data.departments = data.departments.map(function(d) {
+      return d.id === editId
+        ? { id: d.id, name: name, officer: officer, phone: phone, scope: scope }
+        : d;
+    });
+    showToast('부서 정보가 수정되었습니다.', 'success');
+  } else {
+    /* 추가: 새 항목 삽입 */
+    data.departments.push({ id: genId(), name: name, officer: officer, phone: phone, scope: scope });
+    showToast('부서가 추가되었습니다.', 'success');
+  }
+
+  if (saveContractData(data)) {
+    closeDeptModal();
+    renderDepts();
+  }
+}
+
+/* 부서 삭제 */
+function deleteDept(id) {
+  if (!confirm('정말 삭제하시겠습니까?')) return;
+  var data = loadContractData();
+  data.departments = (data.departments || []).filter(function(d) { return d.id !== id; });
+  if (saveContractData(data)) {
+    renderDepts();
+    showToast('부서가 삭제되었습니다.', 'info');
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   수의계약 기준금액 (hwaseong_contract_data.thresholds)
+   ══════════════════════════════════════════════════════ */
+
+/* 기준금액 화면 로드 (저장된 값 → 입력 필드에 표시) */
+function loadThresholds() {
+  var data       = loadContractData();
+  /* 저장값 없으면 현행 기준값 사용 */
+  var thresholds = data.thresholds || { '공사': 200000000, '용역': 50000000, '물품': 50000000 };
+
+  ['공사', '용역', '물품'].forEach(function(t) {
+    var el = document.getElementById('thr-' + t);
+    if (el) el.value = (thresholds[t] || 0).toLocaleString('ko-KR');
+  });
+}
+
+/* 기준금액 저장 */
+function saveThresholds() {
+  var data = loadContractData();
+
+  /* parseAmt()는 common.js 제공 — 쉼표 포함 문자열 → 숫자 */
+  data.thresholds = {
+    '공사': parseAmt(document.getElementById('thr-공사').value),
+    '용역': parseAmt(document.getElementById('thr-용역').value),
+    '물품': parseAmt(document.getElementById('thr-물품').value)
+  };
+
+  if (saveContractData(data)) {
+    showToast('기준금액이 저장되었습니다.', 'success');
+  }
+}
+
+/* ══════════════════════════════════════════════════════
    공통 — 섹션 전환 & 통계
    ══════════════════════════════════════════════════════ */
 
@@ -894,8 +1171,8 @@ function switchSec(name) {
   /* 섹션별 렌더 */
   if (name === 'procedure') renderProcSteps();
   if (name === 'forms')     { renderFormItems(); renderAlerts(); }
-  if (name === 'dept')      renderProfiles();
-  if (name === 'settings')  loadSettingsForm();
+  if (name === 'dept')      { renderDepts(); renderProfiles(); }
+  if (name === 'settings')  { loadSettingsForm(); loadThresholds(); }
   updateStats();
 }
 
@@ -1060,7 +1337,7 @@ function loadSettingsForm() {
 
 /* ── 전체 데이터 초기화 (hscity_* + hwaseong_contract_data) ── */
 function clearAll() {
-  if (!confirm('모든 데이터(알림·담당자·설정·절차·서식)를 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) return;
+  if (!confirm('모든 데이터(알림·담당자·설정·절차·서식·부서·기준금액)를 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) return;
   /* hscity_ prefix 키 삭제 */
   Object.keys(localStorage)
     .filter(function(k) { return k.startsWith('hscity_'); })
@@ -1110,6 +1387,14 @@ document.getElementById('fi-name').addEventListener('keydown', function(e) {
   updateStats();
   /* 기본 섹션(절차관리) 렌더 */
   renderProcSteps();
+
+  /* ── 금액 입력 자동 쉼표 바인딩 (common.js bindAmountInput) ── */
+  ['공사', '용역', '물품'].forEach(function(t) {
+    bindAmountInput(document.getElementById('thr-' + t));
+  });
+
+  /* ── 연락처 자동 하이픈 바인딩 (common.js bindPhoneInput) ── */
+  bindPhoneInput(document.getElementById('dept-phone'));
 })();
 </script>
 </body>
